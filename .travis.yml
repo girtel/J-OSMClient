@@ -36,7 +36,7 @@ deploy:
   skip_cleanup: true
   on:
     branch: master
-    repo: CFSNM/OSMClient
+    repo: girtel/OSMClient
     tags: true
 
 notifications:
