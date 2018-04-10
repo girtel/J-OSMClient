@@ -1,4 +1,4 @@
-package com.cfsnm.utils;
+package com.girtel.utils;
 
 /**
  * Provides different sets of constants to work with OSM

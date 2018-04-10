@@ -1,11 +1,11 @@
-package com.cfsnm;
+package com.girtel;
 
 
 
 
 
-import com.cfsnm.utils.HTTPResponse;
-import com.cfsnm.utils.OSMConstants;
+import com.girtel.utils.HTTPResponse;
+import com.girtel.utils.OSMConstants;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;

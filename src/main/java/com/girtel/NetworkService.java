@@ -1,4 +1,4 @@
-package com.cfsnm;
+package com.girtel;
 
 /**
  * This class represents Open Source MANO Network-Service (NS) component.

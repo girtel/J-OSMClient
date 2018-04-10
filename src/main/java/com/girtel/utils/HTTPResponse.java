@@ -1,4 +1,4 @@
-package com.cfsnm.utils;
+package com.girtel.utils;
 
 /**
  * This class represents a HTTP Response (code, message) ,e.c. (200,OK)

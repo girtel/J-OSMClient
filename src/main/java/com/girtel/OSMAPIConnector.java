@@ -1,7 +1,7 @@
-package com.cfsnm;
+package com.girtel;
 
 
-import com.cfsnm.utils.HTTPResponse;
+import com.girtel.utils.HTTPResponse;
 import com.shc.easyjson.JSON;
 import com.shc.easyjson.JSONObject;
 import org.apache.http.entity.mime.HttpMultipartMode;
