@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [1.0] - 2018-04-10
 ### Added
     - Basic functionality to work with OSM.
-	- Different objects which represents OSM objects (Network Service, Virtual Network Function, ...).
+    - Different classes which represent OSM objects (Network Service, Virtual Network Function, ...).
     
 
 
