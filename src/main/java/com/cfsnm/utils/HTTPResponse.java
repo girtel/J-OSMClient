@@ -1,6 +1,8 @@
 package com.cfsnm.utils;
 
 /**
+ * This class represents a HTTP Response (code, message) ,e.c. (200,OK)
+ *
  * @author Cesar San-Nicolas-Martinez
  */
 public class HTTPResponse extends javafx.util.Pair<Integer, String>
@@ -9,7 +11,7 @@ public class HTTPResponse extends javafx.util.Pair<Integer, String>
     private Integer code;
     private String message;
     /**
-     * Creates a new HTTP pair
+     * Constructor
      *
      * @param code HTTP code
      * @param message HTTP message
