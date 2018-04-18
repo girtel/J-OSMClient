@@ -1,4 +1,4 @@
-package com.girtel;
+package com.girtel.osmclient;
 
 /**
  * This class represents Open Source MANO VIM component.

@@ -1,7 +1,7 @@
-package com.girtel;
+package com.girtel.osmclient;
 
 
-import com.girtel.utils.HTTPResponse;
+import com.girtel.osmclient.utils.HTTPResponse;
 import com.shc.easyjson.JSON;
 import com.shc.easyjson.JSONObject;
 import org.apache.http.entity.mime.HttpMultipartMode;

@@ -1,4 +1,4 @@
-package com.girtel.utils;
+package com.girtel.osmclient.utils;
 
 /**
  * Provides different sets of constants to work with OSM

@@ -1,11 +1,11 @@
-package com.girtel;
+package com.girtel.osmclient;
 
 
 
 
 
-import com.girtel.utils.HTTPResponse;
-import com.girtel.utils.OSMConstants;
+import com.girtel.osmclient.utils.HTTPResponse;
+import com.girtel.osmclient.utils.OSMConstants;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;

@@ -1,9 +1,9 @@
-package com.girtel;
+package com.girtel.osmclient;
 
 
-import com.girtel.utils.HTTPResponse;
-import com.girtel.utils.OSMConstants;
-import com.girtel.utils.UUIDUtils;
+import com.girtel.osmclient.utils.HTTPResponse;
+import com.girtel.osmclient.utils.OSMConstants;
+import com.girtel.osmclient.utils.UUIDUtils;
 import com.shc.easyjson.*;
 import javafx.util.Pair;
 

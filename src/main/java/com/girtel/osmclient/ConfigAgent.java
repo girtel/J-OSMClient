@@ -1,4 +1,4 @@
-package com.girtel;
+package com.girtel.osmclient;
 
 
 /**

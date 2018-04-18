@@ -1,4 +1,4 @@
-package com.girtel.utils;
+package com.girtel.osmclient.utils;
 
 import java.util.UUID;
 

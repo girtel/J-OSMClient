@@ -1,4 +1,4 @@
-package com.girtel.utils;
+package com.girtel.osmclient.utils;
 
 /**
  * This class represents a HTTP Response (code, message) ,e.c. (200,OK)
