@@ -11,6 +11,8 @@ import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <h2>REST Client targeted to work with Open Source MANO.</h2>
@@ -43,7 +45,7 @@ public class OSMClient {
      * Obtains OSM server address
      * @return IP Address where OSM is running
      */
-    public String getOSMIPAddress()
+    protected String getOSMIPAddress()
     {
         return this.osmIPAddress;
     }
@@ -52,7 +54,7 @@ public class OSMClient {
      * Obtains OSM user and password encoded
      * @return Encoded credentials
      */
-    public String getEncodedCredentials()
+    protected String getEncodedCredentials()
     {
         return this.credentials;
     }
@@ -101,6 +103,61 @@ public class OSMClient {
     {
         HTTPResponse response = osmController.createNS(nsName, nsdName, datacenterName);
         return response;
+    }
+
+    /**
+     * Deletes all configuration agents
+     * @return Map where key is agent's name and value is http response
+     */
+    public Map<String, HTTPResponse> deleteAllConfigAgents()
+    {
+        List<ConfigAgent> configAgents = this.getConfigAgentList();
+        Map<String, HTTPResponse> configAgentsResponseMap = configAgents.stream().collect(Collectors.toMap(agent -> agent.getName(), agent -> this.deleteConfigAgent(agent.getName())));
+        return configAgentsResponseMap;
+    }
+
+    /**
+     * Deletes all Datacenters (VIMs)
+     * @return Map where key is agent's name and value is http response
+     */
+    public Map<String, HTTPResponse> deleteAllDatacenters()
+    {
+        List<DataCenter> datacenters = this.getDataCenterList();
+        Map<String, HTTPResponse> datacentersResponseMap = datacenters.stream().collect(Collectors.toMap(dc -> dc.getName(), dc -> this.deleteDatacenter(dc.getName())));
+        return datacentersResponseMap;
+    }
+
+    /**
+     * Deletes all Network Services (NS)
+     * @return Map where key is agent's name and value is OSM response
+     */
+    public Map<String, String> deleteAllNS()
+    {
+        List<NetworkService> networkServices = this.getNSList();
+        Map<String, String> networkServicesResponseMap = networkServices.stream().collect(Collectors.toMap(ns -> ns.getName(), ns -> this.deleteNS(ns.getName())));
+        return networkServicesResponseMap;
+    }
+
+    /**
+     * Deletes all Network Service Descriptors (NSD)
+     * @return Map where key is agent's name and value is OSM response
+     */
+    public Map<String, String> deleteAllNSD()
+    {
+        List<NetworkServiceDescriptor> networkServiceDescriptors = this.getNSDList();
+        Map<String, String> networkServiceDescriptorsResponseMap = networkServiceDescriptors.stream().collect(Collectors.toMap(nsd -> nsd.getName(), nsd -> this.deleteNSD(nsd.getName())));
+        return networkServiceDescriptorsResponseMap;
+    }
+
+    /**
+     * Deletes all Virtual Network Function Descriptors (VNFD)
+     * @return Map where key is agent's name and value is OSM response
+     */
+    public Map<String, String> deleteAllVNFD()
+    {
+        List<VirtualNetworkFunctionDescriptor> virtualNetworkFunctionDescriptors = this.getVNFDList();
+        Map<String, String> virtualNetworkFunctionDescriptorsResponseMap = virtualNetworkFunctionDescriptors.stream().collect(Collectors.toMap(vnfd -> vnfd.getName(), vnfd -> this.deleteVNFD(vnfd.getName())));
+        return virtualNetworkFunctionDescriptorsResponseMap;
     }
 
     /**
@@ -373,6 +430,5 @@ public class OSMClient {
         HTTPResponse response = osmController.uploadPackage(file);
         return response;
     }
-
 
 }

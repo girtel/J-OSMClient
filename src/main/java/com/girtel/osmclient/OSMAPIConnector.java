@@ -83,11 +83,14 @@ class OSMAPIConnector {
         }
         HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         HostnameVerifier hv = new HostnameVerifier() {
-            public boolean verify(String urlHostName, SSLSession session) {
-                if (!urlHostName.equalsIgnoreCase(session.getPeerHost())) {
-                    System.out.println("Warning: URL host '" + urlHostName + "' is different to SSLSession host '" + session.getPeerHost() + "'.");
+            public boolean verify(String urlHostName, SSLSession session)
+            {
+                boolean verify = false;
+                if (urlHostName.equalsIgnoreCase(session.getPeerHost()))
+                {
+                   verify = true;
                 }
-                return true;
+                return verify;
             }
         };
 
