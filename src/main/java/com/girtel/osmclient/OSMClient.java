@@ -31,6 +31,8 @@ public class OSMClient {
     /**
      * OSMClient constructor
      * @param osmIPAddress IP Address where OSM is running
+     * @param user OSM user
+     * @param password OSM password
      */
 
     public OSMClient(String osmIPAddress, String user, String password)

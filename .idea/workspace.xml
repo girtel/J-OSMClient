@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fd01548a-7236-43e5-bade-479932b14bc0" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -25,19 +23,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="OSMClient.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="OSMClient.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="452">
-              <caret line="433" column="1" selection-start-line="433" selection-start-column="1" selection-end-line="433" selection-end-column="1" />
+            <state relative-caret-position="238">
+              <caret line="34" column="35" selection-start-line="34" selection-start-column="35" selection-end-line="34" selection-end-column="35" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1370">
+            <state relative-caret-position="136">
               <caret line="8" column="16" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
             </state>
           </provider>
@@ -71,8 +69,8 @@
       <list>
         <option value="$PROJECT_DIR$/src/main/java/com/cfsnm/utils/HTTPResponse.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnector.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient.java" />
       </list>
     </option>
   </component>
@@ -461,17 +459,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient.java">
+    <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="452">
-          <caret line="433" column="1" selection-start-line="433" selection-start-column="1" selection-end-line="433" selection-end-column="1" />
+        <state relative-caret-position="136">
+          <caret line="8" column="16" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1370">
-          <caret line="8" column="16" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
+        <state relative-caret-position="238">
+          <caret line="34" column="35" selection-start-line="34" selection-start-column="35" selection-end-line="34" selection-end-column="35" />
         </state>
       </provider>
     </entry>
