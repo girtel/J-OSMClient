@@ -5,7 +5,7 @@ package com.girtel.osmclient;
 
 
 import com.girtel.osmclient.utils.HTTPResponse;
-import com.girtel.osmclient.utils.OSMConstants;
+import com.girtel.osmclient.utils.Constants;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  */
 public class OSMClient {
 
-    private String osmIPAddress, credentials;
+    private String osmIPAddress, credentials, project;
     private OSMController osmController;
 
     /**
@@ -33,13 +33,21 @@ public class OSMClient {
      * @param osmIPAddress IP Address where OSM is running
      * @param user OSM user
      * @param password OSM password
+     * @param project OSM project (optional). If it is not specified, project default will be used
      */
 
-    public OSMClient(String osmIPAddress, String user, String password)
+    public OSMClient(String osmIPAddress, String user, String password, String... project)
     {
         this.osmIPAddress = osmIPAddress;
         String userCred = user + ":" + password;
         this.credentials = "Basic " + DatatypeConverter.printBase64Binary(userCred.getBytes());
+        if(project.length == 0)
+            this.project = "default";
+        else if(project.length == 1)
+            this.project = project[0];
+        else
+            throw new RuntimeException("More than one project is not allowed");
+
         this.osmController = new OSMController(this);
     }
 
@@ -62,6 +70,15 @@ public class OSMClient {
     }
 
     /**
+     * Obtains OSM project
+     * @return Project
+     */
+    protected String getProject()
+    {
+        return this.project;
+    }
+
+    /**
      * Adds a new configuration agent, e.c. Juju
      * @param name new agent's name
      * @param type new agent's type
@@ -70,7 +87,7 @@ public class OSMClient {
      * @param secret new agent's password
      * @return Response where first parameter is http message and second is http code, e.c. (200,OK)
      */
-    public HTTPResponse addConfigAgent(String name, OSMConstants.OSMConfigAgentType type, String serverIP, String user, String secret)
+    public HTTPResponse addConfigAgent(String name, Constants.OSMConfigAgentType type, String serverIP, String user, String secret)
     {
         HTTPResponse response = osmController.addConfigAgent(name, type, serverIP, user, secret);
         return response;
@@ -88,7 +105,7 @@ public class OSMClient {
      * @param keyPairName SSH key pair name (optional)
      * @return Response where first parameter is http message and second is http code, e.c. (200,OK)
      */
-    public HTTPResponse createDatacenter(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, boolean usingFloatingIPs, String... keyPairName)
+    public HTTPResponse createDatacenter(String name, Constants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, boolean usingFloatingIPs, String... keyPairName)
     {
         HTTPResponse response = osmController.createDataCenter(name,osmVimType,user,password,authURL,tenant,usingFloatingIPs, keyPairName);
         return response;
@@ -431,6 +448,12 @@ public class OSMClient {
     {
         HTTPResponse response = osmController.uploadPackage(file);
         return response;
+    }
+
+    public static void main(String [] args)
+    {
+        OSMClient osmClient = new OSMClient("192.168.10.115","admin","admin");
+        System.out.println(osmClient.getVNFDList().stream().collect(Collectors.toMap(vnfd->vnfd.getName(), vnfd -> vnfd.getDescription())));
     }
 
 }

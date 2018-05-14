@@ -2,7 +2,7 @@ package com.girtel.osmclient;
 
 
 import com.girtel.osmclient.utils.HTTPResponse;
-import com.girtel.osmclient.utils.OSMConstants;
+import com.girtel.osmclient.utils.Constants;
 import com.girtel.osmclient.utils.UUIDUtils;
 import com.shc.easyjson.*;
 import javafx.util.Pair;
@@ -21,7 +21,7 @@ class OSMController {
     protected OSMController(OSMClient osmClient)
     {
         this.osmClient = osmClient;
-        this.osmConnector = new OSMAPIConnector(osmClient.getOSMIPAddress(), osmClient.getEncodedCredentials());
+        this.osmConnector = new OSMAPIConnector(osmClient);
     }
 
 
@@ -643,13 +643,13 @@ class OSMController {
         return finalResponse;
     }
 
-    public HTTPResponse createDataCenter(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, boolean usingFloatingIPs, String... keyPairName)
+    public HTTPResponse createDataCenter(String name, Constants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, boolean usingFloatingIPs, String... keyPairName)
     {
         JSONObject finalJSON = new JSONObject();
         JSONObject dataCenterJSON = new JSONObject();
 
         dataCenterJSON.put("name",new JSONValue(name));
-        dataCenterJSON.put("type",new JSONValue(osmVimType.getType()));
+        dataCenterJSON.put("type",new JSONValue(osmVimType.toString()));
 
         JSONObject configJSON = new JSONObject();
         configJSON.put("use_floating_ip",new JSONValue(usingFloatingIPs));
@@ -791,7 +791,7 @@ class OSMController {
 
     }
 
-    public HTTPResponse addConfigAgent(String name, OSMConstants.OSMConfigAgentType type, String serverIP, String user, String secret)
+    public HTTPResponse addConfigAgent(String name, Constants.OSMConfigAgentType type, String serverIP, String user, String secret)
     {
         JSONObject finalJSON = new JSONObject();
         JSONArray accountArray = new JSONArray();
@@ -803,8 +803,8 @@ class OSMController {
         configJSON.put("ip-address",new JSONValue(serverIP));
 
         accountJSON.put("name",new JSONValue(name));
-        accountJSON.put("account-type",new JSONValue(type.getType()));
-        accountJSON.put(type.getType(),new JSONValue(configJSON));
+        accountJSON.put("account-type",new JSONValue(type.toString()));
+        accountJSON.put(type.toString(),new JSONValue(configJSON));
 
         accountArray.add(new JSONValue(accountJSON));
 

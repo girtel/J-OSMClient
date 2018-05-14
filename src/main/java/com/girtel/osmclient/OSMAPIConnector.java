@@ -1,6 +1,7 @@
 package com.girtel.osmclient;
 
 
+import com.girtel.osmclient.utils.Constants;
 import com.girtel.osmclient.utils.HTTPResponse;
 import com.shc.easyjson.JSON;
 import com.shc.easyjson.JSONObject;
@@ -19,33 +20,34 @@ import java.security.NoSuchAlgorithmException;
 
 class OSMAPIConnector {
 
-    final String NS_URL = "/api/running/project/default/ns-instance-config";
-    final String NSD_URL = "/api/running/project/default/nsd-catalog/nsd";
-    final String VNF_URL = "/v1/api/operational/project/default/vnfr-catalog/vnfr";
-    final String VNFD_URL = "/api/running/project/default/vnfd-catalog/vnfd";
-    final String CONFIG_AGENT_URL = "/api/config/project/default/config-agent";
+    final String NS_URL = "/api/running/project/{projectname}/ns-instance-config";
+    final String NSD_URL = "/api/running/project/{projectname}/nsd-catalog/nsd";
+    final String VNF_URL = "/v1/api/operational/project/{projectname}/vnfr-catalog/vnfr";
+    final String VNFD_URL = "/api/running/project/{projectname}/vnfd-catalog/vnfd";
+    final String CONFIG_AGENT_URL = "/api/config/project/{projectname}/config-agent";
     final String DATACENTER_LIST_URL = "/openmano/{tenant_id}/datacenters";
-    final String DEFAULTROACCOUNT_URL = "/api/operational/project/default/ro-account";
+    final String DEFAULTROACCOUNT_URL = "/api/operational/project/{projectname}/ro-account";
     final String UPDATEROACCOUNT_URL = "/api/operations/update-ro-account-status";
     final String DATACENTERS_URL = "/openmano/datacenters";
     final String GET_TENANTS_URL = "/openmano/tenants/";
     final String ATTACH_DETACH_DATACENTER_URL = "/openmano/{osm_id}/datacenters/{dc_id}";
-    final String UPLOAD_PACKAGE_URL = "https://{osm_ip}:8443/composer/upload?api_server=https://localhost&upload_server=https://{osm_ip}&project_name=default";
-    final String CREATE_NS_URL = "/api/config/project/default/ns-instance-config/nsr";
-    final String NS_DELETE_URL = "/api/config/project/default/ns-instance-config/nsr/{ns_id}";
-    final String NSD_DELETE_URL = "/api/running/project/default/nsd-catalog/nsd/{nsd_id}";
-    final String VNFD_DELETE_URL = "/api/running/project/default/vnfd-catalog/vnfd/{vnfd_id}";
-    final String SCALE_URL = "/v1/api/config/project/default/ns-instance-config/nsr/{ns_id}/scaling-group/{group}/instance";
-    final String NS_OPDATA_URL = "/api/operational/project/default/ns-instance-opdata/nsr/{ns_id}?deep";
+    final String UPLOAD_PACKAGE_URL = "https://{osm_ip}:8443/composer/upload?api_server=https://localhost&upload_server=https://{osm_ip}&project_name={projectname}";
+    final String CREATE_NS_URL = "/api/config/project/{projectname}/ns-instance-config/nsr";
+    final String NS_DELETE_URL = "/api/config/project/{projectname}/ns-instance-config/nsr/{ns_id}";
+    final String NSD_DELETE_URL = "/api/running/project/{projectname}/nsd-catalog/nsd/{nsd_id}";
+    final String VNFD_DELETE_URL = "/api/running/project/{projectname}/vnfd-catalog/vnfd/{vnfd_id}";
+    final String SCALE_URL = "/v1/api/config/project/{projectname}/ns-instance-config/nsr/{ns_id}/scaling-group/{group}/instance";
+    final String NS_OPDATA_URL = "/api/operational/project/{projectname}/ns-instance-opdata/nsr/{ns_id}?deep";
 
     private String credentials;
-
     private String osmIPAddress;
+    private String project;
 
-    protected OSMAPIConnector(String osmIPAddress, String credentials)
+    protected OSMAPIConnector(OSMClient osmClient)
     {
-        this.osmIPAddress = osmIPAddress;
-        this.credentials = credentials;
+        this.osmIPAddress = osmClient.getOSMIPAddress();
+        this.credentials = osmClient.getEncodedCredentials();
+        this.project = osmClient.getProject();
         configureSecurity();
     }
 
@@ -88,7 +90,7 @@ class OSMAPIConnector {
                 boolean verify = false;
                 if (urlHostName.equalsIgnoreCase(session.getPeerHost()))
                 {
-                   verify = true;
+                    verify = true;
                 }
                 return verify;
             }
@@ -100,8 +102,6 @@ class OSMAPIConnector {
 
     private void configureConnection(HttpURLConnection conn)
     {
-        configureSecurity();
-        String userCred = "admin:admin";
         conn.setRequestProperty("Content-Type","application/json");
         conn.setRequestProperty("Accept","application/vnd.yand.data+json");
         conn.setRequestProperty("Authorization",credentials);
@@ -109,8 +109,6 @@ class OSMAPIConnector {
 
     private void configureConnectionToUploadPackage(HttpURLConnection conn, File file, MultipartEntity entity)
     {
-        configureSecurity();
-        String userCred = "admin:admin";
         conn.setRequestProperty("Content-Encoding", "gzip");
         conn.setRequestProperty("Accept","*application/json*");
         conn.setRequestProperty("Content-Type",entity.getContentType().getValue());
@@ -118,26 +116,40 @@ class OSMAPIConnector {
         conn.setRequestProperty("Authorization",credentials);
     }
 
-    public String establishConnectionToReceiveVNFDList()
+    private HttpURLConnection establishConnection(String url, Constants.HTTPMethod method, File... fileToUpload)
     {
-        URL url;
-        String receivedJSON = "";
+        if(fileToUpload.length > 0 && method != Constants.HTTPMethod.POST)
+            throw new RuntimeException("Files are only allowed in POST requests");
+
+        URL url_;
+        HttpURLConnection conn = null;
         try {
-            url = new URL("https://"+osmIPAddress+":8008"+ VNFD_URL);
+            url_ = new URL(url);
 
-
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-            conn.setRequestMethod("GET");
-            configureConnection(conn);
-
+            conn = (HttpURLConnection)url_.openConnection();
+            conn.setRequestMethod(method.toString());
             conn.setUseCaches(false);
             conn.setDoInput(true);
             conn.setDoOutput(true);
 
-            conn.connect();
+            if(fileToUpload.length == 0)
+            {
+                configureConnection(conn);
+                conn.connect();
+            }
+            else if (fileToUpload.length == 1)
+            {
+                FileBody fileBody = new FileBody(fileToUpload[0]);
+                MultipartEntity entity = new MultipartEntity(HttpMultipartMode.STRICT);
+                entity.addPart("package",fileBody);
+                configureConnectionToUploadPackage(conn, fileToUpload[0], entity);
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            receivedJSON = in.readLine();
+                conn.connect();
+                OutputStream out = conn.getOutputStream();
+                entity.writeTo(out);
+                out.close();
+            }
+
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -147,151 +159,71 @@ class OSMAPIConnector {
             e.printStackTrace();
         }
 
+        return conn;
+    }
+
+    private String processResponse(HttpURLConnection conn)
+    {
+        BufferedReader in = null;
+        String response = "";
+        try {
+            in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line = "";
+            while((line = in.readLine()) != null)
+            {
+                response += line;
+            }
+
+            in.close();
+            conn.disconnect();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return response;
+    }
+
+
+    public String establishConnectionToReceiveVNFDList()
+    {
+
+        String url = "https://"+osmIPAddress+":8008"+ VNFD_URL.replace("{projectname}",project);
+        HttpURLConnection conn = establishConnection(url, Constants.HTTPMethod.GET);
+        String receivedJSON = processResponse(conn);
         return receivedJSON;
     }
 
     public String establishConnectionToReceiveVNFList()
     {
-        URL url = null;
-        String receivedJSON = "";
-        try {
-            url = new URL("https://"+osmIPAddress+":8008"+ VNF_URL);
-
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-            conn.setRequestMethod("GET");
-            configureConnection(conn);
-
-            conn.setUseCaches(false);
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-
-            conn.connect();
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            receivedJSON = in.readLine();
-
-            in.close();
-            conn.disconnect();
-
-
-        } catch (MalformedURLException e3) {
-            e3.printStackTrace();
-        } catch (ProtocolException e2) {
-            e2.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        String url = "https://"+osmIPAddress+":8008"+ VNF_URL.replace("{projectname}",project);
+        HttpURLConnection conn = establishConnection(url, Constants.HTTPMethod.GET);
+        String receivedJSON = processResponse(conn);
         return receivedJSON;
-
     }
 
     public String establishConnectionToReceiveNSDList()
     {
-        URL url = null;
-        String receivedJSON = "";
-        try {
-
-            url = new URL("https://"+osmIPAddress+":8008"+ NSD_URL);
-
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-            conn.setRequestMethod("GET");
-            configureConnection(conn);
-
-            conn.setUseCaches(false);
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-
-            conn.connect();
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            receivedJSON = in.readLine();
-
-            in.close();
-            conn.disconnect();
-        } catch (MalformedURLException e3) {
-            e3.printStackTrace();
-        } catch (ProtocolException e2) {
-            e2.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        String url = "https://"+osmIPAddress+":8008"+ NSD_URL.replace("{projectname}",project);
+        HttpURLConnection conn = establishConnection(url, Constants.HTTPMethod.GET);
+        String receivedJSON = processResponse(conn);
         return receivedJSON;
     }
 
     public String establishConnectionToReceiveNSList()
     {
-        URL url = null;
-        String receivedJSON = "";
-        try {
-
-            url = new URL("https://"+osmIPAddress+":8008"+ NS_URL);
-
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-            conn.setRequestMethod("GET");
-            configureConnection(conn);
-
-            conn.setUseCaches(false);
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-
-            conn.connect();
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            receivedJSON = in.readLine();
-
-            in.close();
-            conn.disconnect();
-        } catch (MalformedURLException e3) {
-            e3.printStackTrace();
-        } catch (ProtocolException e2) {
-            e2.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        String url = "https://"+osmIPAddress+":8008"+ NS_URL.replace("{projectname}",project);
+        HttpURLConnection conn = establishConnection(url, Constants.HTTPMethod.GET);
+        String receivedJSON = processResponse(conn);
         return receivedJSON;
     }
 
 
-        public String establishConnectionToReceiveDatacenterList(String tenantId)
+    public String establishConnectionToReceiveDatacenterList(String tenantId)
     {
-        URL url = null;
-        String receivedJSON = "";
-        try {
-
-            String datacenterListURL = DATACENTER_LIST_URL.replace("{tenant_id}",tenantId);
-            url = new URL("http://"+osmIPAddress+":9090"+ datacenterListURL);
-
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-            conn.setRequestMethod("GET");
-            configureConnection(conn);
-
-            conn.setUseCaches(false);
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-
-            conn.connect();
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String line = "";
-            while((line = in.readLine()) != null)
-            {
-                receivedJSON = receivedJSON + line;
-            }
-
-
-            in.close();
-            conn.disconnect();
-        } catch (MalformedURLException e3) {
-            e3.printStackTrace();
-        } catch (ProtocolException e2) {
-            e2.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        String url = "http://"+osmIPAddress+":9090"+ DATACENTER_LIST_URL.replace("{tenant_id}",tenantId);
+        HttpURLConnection conn = establishConnection(url, Constants.HTTPMethod.GET);
+        String receivedJSON = processResponse(conn);
         return receivedJSON;
     }
 
