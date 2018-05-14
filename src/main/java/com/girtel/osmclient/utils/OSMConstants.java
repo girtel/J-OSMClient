@@ -5,10 +5,10 @@ package com.girtel.osmclient.utils;
  *
  * @author Cesar San-Nicolas-Martinez
  */
-public class Constants {
+public class OSMConstants {
 
 
-    private Constants(){}
+    private OSMConstants(){}
 
 
     /**
@@ -60,27 +60,6 @@ public class Constants {
             return type;
         }
     };
-
-    /**
-     * HTTP methods
-     */
-    public enum HTTPMethod
-    {
-        GET("GET"), POST("POST"), DELETE("DELETE");
-
-        private String method;
-
-        HTTPMethod(String method)
-        {
-            this.method = method;
-        }
-
-        @Override
-        public String toString()
-        {
-            return method;
-        }
-    }
 
 }
 

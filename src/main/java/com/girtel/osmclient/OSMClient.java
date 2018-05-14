@@ -5,7 +5,7 @@ package com.girtel.osmclient;
 
 
 import com.girtel.osmclient.utils.HTTPResponse;
-import com.girtel.osmclient.utils.Constants;
+import com.girtel.osmclient.utils.OSMConstants;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;
@@ -87,7 +87,7 @@ public class OSMClient {
      * @param secret new agent's password
      * @return Response where first parameter is http message and second is http code, e.c. (200,OK)
      */
-    public HTTPResponse addConfigAgent(String name, Constants.OSMConfigAgentType type, String serverIP, String user, String secret)
+    public HTTPResponse addConfigAgent(String name, OSMConstants.OSMConfigAgentType type, String serverIP, String user, String secret)
     {
         HTTPResponse response = osmController.addConfigAgent(name, type, serverIP, user, secret);
         return response;
@@ -105,7 +105,7 @@ public class OSMClient {
      * @param keyPairName SSH key pair name (optional)
      * @return Response where first parameter is http message and second is http code, e.c. (200,OK)
      */
-    public HTTPResponse createDatacenter(String name, Constants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, boolean usingFloatingIPs, String... keyPairName)
+    public HTTPResponse createDatacenter(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, boolean usingFloatingIPs, String... keyPairName)
     {
         HTTPResponse response = osmController.createDataCenter(name,osmVimType,user,password,authURL,tenant,usingFloatingIPs, keyPairName);
         return response;

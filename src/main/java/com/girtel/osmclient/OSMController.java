@@ -2,7 +2,7 @@ package com.girtel.osmclient;
 
 
 import com.girtel.osmclient.utils.HTTPResponse;
-import com.girtel.osmclient.utils.Constants;
+import com.girtel.osmclient.utils.OSMConstants;
 import com.girtel.osmclient.utils.UUIDUtils;
 import com.shc.easyjson.*;
 import javafx.util.Pair;
@@ -643,7 +643,7 @@ class OSMController {
         return finalResponse;
     }
 
-    public HTTPResponse createDataCenter(String name, Constants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, boolean usingFloatingIPs, String... keyPairName)
+    public HTTPResponse createDataCenter(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, boolean usingFloatingIPs, String... keyPairName)
     {
         JSONObject finalJSON = new JSONObject();
         JSONObject dataCenterJSON = new JSONObject();
@@ -711,7 +711,7 @@ class OSMController {
         HTTPResponse finalResponse = null;
         if(!defaultROType.equals("openmano"))
         {
-            finalResponse = new HTTPResponse(0,"Error, openmano is not default account");
+            finalResponse = new HTTPResponse(0,"Error, openmano is not default account","");
         }
         else {
 
@@ -791,7 +791,7 @@ class OSMController {
 
     }
 
-    public HTTPResponse addConfigAgent(String name, Constants.OSMConfigAgentType type, String serverIP, String user, String secret)
+    public HTTPResponse addConfigAgent(String name, OSMConstants.OSMConfigAgentType type, String serverIP, String user, String secret)
     {
         JSONObject finalJSON = new JSONObject();
         JSONArray accountArray = new JSONArray();
