@@ -58,6 +58,11 @@ public class HTTPResponse
                 "Content -> "+content;
     }
 
+    /**
+     * Returns a HTTPResponse which represents an error
+     * @param content error content
+     * @return Error HTTPResponse
+     */
     public static HTTPResponse errorResponse(String content)
     {
         return new HTTPResponse(0,"ERROR",content);
