@@ -7,6 +7,7 @@ package com.girtel.osmclient;
 import com.girtel.osmclient.utils.HTTPResponse;
 import com.girtel.osmclient.utils.OSMConstants;
 
+import javax.swing.*;
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.util.ArrayList;
@@ -453,7 +454,9 @@ public class OSMClient {
     public static void main(String [] args)
     {
         OSMClient osmClient = new OSMClient("192.168.10.115","admin","admin");
-        System.out.println(osmClient.getVNFDList().stream().collect(Collectors.toMap(vnfd->vnfd.getName(), vnfd -> vnfd.getDescription())));
+        JFileChooser chooser = new JFileChooser();
+        chooser.showOpenDialog(null);
+        System.out.println(osmClient.uploadPackage(chooser.getSelectedFile()));
     }
 
 }
