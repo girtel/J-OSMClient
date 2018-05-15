@@ -55,7 +55,7 @@ public class HTTPResponse
     public String toString()
     {
         return "(" +code+", "+message+")\r\n" +
-                "Content -> "+content;
+                "Content -> "+content+"\r\n";
     }
 
     /**

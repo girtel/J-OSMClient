@@ -249,7 +249,6 @@ class OSMAPIConnector {
 
     public HTTPResponse establishConnectionToReceiveVNFDList()
     {
-
         String url = "https://"+osmIPAddress+":8008"+ VNFD_URL.replace("{projectname}",project);
         HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.GET);
         HTTPResponse response = processHTTPResponse(conn);
