@@ -6,8 +6,8 @@ package com.girtel.osmclient;
 
 import com.girtel.osmclient.utils.HTTPResponse;
 import com.girtel.osmclient.utils.OSMConstants;
+import org.apache.http.protocol.HTTP;
 
-import javax.swing.*;
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.util.ArrayList;
@@ -86,7 +86,7 @@ public class OSMClient {
      * @param serverIP ip address where the agent is running
      * @param user  new agent's user
      * @param secret new agent's password
-     * @return Response where first parameter is http message and second is http code, e.c. (200,OK)
+     * @return HTTPResponse from OSM (code, message, content)
      */
     public HTTPResponse addConfigAgent(String name, OSMConstants.OSMConfigAgentType type, String serverIP, String user, String secret)
     {
@@ -104,7 +104,7 @@ public class OSMClient {
      * @param tenant datacenter's tenant to instantiate VMs
      * @param usingFloatingIPs true if you want to assign floating ips automatically, false if not
      * @param keyPairName SSH key pair name (optional)
-     * @return Response where first parameter is http message and second is http code, e.c. (200,OK)
+     * @return HTTPResponse from OSM (code, message, content)
      */
     public HTTPResponse createDatacenter(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, boolean usingFloatingIPs, String... keyPairName)
     {
@@ -117,7 +117,7 @@ public class OSMClient {
      * @param nsName new network service name
      * @param nsdName ns descritptor name
      * @param datacenterName vim name where ns will be instantiated
-     * @return Response where first parameter is http message and second is http code, e.c. (200,OK)
+     * @return HTTPResponse from OSM (code, message, content)
      */
     public HTTPResponse createNS(String nsName, String nsdName, String datacenterName)
     {
@@ -151,10 +151,10 @@ public class OSMClient {
      * Deletes all Network Services (NS)
      * @return Map where key is agent's name and value is OSM response
      */
-    public Map<String, String> deleteAllNS()
+    public Map<String, HTTPResponse> deleteAllNS()
     {
         List<NetworkService> networkServices = this.getNSList();
-        Map<String, String> networkServicesResponseMap = networkServices.stream().collect(Collectors.toMap(ns -> ns.getName(), ns -> this.deleteNS(ns.getName())));
+        Map<String, HTTPResponse> networkServicesResponseMap = networkServices.stream().collect(Collectors.toMap(ns -> ns.getName(), ns -> this.deleteNS(ns.getName())));
         return networkServicesResponseMap;
     }
 
@@ -162,10 +162,10 @@ public class OSMClient {
      * Deletes all Network Service Descriptors (NSD)
      * @return Map where key is agent's name and value is OSM response
      */
-    public Map<String, String> deleteAllNSD()
+    public Map<String, HTTPResponse> deleteAllNSD()
     {
         List<NetworkServiceDescriptor> networkServiceDescriptors = this.getNSDList();
-        Map<String, String> networkServiceDescriptorsResponseMap = networkServiceDescriptors.stream().collect(Collectors.toMap(nsd -> nsd.getName(), nsd -> this.deleteNSD(nsd.getName())));
+        Map<String, HTTPResponse> networkServiceDescriptorsResponseMap = networkServiceDescriptors.stream().collect(Collectors.toMap(nsd -> nsd.getName(), nsd -> this.deleteNSD(nsd.getName())));
         return networkServiceDescriptorsResponseMap;
     }
 
@@ -173,17 +173,17 @@ public class OSMClient {
      * Deletes all Virtual Network Function Descriptors (VNFD)
      * @return Map where key is agent's name and value is OSM response
      */
-    public Map<String, String> deleteAllVNFD()
+    public Map<String, HTTPResponse> deleteAllVNFD()
     {
         List<VirtualNetworkFunctionDescriptor> virtualNetworkFunctionDescriptors = this.getVNFDList();
-        Map<String, String> virtualNetworkFunctionDescriptorsResponseMap = virtualNetworkFunctionDescriptors.stream().collect(Collectors.toMap(vnfd -> vnfd.getName(), vnfd -> this.deleteVNFD(vnfd.getName())));
+        Map<String, HTTPResponse> virtualNetworkFunctionDescriptorsResponseMap = virtualNetworkFunctionDescriptors.stream().collect(Collectors.toMap(vnfd -> vnfd.getName(), vnfd -> this.deleteVNFD(vnfd.getName())));
         return virtualNetworkFunctionDescriptorsResponseMap;
     }
 
     /**
      * Deletes a configuration agent
      * @param name agent's name to delete
-     * @return Response where first parameter is http message and second is http code, e.c. (200,OK)
+     * @return HTTPResponse from OSM (code, message, content)
      */
     public HTTPResponse deleteConfigAgent(String name)
     {
@@ -194,7 +194,7 @@ public class OSMClient {
     /**
      * Deletes a datacenter
      * @param name datacenter's name to delete
-     * @return Response where first parameter is http message and second is http code, e.c. (200,OK)
+     * @return HTTPResponse from OSM (code, message, content)
      */
     public HTTPResponse deleteDatacenter(String name)
     {
@@ -205,33 +205,33 @@ public class OSMClient {
     /**
      * Deletes a network service
      * @param name NetworkService name to delete
-     * @return OSM server response (success or failure)
+     * @return HTTPResponse from OSM (code, message, content)
      */
-    public String deleteNS(String name)
+    public HTTPResponse deleteNS(String name)
     {
-        String response = osmController.deleteNS(name);
+        HTTPResponse response = osmController.deleteNS(name);
         return response;
     }
 
     /**
      * Deletes a network service descriptor
      * @param name NSD name to delete
-     * @return OSM server response (success or failure)
+     * @return HTTPResponse from OSM (code, message, content)
      */
-    public String deleteNSD(String name)
+    public HTTPResponse deleteNSD(String name)
     {
-        String response = osmController.deleteNSD(name);
+        HTTPResponse response = osmController.deleteNSD(name);
         return response;
     }
 
     /**
      * Deletes a virtual network function descriptor
      * @param name VNFD name to delete
-     * @return OSM server response (success or failure)
+     * @return HTTPResponse from OSM (code, message, content)
      */
-    public String deleteVNFD(String name)
+    public HTTPResponse deleteVNFD(String name)
     {
-        String response = osmController.deleteVNFD(name);
+        HTTPResponse response = osmController.deleteVNFD(name);
         return response;
     }
 
@@ -443,20 +443,12 @@ public class OSMClient {
     /**
      * Uploads a package (VNFD or NSD)
      * @param file file which represents VNFD or NSD
-     * @return Pair where first parameter is http message and second is http code, e.c. (200,OK)
+     * @return HTTPResponse from OSM (code, message, content)
      */
     public HTTPResponse uploadPackage(File file)
     {
         HTTPResponse response = osmController.uploadPackage(file);
         return response;
-    }
-
-    public static void main(String [] args)
-    {
-        OSMClient osmClient = new OSMClient("192.168.10.115","admin","admin");
-        JFileChooser chooser = new JFileChooser();
-        chooser.showOpenDialog(null);
-        System.out.println(osmClient.uploadPackage(chooser.getSelectedFile()));
     }
 
 }

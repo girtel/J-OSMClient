@@ -16,6 +16,7 @@ class OSMController {
 
     private OSMAPIConnector osmConnector;
     private OSMClient osmClient;
+    private String emptyJSON = "{}";
 
 
     protected OSMController(OSMClient osmClient)
@@ -30,7 +31,7 @@ class OSMController {
 
         List<VirtualNetworkFunctionDescriptor> vnfdList = new ArrayList<>();
         String receivedJSON = osmConnector.establishConnectionToReceiveVNFDList().getContent();
-        if(receivedJSON != null)
+        if(!receivedJSON.equalsIgnoreCase(emptyJSON))
         {
             JSONObject jObj = null;
             try {
@@ -56,7 +57,7 @@ class OSMController {
     {
         List<VirtualNetworkFunction> vnfList = new ArrayList<>();
         String receivedJSON = osmConnector.establishConnectionToReceiveVNFList().getContent();
-        if(receivedJSON != null)
+        if(!receivedJSON.equalsIgnoreCase(emptyJSON))
         {
             JSONObject jObj = null;
 
@@ -84,7 +85,7 @@ class OSMController {
     {
         List<NetworkServiceDescriptor> nsdList = new ArrayList<>();
         String receivedJSON = osmConnector.establishConnectionToReceiveNSDList().getContent();
-        if(receivedJSON != null)
+        if(!receivedJSON.equalsIgnoreCase(emptyJSON))
         {
             JSONObject jObj = null;
             try {
@@ -110,7 +111,7 @@ class OSMController {
     {
         List<NetworkService> nsList = new ArrayList<>();
         String receivedJSON = osmConnector.establishConnectionToReceiveNSList().getContent();
-        if(receivedJSON != null)
+        if(!receivedJSON.equalsIgnoreCase(emptyJSON))
         {
             JSONObject jObj = null;
             try {
@@ -147,7 +148,7 @@ class OSMController {
         List<DataCenter> datacenterList = new ArrayList<>();
         String osmTenant = osmConnector.establishConnectionToReceiveOSMTenant().getContent();
 
-        if(osmTenant != null)
+        if(!osmTenant.equalsIgnoreCase(emptyJSON))
         {
             JSONObject jObjDatacenters = null;
             try {
@@ -189,7 +190,7 @@ class OSMController {
         List<ConfigAgent> configAgentList = new ArrayList<>();
         String receivedJSON = osmConnector.establishConnectionToReceiveConfigAgentList().getContent();
 
-        if(receivedJSON != null)
+        if(!receivedJSON.equalsIgnoreCase(emptyJSON))
         {
             JSONObject jObj = null;
             try {
@@ -446,15 +447,15 @@ class OSMController {
 
     }
 
-    public String deleteNS(String name)
+    public HTTPResponse deleteNS(String name)
     {
         String nsJSON = osmConnector.establishConnectionToReceiveNSList().getContent();
         List<NetworkService> nsList = osmClient.getNSList();
-        String deleteResponse = "";
+        HTTPResponse response;
 
         if(nsList.size() == 0)
         {
-            deleteResponse = "No NS to remove";
+            response = HTTPResponse.EMPTY_RESPONSE;
         }
         else{
             JSONObject jObj = null;
@@ -483,25 +484,25 @@ class OSMController {
 
             if(nsIdToDelete.equals(""))
             {
-                deleteResponse = "NS NAMED "+name+" DOESN'T EXISTS!!!!!";
+                response = HTTPResponse.EMPTY_RESPONSE;
             }
             else
             {
-                deleteResponse = osmConnector.establishConnectionToDeleteNS(nsIdToDelete);
+                response = osmConnector.establishConnectionToDeleteNS(nsIdToDelete);
             }
 
         }
 
-        return deleteResponse;
+        return response;
     }
 
-    public String deleteNSD(String name)
+    public HTTPResponse deleteNSD(String name)
     {
-        String deleteResponse = "";
+        HTTPResponse response;
         String nsdJSON = osmConnector.establishConnectionToReceiveNSDList().getContent();
         List<NetworkServiceDescriptor> nsdList = osmClient.getNSDList();
         if(nsdList.size() == 0)
-            deleteResponse = "No NSD to remove";
+            response = HTTPResponse.EMPTY_RESPONSE;
         else{
             JSONObject jObj = null;
             try {
@@ -527,25 +528,25 @@ class OSMController {
 
             if(nsdIdToDelete.equals(""))
             {
-                deleteResponse = "NSD NAMED "+name+" DOESN'T EXISTS!!!!!";
+                response = HTTPResponse.EMPTY_RESPONSE;
             }
             else
             {
-                deleteResponse = osmConnector.establishConnectionToDeleteNSD(nsdIdToDelete);
+                response = osmConnector.establishConnectionToDeleteNSD(nsdIdToDelete);
             }
         }
 
-        return deleteResponse;
+        return response;
 
     }
 
-    public String deleteVNFD(String name)
+    public HTTPResponse deleteVNFD(String name)
     {
-        String deleteResponse = "";
+        HTTPResponse response;
         String vnfdJSON = osmConnector.establishConnectionToReceiveVNFDList().getContent();
         List<VirtualNetworkFunctionDescriptor> vnfdList = osmClient.getVNFDList();
         if(vnfdList.size() == 0)
-            deleteResponse = "No VNFD to remove";
+            response = HTTPResponse.EMPTY_RESPONSE;
         else{
 
             JSONObject jObj = null;
@@ -572,15 +573,15 @@ class OSMController {
 
             if(vnfdIdToDelete.equals(""))
             {
-                deleteResponse = "VNFD NAMED "+name+" DOESN'T EXISTS!!!!!";
+                response = HTTPResponse.EMPTY_RESPONSE;
             }
             else
             {
-                deleteResponse = osmConnector.establishConnectionToDeleteVNFD(vnfdIdToDelete);
+                response = osmConnector.establishConnectionToDeleteVNFD(vnfdIdToDelete);
             }
         }
 
-        return deleteResponse;
+        return response;
 
     }
 
@@ -604,7 +605,7 @@ class OSMController {
         }
         String tenantId = ((JSONObject)tenantJSONOb.get("tenant").getValue()).get("uuid").getValue();
 
-        String detachResponse = osmConnector.establishConnectionToDetachDatacenter(tenantId, name).getContent();
+        osmConnector.establishConnectionToDetachDatacenter(tenantId, name).getContent();
 
         osmConnector.establishConnectionToDeleteDatacenter(name);
 
@@ -625,7 +626,7 @@ class OSMController {
         HTTPResponse finalResponse = null;
         if(!defaultROType.equals("openmano"))
         {
-            finalResponse = new HTTPResponse(0,"ERROR","Error, openmano is not default account");
+            finalResponse = HTTPResponse.errorResponse("Error, openmano is not default account");
         }
         else {
 
@@ -688,7 +689,7 @@ class OSMController {
         if(response.getCode() > 299)
         {
             try {
-                throw new Exception("ERROR!! UNABLE TO ATTACH DATACENTER");
+                throw new RuntimeException("Error!! Unable to attach datacenter to OSM");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -711,7 +712,7 @@ class OSMController {
         HTTPResponse finalResponse = null;
         if(!defaultROType.equals("openmano"))
         {
-            finalResponse = new HTTPResponse(0,"Error, openmano is not default account","");
+            finalResponse = HTTPResponse.errorResponse("Error, openmano is not default account");
         }
         else {
 
@@ -766,7 +767,7 @@ class OSMController {
 
         if(!containsNSD)
             try {
-                throw new RuntimeException("NSD NAMED "+nsdName+" NOT FOUND");
+                throw new RuntimeException("NSD named "+nsdName+" not found");
             } catch (Exception e) {
                 e.printStackTrace();
             }

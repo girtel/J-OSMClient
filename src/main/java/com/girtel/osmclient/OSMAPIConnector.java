@@ -378,261 +378,52 @@ class OSMAPIConnector {
         return response;
     }
 
-    public String establishConnectionToDeleteNS(String id)
+    public HTTPResponse establishConnectionToDeleteNS(String id)
     {
-
-        URL url = null;
-        String response = "";
-
-        try {
-
-            String deleteURL = NS_DELETE_URL.replace("{ns_id}",id);
-            url = new URL("https://"+osmIPAddress+":8008"+ deleteURL);
-
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-            conn.setRequestMethod("DELETE");
-            configureConnection(conn);
-
-            conn.setUseCaches(false);
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-
-
-            conn.connect();
-
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-            String line = "";
-            while((line = in.readLine()) != null)
-            {
-                response = response + line;
-            }
-
-            conn.disconnect();
-        } catch (MalformedURLException e3) {
-            e3.printStackTrace();
-        } catch (ProtocolException e2) {
-            e2.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        String url = "https://"+osmIPAddress+":8008" + NS_DELETE_URL.replace("{ns_id}",id).replace("{projectname}",project);
+        HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.DELETE);
+        HTTPResponse response = processHTTPResponse(conn);
         return response;
     }
 
-    public String establishConnectionToDeleteNSD(String id)
+    public HTTPResponse establishConnectionToDeleteNSD(String id)
     {
-
-        URL url = null;
-        String response = "";
-
-        try {
-
-            String deleteURL = NSD_DELETE_URL.replace("{nsd_id}",id);
-            url = new URL("https://"+osmIPAddress+":8008"+ deleteURL);
-
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-            conn.setRequestMethod("DELETE");
-            configureConnection(conn);
-
-            conn.setUseCaches(false);
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-
-
-            conn.connect();
-
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-            String line = "";
-            while((line = in.readLine()) != null)
-            {
-                response = response + line;
-            }
-
-            conn.disconnect();
-        } catch (MalformedURLException e3) {
-            e3.printStackTrace();
-        } catch (ProtocolException e2) {
-            e2.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        String url = "https://"+osmIPAddress+":8008" + NSD_DELETE_URL.replace("{nsd_id}",id).replace("{projectname}",project);
+        HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.DELETE);
+        HTTPResponse response = processHTTPResponse(conn);
         return response;
     }
 
-    public String establishConnectionToDeleteVNFD(String id)
+    public HTTPResponse establishConnectionToDeleteVNFD(String id)
     {
-
-        URL url = null;
-        String response = "";
-
-        try {
-
-            String deleteURL = VNFD_DELETE_URL.replace("{vnfd_id}",id);
-            url = new URL("https://"+osmIPAddress+":8008"+ deleteURL);
-
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-            conn.setRequestMethod("DELETE");
-            configureConnection(conn);
-
-            conn.setUseCaches(false);
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-
-
-            conn.connect();
-
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-            String line = "";
-            while((line = in.readLine()) != null)
-            {
-                response = response + line;
-            }
-
-            conn.disconnect();
-        } catch (MalformedURLException e3) {
-            e3.printStackTrace();
-        } catch (ProtocolException e2) {
-            e2.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        String url = "https://"+osmIPAddress+":8008" + VNFD_DELETE_URL.replace("{vnfd_id}",id).replace("{projectname}",project);
+        HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.DELETE);
+        HTTPResponse response = processHTTPResponse(conn);
         return response;
     }
 
     public HTTPResponse establishConnectionToDeleteConfigAgent(String name)
     {
-        URL url = null;
-        int responseCode = 0;
-        String responseMessage = "";
-        String receivedJSON = "";
-
-        try {
-
-            url = new URL("https://"+osmIPAddress+":8008"+ CONFIG_AGENT_URL+"/account/"+name);
-            System.out.println(url);
-
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-            conn.setRequestMethod("DELETE");
-            configureConnection(conn);
-
-            conn.setUseCaches(false);
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-
-
-            conn.connect();
-
-
-            responseCode = conn.getResponseCode();
-            responseMessage = conn.getResponseMessage();
-
-            conn.disconnect();
-        } catch (MalformedURLException e3) {
-            e3.printStackTrace();
-        } catch (ProtocolException e2) {
-            e2.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return new HTTPResponse(responseCode, responseMessage,"");
+        String url = "https://"+osmIPAddress+":8008"+ CONFIG_AGENT_URL.replace("{projectname}",project)+"/account/"+name;
+        HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.DELETE);
+        HTTPResponse response = processHTTPResponse(conn);
+        return response;
     }
 
     public HTTPResponse establishConnectionToScaleNS(String nsId, String group, JSONObject scaleJSON)
     {
-        URL url = null;
-        int responseCode = 0;
-        String responseMessage = "";
-        String receivedJSON = "";
-
-        try {
-
-            String scaleURL = SCALE_URL.replace("{ns_id}",nsId).replace("{group",group);
-
-            url = new URL("https://"+osmIPAddress+":8008"+ scaleURL);
-
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-            conn.setRequestMethod("POST");
-            configureConnection(conn);
-
-            conn.setUseCaches(false);
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-
-
-            conn.connect();
-
-            DataOutputStream out = new DataOutputStream(conn.getOutputStream());
-
-            System.out.println("SCALE NS -> "+scaleJSON.toString());
-
-            out.writeBytes(scaleJSON.toString());
-
-            responseCode = conn.getResponseCode();
-            responseMessage = conn.getResponseMessage();
-
-            out.close();
-            conn.disconnect();
-        } catch (MalformedURLException e3) {
-            e3.printStackTrace();
-        } catch (ProtocolException e2) {
-            e2.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return new HTTPResponse(responseCode, responseMessage,"");
+        String url = "https://"+osmIPAddress+":8008" +  SCALE_URL.replace("{ns_id}",nsId).replace("{group",group);
+        HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.POST, scaleJSON);
+        HTTPResponse response = processHTTPResponse(conn);
+        return response;
     }
 
-    public String establishConnectionToReceiveNSOperationalData(String id)
+    public HTTPResponse establishConnectionToReceiveNSOperationalData(String id)
     {
-        URL url = null;
-        String receivedJSON = "";
-        try {
-
-            String opDataUrl = NS_OPDATA_URL.replace("{ns_id}",id);
-
-            url = new URL("https://"+osmIPAddress+":8008"+ opDataUrl);
-
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-            conn.setRequestMethod("GET");
-            configureConnection(conn);
-
-            conn.setUseCaches(false);
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-
-            conn.connect();
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-            String line = "";
-            while((line = in.readLine()) != null)
-            {
-                receivedJSON = receivedJSON + line;
-            }
-
-            System.out.println("OP DATA -> "+receivedJSON);
-
-            in.close();
-            conn.disconnect();
-        } catch (MalformedURLException e3) {
-            e3.printStackTrace();
-        } catch (ProtocolException e2) {
-            e2.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return receivedJSON;
+        String url = "https://"+osmIPAddress+":8008" + NS_OPDATA_URL.replace("{ns_id}",id).replace("{projectname}",project);
+        HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.GET);
+        HTTPResponse response = processHTTPResponse(conn);
+        return response;
     }
 
 }
