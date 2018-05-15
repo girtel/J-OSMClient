@@ -72,11 +72,6 @@ class OSMAPIConnector {
         }
     }
 
-    private enum FileTypeToSend
-    {
-        JSON, FILE, NONE;
-    }
-
     private void configureSecurity()
     {
         TrustManager[] trustAllCerts = new TrustManager[]{
@@ -129,11 +124,6 @@ class OSMAPIConnector {
 
     private void configureConnection(HttpURLConnection conn, MultipartEntity... optionalMultiPartEntity)
     {
-        conn.setRequestProperty("Content-Encoding", "gzip");
-        conn.setRequestProperty("Accept","*application/json*");
-        conn.setRequestProperty("Content-Type",entity.getContentType().getValue());
-        conn.setRequestProperty("Content-length", String.valueOf(file.length()));
-        conn.setRequestProperty("Authorization",credentials);
         if(optionalMultiPartEntity.length == 0)
         {
             conn.setRequestProperty("Content-Type","application/json");
@@ -142,7 +132,12 @@ class OSMAPIConnector {
         }
         else if (optionalMultiPartEntity.length == 1)
         {
-
+            MultipartEntity entity = optionalMultiPartEntity[0];
+            conn.setRequestProperty("Content-Encoding", "gzip");
+            conn.setRequestProperty("Accept","*application/json*");
+            conn.setRequestProperty("Content-Type",entity.getContentType().getValue());
+            conn.setRequestProperty("Content-length", String.valueOf(entity.getContentLength()));
+            conn.setRequestProperty("Authorization",credentials);
         }
         else
             throw new RuntimeException("No more than one multipartEntity is allowed");
@@ -150,9 +145,8 @@ class OSMAPIConnector {
 
     }
 
-    private HttpURLConnection establishConnection(String url, HTTPMethod method, Object... optionalObjectToSend)
+    private HttpURLConnection sendHTTPRequest(String url, HTTPMethod method, Object... optionalObjectToSend)
     {
-        Object obj = null;
         URL url_;
         HttpURLConnection conn = null;
         try {
@@ -168,7 +162,51 @@ class OSMAPIConnector {
             {
                 configureConnection(conn);
             }
-            conn.connect();
+            else if(optionalObjectToSend.length == 1)
+            {
+                Object obj = optionalObjectToSend[0];
+                if(obj instanceof File)
+                {
+                    File file = (File)obj;
+                    FileBody fileBody = new FileBody(file);
+                    MultipartEntity entity = new MultipartEntity(HttpMultipartMode.STRICT);
+                    entity.addPart("package",fileBody);
+
+                    configureConnection(conn, entity);
+                    conn.connect();
+
+                    OutputStream out = null;
+                    try {
+                        out = conn.getOutputStream();
+                        entity.writeTo(out);
+                        out.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                else if(obj instanceof JSONObject)
+                {
+                    configureConnection(conn);
+                    conn.connect();
+
+                    JSONObject json = (JSONObject)obj;
+                    DataOutputStream out = null;
+                    try {
+                        out = new DataOutputStream(conn.getOutputStream());
+                        out.writeBytes(JSON.write(json));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else{
+                    throw new RuntimeException("Unsupported file type -> "+obj.getClass());
+                }
+            }
+            else{
+                throw new RuntimeException("More than one object is not allowed");
+            }
+
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -181,35 +219,7 @@ class OSMAPIConnector {
         return conn;
     }
 
-    private void sendJSON(HttpURLConnection conn, JSONObject json)
-    {
-        DataOutputStream out = null;
-        try {
-            out = new DataOutputStream(conn.getOutputStream());
-            out.writeBytes(JSON.write(json));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void sendFile(HttpURLConnection conn, File fileToUpload)
-    {
-        FileBody fileBody = new FileBody(fileToUpload);
-        MultipartEntity entity = new MultipartEntity(HttpMultipartMode.STRICT);
-        entity.addPart("package",fileBody);
-
-        OutputStream out = null;
-        try {
-            out = conn.getOutputStream();
-            entity.writeTo(out);
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private HTTPResponse processResponse(HttpURLConnection conn)
+    private HTTPResponse processHTTPResponse(HttpURLConnection conn)
     {
         BufferedReader in = null;
         int code = 0;
@@ -241,32 +251,32 @@ class OSMAPIConnector {
     {
 
         String url = "https://"+osmIPAddress+":8008"+ VNFD_URL.replace("{projectname}",project);
-        HttpURLConnection conn = establishConnection(url, HTTPMethod.GET);
-        HTTPResponse response = processResponse(conn);
+        HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.GET);
+        HTTPResponse response = processHTTPResponse(conn);
         return response;
     }
 
     public HTTPResponse establishConnectionToReceiveVNFList()
     {
         String url = "https://"+osmIPAddress+":8008"+ VNF_URL.replace("{projectname}",project);
-        HttpURLConnection conn = establishConnection(url, HTTPMethod.GET);
-        HTTPResponse response = processResponse(conn);
+        HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.GET);
+        HTTPResponse response = processHTTPResponse(conn);
         return response;
     }
 
     public HTTPResponse establishConnectionToReceiveNSDList()
     {
         String url = "https://"+osmIPAddress+":8008"+ NSD_URL.replace("{projectname}",project);
-        HttpURLConnection conn = establishConnection(url, HTTPMethod.GET);
-        HTTPResponse response = processResponse(conn);
+        HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.GET);
+        HTTPResponse response = processHTTPResponse(conn);
         return response;
     }
 
     public HTTPResponse establishConnectionToReceiveNSList()
     {
         String url = "https://"+osmIPAddress+":8008"+ NS_URL.replace("{projectname}",project);
-        HttpURLConnection conn = establishConnection(url, HTTPMethod.GET);
-        HTTPResponse response = processResponse(conn);
+        HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.GET);
+        HTTPResponse response = processHTTPResponse(conn);
         return response;
     }
 
@@ -274,8 +284,8 @@ class OSMAPIConnector {
     public HTTPResponse establishConnectionToReceiveDatacenterList(String tenantId)
     {
         String url = "http://"+osmIPAddress+":9090"+ DATACENTER_LIST_URL.replace("{tenant_id}",tenantId);
-        HttpURLConnection conn = establishConnection(url, HTTPMethod.GET);
-        HTTPResponse response = processResponse(conn);
+        HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.GET);
+        HTTPResponse response = processHTTPResponse(conn);
         return response;
     }
 
@@ -283,94 +293,88 @@ class OSMAPIConnector {
     public HTTPResponse establishConnectionToReceiveConfigAgentList()
     {
         String url = "https://"+osmIPAddress+":8008"+ CONFIG_AGENT_URL.replace("{projectname}",project);
-        HttpURLConnection conn = establishConnection(url, HTTPMethod.GET);
-        HTTPResponse response = processResponse(conn);
+        HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.GET);
+        HTTPResponse response = processHTTPResponse(conn);
         return response;
     }
 
     public HTTPResponse establishConnectionToCreateDatacenter(JSONObject dataCenterJSON)
     {
         String url = "http://"+osmIPAddress+":9090"+ DATACENTERS_URL;
-        HttpURLConnection conn = establishConnection(url, HTTPMethod.POST);
-        sendJSON(conn, dataCenterJSON);
-        HTTPResponse response = processResponse(conn);
+        HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.POST, dataCenterJSON);
+        HTTPResponse response = processHTTPResponse(conn);
         return response;
     }
 
     public HTTPResponse establishConnectionToAttachDatacenterToOSM(String tenantId, String datacenterId, JSONObject dataCenterJSON)
     {
         String url = "http://"+osmIPAddress+":9090"+ ATTACH_DETACH_DATACENTER_URL.replace("{osm_id}",tenantId).replace("{dc_id}",datacenterId);
-        HttpURLConnection conn = establishConnection(url, HTTPMethod.POST);
-        sendJSON(conn, dataCenterJSON);
-        HTTPResponse response = processResponse(conn);
+        HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.POST, dataCenterJSON);
+        HTTPResponse response = processHTTPResponse(conn);
         return response;
     }
 
     public HTTPResponse establishConnectionToReceiveOSMTenant()
     {
         String url = "http://"+osmIPAddress+":9090"+ GET_TENANTS_URL+"osm";
-        HttpURLConnection conn = establishConnection(url, HTTPMethod.GET);
-        HTTPResponse response = processResponse(conn);
+        HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.GET);
+        HTTPResponse response = processHTTPResponse(conn);
         return response;
     }
 
     public HTTPResponse establishConnectionToReceiveDefaultROAccount()
     {
         String url = "https://"+osmIPAddress+":8008"+ DEFAULTROACCOUNT_URL.replace("{projectname}",project);
-        HttpURLConnection conn = establishConnection(url, HTTPMethod.GET);
-        HTTPResponse response = processResponse(conn);
+        HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.GET);
+        HTTPResponse response = processHTTPResponse(conn);
         return response;
     }
 
     public HTTPResponse establishConnectionToUpdateROAccount(JSONObject updateJSON)
     {
         String url = "https://"+osmIPAddress+":8008"+ UPDATEROACCOUNT_URL;
-        HttpURLConnection conn = establishConnection(url, HTTPMethod.POST);
-        sendJSON(conn, updateJSON);
-        HTTPResponse response = processResponse(conn);
+        HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.POST, updateJSON);
+        HTTPResponse response = processHTTPResponse(conn);
         return response;
     }
 
     public HTTPResponse establishConnectionToUploadPackageToOSM(File packageToUpload)
     {
         String url = UPLOAD_PACKAGE_URL.replace("{osm_ip}",osmIPAddress).replace("{projectname}",project);
-        HttpURLConnection conn = establishConnection(url, HTTPMethod.POST);
-        sendFile(conn, packageToUpload);
-        HTTPResponse response = processResponse(conn);
+        HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.POST, packageToUpload);
+        HTTPResponse response = processHTTPResponse(conn);
         return response;
     }
 
     public HTTPResponse establishConnectionToCreateNS(JSONObject nsJSON)
     {
         String url = "https://"+osmIPAddress+":8008"+ CREATE_NS_URL.replace("{projectname}",project);
-        HttpURLConnection conn = establishConnection(url, HTTPMethod.POST);
-        sendJSON(conn, nsJSON);
-        HTTPResponse response = processResponse(conn);
+        HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.POST, nsJSON);
+        HTTPResponse response = processHTTPResponse(conn);
         return response;
     }
 
     public HTTPResponse establishConnectionToAddConfigAgent(JSONObject configAgentJSON)
     {
         String url = "https://"+osmIPAddress+":8008" + CONFIG_AGENT_URL.replace("{projectname}",project);
-        HttpURLConnection conn = establishConnection(url, HTTPMethod.POST);
-        sendJSON(conn, configAgentJSON);
-        HTTPResponse response = processResponse(conn);
+        HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.POST, configAgentJSON);
+        HTTPResponse response = processHTTPResponse(conn);
         return response;
     }
 
     public HTTPResponse establishConnectionToDetachDatacenter(String tenantId, String datacenterName)
     {
         String url = "http://"+osmIPAddress+":9090" + ATTACH_DETACH_DATACENTER_URL.replace("{osm_id}",tenantId).replace("{dc_id}",datacenterName);
-        HttpURLConnection conn = establishConnection(url, HTTPMethod.DELETE);
-        HTTPResponse response = processResponse(conn);
+        HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.DELETE);
+        HTTPResponse response = processHTTPResponse(conn);
         return response;
     }
 
     public HTTPResponse establishConnectionToDeleteDatacenter(String datacenterName)
     {
         String url = "http://"+osmIPAddress+":9090"+ DATACENTERS_URL+"/"+datacenterName;
-        HttpURLConnection conn = establishConnection(url, HTTPMethod.DELETE);
-        HTTPResponse response = processResponse(conn);
+        HttpURLConnection conn = sendHTTPRequest(url, HTTPMethod.DELETE);
+        HTTPResponse response = processHTTPResponse(conn);
         return response;
     }
 
