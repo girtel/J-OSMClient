@@ -451,4 +451,9 @@ public class OSMClient {
         return response;
     }
 
+    public static void main(String [] args)
+    {
+        
+    }
+
 }
