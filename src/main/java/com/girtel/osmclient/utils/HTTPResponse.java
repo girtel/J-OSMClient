@@ -10,7 +10,6 @@ public class HTTPResponse
 
     private Integer code;
     private String message, content;
-    public static HTTPResponse EMPTY_RESPONSE = new HTTPResponse(0,"","");
     /**
      * Constructor
      *
@@ -67,4 +66,6 @@ public class HTTPResponse
     {
         return new HTTPResponse(0,"ERROR",content);
     }
+
+    public static HTTPResponse EMPTY_RESPONSE = new HTTPResponse(0,"EMPTY","EMPTY");
 }
