@@ -8,6 +8,7 @@ import com.girtel.osmclient.utils.HTTPResponse;
 import com.girtel.osmclient.utils.OSMConstants;
 import org.apache.http.protocol.HTTP;
 
+import javax.swing.*;
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.util.ArrayList;
@@ -453,7 +454,30 @@ public class OSMClient {
 
     public static void main(String [] args)
     {
+        //OSMClient osmClient = new OSMClient("192.168.10.115","admin","admin");
 
+        /*System.out.println(osmClient.getDataCenterList());
+        System.out.println(osmClient.deleteAllDatacenters());
+
+        System.out.println(osmClient.createDatacenter("vimtwo", OSMConstants.OSMVimType.OPENSTACK,
+                "admin","girtelserver", "http://10.0.2.12/identity/v3",
+                "admin",true,"keypairvimtwo"));
+
+        System.out.println(osmClient.createDatacenter("vimthree", OSMConstants.OSMVimType.OPENSTACK,
+                "admin","girtelserver", "http://10.0.2.13/identity/v3",
+                "admin",true,"keypairvimthree"));*/
+       // osmClient.deleteAllNSD();
+        /*JFileChooser chooser = new JFileChooser();
+        chooser.setMultiSelectionEnabled(true);
+        int sel = chooser.showOpenDialog(null);
+        if(sel == JFileChooser.APPROVE_OPTION)
+        {
+            File [] selectedFiles = chooser.getSelectedFiles();
+            for(File f : selectedFiles)
+                System.out.println(osmClient.uploadPackage(f));
+        }*/
+
+        //System.out.println(osmClient.createNS("prueba","vnf1-ns-large","vimtwo"));
     }
 
 }

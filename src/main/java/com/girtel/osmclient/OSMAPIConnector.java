@@ -163,7 +163,7 @@ class OSMAPIConnector {
             {
                 configureConnection(conn);
                 conn.connect();
-                response = processHTTPResponse(conn);
+                response = HTTPResponse.getResponseFromHTTPConnection(conn);
             }
             else if(optionalObjectToSend.length == 1)
             {
@@ -187,7 +187,7 @@ class OSMAPIConnector {
                         e.printStackTrace();
                     }
 
-                    response = processHTTPResponse(conn);
+                    response = HTTPResponse.getResponseFromHTTPConnection(conn);
 
                 }
                 else if(obj instanceof JSONObject)
@@ -204,7 +204,7 @@ class OSMAPIConnector {
                         e.printStackTrace();
                     }
 
-                    response = processHTTPResponse(conn);
+                    response = HTTPResponse.getResponseFromHTTPConnection(conn);
                 }
                 else{
                     throw new RuntimeException("Unsupported file type -> "+obj.getClass());
@@ -225,34 +225,6 @@ class OSMAPIConnector {
 
         return response;
     }
-
-    private HTTPResponse processHTTPResponse(HttpURLConnection conn)
-    {
-        BufferedReader in = null;
-        int code = 0;
-        String message = "";
-        String response = "";
-
-        try {
-            code = conn.getResponseCode();
-            message = conn.getResponseMessage();
-            in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String line = "";
-            while((line = in.readLine()) != null)
-            {
-                response += line;
-            }
-
-            in.close();
-            conn.disconnect();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return new HTTPResponse(code, message, response);
-    }
-
 
     public HTTPResponse establishConnectionToReceiveVNFDList()
     {

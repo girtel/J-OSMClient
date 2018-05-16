@@ -1,5 +1,10 @@
 package com.girtel.osmclient.utils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+
 /**
  * This class represents a HTTP Response
  *
@@ -7,6 +12,11 @@ package com.girtel.osmclient.utils;
  */
 public class HTTPResponse
 {
+
+    /**
+     * Returns an empty HTTPResponse
+     */
+    public static HTTPResponse EMPTY_RESPONSE = new HTTPResponse(0,"EMPTY","EMPTY");
 
     private Integer code;
     private String message, content;
@@ -16,7 +26,7 @@ public class HTTPResponse
      * @param code HTTP code
      * @param message HTTP message
      */
-    public HTTPResponse(Integer code, String message, String content)
+    private HTTPResponse(Integer code, String message, String content)
     {
         this.code = code;
         this.message = message;
@@ -58,6 +68,37 @@ public class HTTPResponse
     }
 
     /**
+     * Obtains a HTTP Response from a HTTP Connection
+     * @param conn HTTP Connection to process
+     * @return HTTP Response
+     */
+    public static HTTPResponse getResponseFromHTTPConnection(HttpURLConnection conn)
+    {
+        BufferedReader in = null;
+        int code = 0;
+        String message = "";
+        String response = "";
+
+        try {
+            code = conn.getResponseCode();
+            message = conn.getResponseMessage();
+            in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line = "";
+            while((line = in.readLine()) != null)
+            {
+                response += line;
+            }
+
+            in.close();
+            conn.disconnect();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new HTTPResponse(code, message, response);
+    }
+    /**
      * Returns a HTTPResponse which represents an error
      * @param content error content
      * @return Error HTTPResponse
@@ -67,5 +108,4 @@ public class HTTPResponse
         return new HTTPResponse(0,"ERROR",content);
     }
 
-    public static HTTPResponse EMPTY_RESPONSE = new HTTPResponse(0,"EMPTY","EMPTY");
 }
