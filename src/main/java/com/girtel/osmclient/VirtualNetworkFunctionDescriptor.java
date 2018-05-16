@@ -1,5 +1,7 @@
 package com.girtel.osmclient;
 
+import com.girtel.osmclient.utils.OSMConstants;
+
 import java.util.List;
 
 /**
@@ -8,7 +10,7 @@ import java.util.List;
  * @author Cesar San-Nicolas-Martinez
  *
  */
-public class VirtualNetworkFunctionDescriptor
+public class VirtualNetworkFunctionDescriptor extends OSMComponent
 {
 
     private String name, id, description;
@@ -21,9 +23,9 @@ public class VirtualNetworkFunctionDescriptor
      * @param description VNFD description
      * @param vduList VNFD list of constituent VDUs
      */
-    protected VirtualNetworkFunctionDescriptor(String id, String name, String description,
-                                            List<VirtualDeploymentUnit> vduList)
+    protected VirtualNetworkFunctionDescriptor(String id, String name, String description, List<VirtualDeploymentUnit> vduList)
     {
+        super(name, OSMConstants.OSMComponentType.VNFD);
         this.id = id;
         this.name = name;
         this.description = description;

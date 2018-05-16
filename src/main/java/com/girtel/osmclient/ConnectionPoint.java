@@ -1,13 +1,15 @@
 package com.girtel.osmclient;
 
 
+import com.girtel.osmclient.utils.OSMConstants;
+
 /**
  * This class represents Open Source MANO Connection-Point component.
  *
  * @author Cesar San-Nicolas-Martinez
  *
  */
-public class ConnectionPoint {
+public class ConnectionPoint extends OSMComponent {
 
     private String name, macAddress, ipAddress;
 
@@ -19,6 +21,7 @@ public class ConnectionPoint {
      */
     protected ConnectionPoint(String name, String macAddress, String ipAddress)
     {
+        super(name, OSMConstants.OSMComponentType.CONNECTION_POINT);
         this.name = name;
         this.macAddress = macAddress;
         this.ipAddress = ipAddress;

@@ -1,6 +1,9 @@
 package com.girtel.osmclient;
 
+import com.girtel.osmclient.utils.OSMConstants;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This class represents Open Source MANO Network-Service-Descriptor (NSD) component.
@@ -8,7 +11,7 @@ import java.util.List;
  * @author Cesar San-Nicolas-Martinez
  *
  */
-public class NetworkServiceDescriptor {
+public class NetworkServiceDescriptor extends OSMComponent{
 
 
     private String id, name, description;
@@ -23,9 +26,9 @@ public class NetworkServiceDescriptor {
      * @param vnfdList NSD constituent VNFDs
      * @param vldList NSD constituent VLDs
      */
-    protected NetworkServiceDescriptor(String id, String name, String description,
-                                    List<VirtualNetworkFunctionDescriptor> vnfdList, List<VirtualLinkDescriptor> vldList)
+    protected NetworkServiceDescriptor(String id, String name, String description, List<VirtualNetworkFunctionDescriptor> vnfdList, List<VirtualLinkDescriptor> vldList)
     {
+        super(name, OSMConstants.OSMComponentType.NSD);
         this.id = id;
         this.name = name;
         this.description = description;

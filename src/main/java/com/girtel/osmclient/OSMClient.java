@@ -6,9 +6,7 @@ package com.girtel.osmclient;
 
 import com.girtel.osmclient.utils.HTTPResponse;
 import com.girtel.osmclient.utils.OSMConstants;
-import org.apache.http.protocol.HTTP;
 
-import javax.swing.*;
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.util.ArrayList;
@@ -96,20 +94,20 @@ public class OSMClient {
     }
 
     /**
-     * Creates a new datacenter (VIM)
-     * @param name new datacenter's name
-     * @param osmVimType new datacenter's type (Openvim, Openstack or AWS)
-     * @param user datacenter's user
-     * @param password datacenter's password
+     * Creates a new VIM
+     * @param name new VIM name
+     * @param osmVimType new VIM type (Openvim, Openstack or AWS)
+     * @param user VIM user
+     * @param password VIM password
      * @param authURL authentication URL, e.c. in Openstack: http://(IP_ADDRESS)/identity/v3
-     * @param tenant datacenter's tenant to instantiate VMs
+     * @param tenant VIM tenant to instantiate VMs
      * @param usingFloatingIPs true if you want to assign floating ips automatically, false if not
      * @param keyPairName SSH key pair name (optional)
      * @return HTTPResponse from OSM (code, message, content)
      */
-    public HTTPResponse createDatacenter(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, boolean usingFloatingIPs, String... keyPairName)
+    public HTTPResponse createVIM(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, boolean usingFloatingIPs, String... keyPairName)
     {
-        HTTPResponse response = osmController.createDataCenter(name,osmVimType,user,password,authURL,tenant,usingFloatingIPs, keyPairName);
+        HTTPResponse response = osmController.createVIM(name,osmVimType,user,password,authURL,tenant,usingFloatingIPs, keyPairName);
         return response;
     }
 
@@ -138,14 +136,14 @@ public class OSMClient {
     }
 
     /**
-     * Deletes all Datacenters (VIMs)
+     * Deletes all VIMs
      * @return Map where key is agent's name and value is http response
      */
-    public Map<String, HTTPResponse> deleteAllDatacenters()
+    public Map<String, HTTPResponse> deleteAllVIM()
     {
-        List<DataCenter> datacenters = this.getDataCenterList();
-        Map<String, HTTPResponse> datacentersResponseMap = datacenters.stream().collect(Collectors.toMap(dc -> dc.getName(), dc -> this.deleteDatacenter(dc.getName())));
-        return datacentersResponseMap;
+        List<VirtualInfrastructureManager> vims = this.getVIMList();
+        Map<String, HTTPResponse> vimsResponseMap = vims.stream().collect(Collectors.toMap(vim -> vim.getName(), vim -> this.deleteVIM(vim.getName())));
+        return vimsResponseMap;
     }
 
     /**
@@ -193,13 +191,13 @@ public class OSMClient {
     }
 
     /**
-     * Deletes a datacenter
-     * @param name datacenter's name to delete
+     * Deletes a VIM
+     * @param name VIM name to delete
      * @return HTTPResponse from OSM (code, message, content)
      */
-    public HTTPResponse deleteDatacenter(String name)
+    public HTTPResponse deleteVIM(String name)
     {
-        HTTPResponse response  = osmController.deleteDatacenter(name);
+        HTTPResponse response  = osmController.deleteVIM(name);
         return response;
     }
 
@@ -249,9 +247,9 @@ public class OSMClient {
      * Obtains datacenter (vim) 's list
      * @return vim's list
      */
-    public List<DataCenter> getDataCenterList()
+    public List<VirtualInfrastructureManager> getVIMList()
     {
-        return osmController.parseDatacenterList();
+        return osmController.parseVIMList();
     }
 
     /**
@@ -422,23 +420,23 @@ public class OSMClient {
     }
 
     /**
-     * Obtains Datacenter (VIM) from its name
+     * Obtains VIM from its name
      * @param name VIM name
-     * @return Datacenter (VIM) named (name)
+     * @return VIM named (name)
      */
-    public DataCenter getDatacenter(String name)
+    public VirtualInfrastructureManager getVIM(String name)
     {
-        DataCenter finalDC = null;
-        for(DataCenter dc : getDataCenterList())
+        VirtualInfrastructureManager finalVIM = null;
+        for(VirtualInfrastructureManager vim : getVIMList())
         {
-            if(dc.getName().equals(name))
+            if(vim.getName().equals(name))
             {
-                finalDC = dc;
+                finalVIM = vim;
                 break;
             }
         }
 
-        return finalDC;
+        return finalVIM;
     }
 
     /**
@@ -450,34 +448,6 @@ public class OSMClient {
     {
         HTTPResponse response = osmController.uploadPackage(file);
         return response;
-    }
-
-    public static void main(String [] args)
-    {
-        //OSMClient osmClient = new OSMClient("192.168.10.115","admin","admin");
-
-        /*System.out.println(osmClient.getDataCenterList());
-        System.out.println(osmClient.deleteAllDatacenters());
-
-        System.out.println(osmClient.createDatacenter("vimtwo", OSMConstants.OSMVimType.OPENSTACK,
-                "admin","girtelserver", "http://10.0.2.12/identity/v3",
-                "admin",true,"keypairvimtwo"));
-
-        System.out.println(osmClient.createDatacenter("vimthree", OSMConstants.OSMVimType.OPENSTACK,
-                "admin","girtelserver", "http://10.0.2.13/identity/v3",
-                "admin",true,"keypairvimthree"));*/
-       // osmClient.deleteAllNSD();
-        /*JFileChooser chooser = new JFileChooser();
-        chooser.setMultiSelectionEnabled(true);
-        int sel = chooser.showOpenDialog(null);
-        if(sel == JFileChooser.APPROVE_OPTION)
-        {
-            File [] selectedFiles = chooser.getSelectedFiles();
-            for(File f : selectedFiles)
-                System.out.println(osmClient.uploadPackage(f));
-        }*/
-
-        //System.out.println(osmClient.createNS("prueba","vnf1-ns-large","vimtwo"));
     }
 
 }

@@ -1,5 +1,7 @@
 package com.girtel.osmclient;
 
+import com.girtel.osmclient.utils.OSMConstants;
+
 import java.util.List;
 
 /**
@@ -8,7 +10,7 @@ import java.util.List;
  * @author Cesar San-Nicolas-Martinez
  *
  */
-public class VirtualNetworkFunction {
+public class VirtualNetworkFunction extends OSMComponent{
 
 
     private String id, name, description, status, nsIdRef;
@@ -30,6 +32,7 @@ public class VirtualNetworkFunction {
     protected VirtualNetworkFunction(String id, String name, String description, String status, String nsIdRef, VirtualNetworkFunctionDescriptor vnfd,
                                   List<ConnectionPoint> connPointList, List<MonitoringParameter> monParamList)
     {
+        super(name, OSMConstants.OSMComponentType.VNF);
         this.id = id;
         this.name = name;
         this.description = description;
@@ -57,6 +60,7 @@ public class VirtualNetworkFunction {
     {
         return name;
     }
+
 
     /**
      * Gets VNF description

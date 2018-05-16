@@ -120,7 +120,7 @@ class OSMAPIConnector {
         HttpsURLConnection.setDefaultHostnameVerifier(hv);
 
     }
-    
+
     private void configureConnection(HttpURLConnection conn, MultipartEntity... optionalMultiPartEntity)
     {
         if(optionalMultiPartEntity.length == 0)

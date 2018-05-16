@@ -10,6 +10,7 @@ import javafx.util.Pair;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 class OSMController {
@@ -143,9 +144,9 @@ class OSMController {
 
     }
 
-    public List<DataCenter> parseDatacenterList()
+    public List<VirtualInfrastructureManager> parseVIMList()
     {
-        List<DataCenter> datacenterList = new ArrayList<>();
+        List<VirtualInfrastructureManager> datacenterList = new ArrayList<>();
         String osmTenant = osmConnector.establishConnectionToReceiveOSMTenant().getContent();
 
         if(!osmTenant.equalsIgnoreCase(emptyJSON))
@@ -175,7 +176,7 @@ class OSMController {
                 for(JSONValue dcJSON : dataCenterArray)
                 {
                     JSONObject jOb = dcJSON.getValue();
-                    DataCenter dc = parseDataCenter(jOb);
+                    VirtualInfrastructureManager dc = parseVIM(jOb);
                     datacenterList.add(dc);
                 }
             }
@@ -364,13 +365,13 @@ class OSMController {
         return vld;
     }
 
-    private DataCenter parseDataCenter(JSONObject ob)
+    private VirtualInfrastructureManager parseVIM(JSONObject ob)
     {
-        String dcName = ob.get("name").getValue();
-        String dcUUID = ob.get("uuid").getValue();
-        String dcURL = ob.get("vim_url").getValue();
-        String dcType = ob.get("type").getValue();
-        DataCenter dc = new DataCenter(dcName,dcUUID,dcURL,dcType);
+        String name = ob.get("name").getValue();
+        String id = ob.get("uuid").getValue();
+        String url = ob.get("vim_url").getValue();
+        String type = ob.get("type").getValue();
+        VirtualInfrastructureManager dc = new VirtualInfrastructureManager(name,id,url,type);
         return dc;
     }
 
@@ -441,7 +442,10 @@ class OSMController {
         JSONObject nsdJSON = ob.get("nsd").getValue();
         NetworkServiceDescriptor nsNSD = parseNSD(nsdJSON);
 
-        NetworkService ns = new NetworkService(nsId,nsName,nsDescription,nsStatus,nsDatacenter,nsNSD);
+        List<VirtualNetworkFunction> vnfs = osmClient.getVNFList();
+        List<VirtualNetworkFunction> thisNS_VNFs = vnfs.stream().filter(vnf -> vnf.getNSID().equalsIgnoreCase(nsId)).collect(Collectors.toList());
+
+        NetworkService ns = new NetworkService(nsId,nsName,nsDescription,nsStatus,nsDatacenter,nsNSD,thisNS_VNFs);
 
         return ns;
 
@@ -592,7 +596,7 @@ class OSMController {
         return response;
     }
 
-    public HTTPResponse deleteDatacenter(String name)
+    public HTTPResponse deleteVIM(String name)
     {
         String tenantJSON = osmConnector.establishConnectionToReceiveOSMTenant().getContent();
 
@@ -644,7 +648,7 @@ class OSMController {
         return finalResponse;
     }
 
-    public HTTPResponse createDataCenter(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, boolean usingFloatingIPs, String... keyPairName)
+    public HTTPResponse createVIM(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, boolean usingFloatingIPs, String... keyPairName)
     {
         JSONObject finalJSON = new JSONObject();
         JSONObject dataCenterJSON = new JSONObject();

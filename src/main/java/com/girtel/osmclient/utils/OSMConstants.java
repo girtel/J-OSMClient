@@ -61,5 +61,28 @@ public class OSMConstants {
         }
     };
 
+    /**
+     * OSM Component types
+     */
+    public enum OSMComponentType
+    {
+        CONFIG_AGENT("Configuration Agent"), CONNECTION_POINT("Connection Point"),
+        MONITORING_PARAMETER("Monitoring Parameter"), NS("NS"), NSD("NSD"), VDU("VDU"),
+        VIM("VIM"), VLD("VLD"), VNF("VNF"), VNFD("VNFD");
+
+        private String type;
+
+        OSMComponentType(String type)
+        {
+            this.type = type;
+        }
+
+        @Override
+        public String toString()
+        {
+            return type;
+        }
+    }
+
 }
 

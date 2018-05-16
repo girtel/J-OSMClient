@@ -1,9 +1,11 @@
 package com.girtel.osmclient;
 
 
+import com.girtel.osmclient.utils.OSMConstants;
 import javafx.util.Pair;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This class represents Open Source MANO Virtual-Link-Desciptor (VLD) component.
@@ -11,7 +13,7 @@ import java.util.List;
  * @author Cesar San-Nicolas-Martinez
  *
  */
-public class VirtualLinkDescriptor {
+public class VirtualLinkDescriptor extends OSMComponent{
 
 
     private String id, name, description;
@@ -28,6 +30,7 @@ public class VirtualLinkDescriptor {
      */
     protected VirtualLinkDescriptor(String vldId, String vldName, String vldDescription, List<Pair<String, String>> connPointRefList, boolean vldIsMgmtNetwork)
     {
+        super(vldName, OSMConstants.OSMComponentType.VLD);
         this.id = id;
         this.name = name;
         this.description = description;
@@ -52,6 +55,7 @@ public class VirtualLinkDescriptor {
     {
         return name;
     }
+
 
     /**
      * Gets VLD description

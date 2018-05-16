@@ -1,12 +1,14 @@
 package com.girtel.osmclient;
 
+import com.girtel.osmclient.utils.OSMConstants;
+
 /**
  * This class represents Open Source MANO VIM component.
  *
  * @author Cesar San-Nicolas-Martinez
  *
  */
-public class DataCenter {
+public class VirtualInfrastructureManager extends OSMComponent{
 
     private String name, uuid, url, type;
 
@@ -17,8 +19,9 @@ public class DataCenter {
      * @param url VIM URL
      * @param type VIM Type
      */
-    protected DataCenter(String name, String uuid, String url, String type)
+    protected VirtualInfrastructureManager(String name, String uuid, String url, String type)
     {
+        super(name, OSMConstants.OSMComponentType.VIM);
         this.name = name;
         this.uuid = uuid;
         this.url = url;
@@ -61,4 +64,5 @@ public class DataCenter {
     {
         return type;
     }
+
 }

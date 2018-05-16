@@ -1,12 +1,14 @@
 package com.girtel.osmclient;
 
+import com.girtel.osmclient.utils.OSMConstants;
+
 /**
  * This class represents Open Source MANO Monitoring-Parameter component.
  *
  * @author Cesar San-Nicolas-Martinez
  *
  */
-public class MonitoringParameter {
+public class MonitoringParameter extends OSMComponent{
 
     private String id, name, value, units, description;
 
@@ -20,6 +22,7 @@ public class MonitoringParameter {
      */
     protected MonitoringParameter(String id, String name, String value, String units, String description)
     {
+        super(name, OSMConstants.OSMComponentType.MONITORING_PARAMETER);
         this.id = id;
         this.name = name;
         this.value = value;
@@ -61,6 +64,15 @@ public class MonitoringParameter {
     public String getUnits()
     {
         return units;
+    }
+
+    /**
+     * Gets monitoring parameter's description
+     * @return monitoring parameter's description
+     */
+    public String getDescription()
+    {
+        return description;
     }
 
 }

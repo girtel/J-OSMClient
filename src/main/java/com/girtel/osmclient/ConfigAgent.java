@@ -1,13 +1,15 @@
 package com.girtel.osmclient;
 
 
+import com.girtel.osmclient.utils.OSMConstants;
+
 /**
  * This class represents Open Source MANO Configuration Agent component.
  *
  * @author Cesar San-Nicolas-Martinez
  *
  */
-public class ConfigAgent
+public class ConfigAgent extends OSMComponent
 {
 
     private String ipAddress, name, type, user, port;
@@ -15,13 +17,14 @@ public class ConfigAgent
     /**
      * Constructor
      * @param name agent's name
-     * @param type agent's type
+     * @param type agent's type, e.c. Juju
      * @param user agent's user
      * @param ipAddress agent's IP Address
      * @param port agent's port
      */
     protected ConfigAgent(String name, String type, String user, String ipAddress, String port)
     {
+        super(name, OSMConstants.OSMComponentType.CONFIG_AGENT);
         this.name = name;
         this.type = type;
         this.user = user;
@@ -42,7 +45,7 @@ public class ConfigAgent
      * Gets agent's type, e.c. Juju
      * @return agent's type
      */
-    public String getType()
+    public String getAgentType()
         {
             return type;
         }

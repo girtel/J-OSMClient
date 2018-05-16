@@ -1,12 +1,14 @@
 package com.girtel.osmclient;
 
+import com.girtel.osmclient.utils.OSMConstants;
+
 /**
  * This class represents Open Source MANO Virtual-Deployment-Unit (VDU) component.
  *
  * @author Cesar San-Nicolas-Martinez
  *
  */
-public class VirtualDeploymentUnit {
+public class VirtualDeploymentUnit extends OSMComponent{
 
     private String id, name, image;
     private double storageInGB, numberOfCPUs, RAMMemoryInMB;
@@ -20,9 +22,9 @@ public class VirtualDeploymentUnit {
      * @param numberOfCPUs VDU CPU number (CPU)
      * @param RAMMemoryInMB VDU RAM memory (MB)
      */
-    protected VirtualDeploymentUnit(String id, String name, String image,
-                                 double storageInGB, double numberOfCPUs, double RAMMemoryInMB)
+    protected VirtualDeploymentUnit(String id, String name, String image, double storageInGB, double numberOfCPUs, double RAMMemoryInMB)
     {
+        super(name, OSMConstants.OSMComponentType.VDU);
         this.id = id;
         this.name = name;
         this.image = image;
