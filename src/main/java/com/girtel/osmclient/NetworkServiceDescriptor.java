@@ -3,7 +3,6 @@ package com.girtel.osmclient;
 import com.girtel.osmclient.utils.OSMConstants;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This class represents Open Source MANO Network-Service-Descriptor (NSD) component.
