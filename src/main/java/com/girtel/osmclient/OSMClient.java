@@ -10,6 +10,7 @@ import com.girtel.osmclient.utils.OSMConstants;
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -232,6 +233,22 @@ public class OSMClient {
     {
         HTTPResponse response = osmController.deleteVNFD(name);
         return response;
+    }
+
+    /**
+     * Obtains a list with every component in OSM (CA, VIM, VNFD, VNF, NSD, NS)
+     * @return OSM Component list
+     */
+    public List<OSMComponent> getOSMComponentList()
+    {
+        List<OSMComponent> componentList = new LinkedList<>();
+        componentList.addAll(getConfigAgentList());
+        componentList.addAll(getVIMList());
+        componentList.addAll(getVNFDList());
+        componentList.addAll(getVNFList());
+        componentList.addAll(getNSDList());
+        componentList.addAll(getNSList());
+        return componentList;
     }
 
     /**

@@ -294,7 +294,6 @@ class OSMController {
         String status = ob.get("operational-status").getValue();
 
         JSONObject vnfdJSON = ob.get("vnfd").getValue();
-        String vnfdId = vnfdJSON.get("id").getValue();
 
         VirtualNetworkFunctionDescriptor finalVNFD = parseVNFD(vnfdJSON);
 
