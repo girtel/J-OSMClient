@@ -322,17 +322,9 @@ public class OSMClient {
      */
     public List<MonitoringParameter> getNSMonitoringParameterList(String name)
     {
-        NetworkService ns = this.getNS(name);
-        List<VirtualNetworkFunction> vnfList = osmController.parseVNFList();
         List<MonitoringParameter> nsMonParamList = new ArrayList<>();
-        for(VirtualNetworkFunction vnf: vnfList)
-        {
-            if(ns.getId().equals(vnf.getNSID()))
-            {
-                nsMonParamList.addAll(vnf.getMonitoringParameterList());
-            }
-        }
-
+        NetworkService ns = this.getNS(name);
+        ns.getVNFList().stream().forEach(vnf -> nsMonParamList.addAll(vnf.getMonitoringParameterList()));
         return nsMonParamList;
     }
 
