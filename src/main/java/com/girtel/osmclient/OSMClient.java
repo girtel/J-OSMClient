@@ -6,6 +6,7 @@ package com.girtel.osmclient;
 
 import com.girtel.osmclient.utils.HTTPResponse;
 import com.girtel.osmclient.utils.OSMConstants;
+import com.shc.easyjson.JSONObject;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;
@@ -116,7 +117,7 @@ public class OSMClient {
      * Creates a new network service
      * @param nsName new network service name
      * @param nsdName ns descritptor name
-     * @param datacenterName vim name where ns will be instantiated
+     * @param datacenterName VIM name where ns will be instantiated
      * @return HTTPResponse from OSM (code, message, content)
      */
     public HTTPResponse createNS(String nsName, String nsdName, String datacenterName)
