@@ -15,7 +15,7 @@ public class VirtualInfrastructureManager extends OSMComponent{
     /**
      * Constructor
      * @param name VIM name
-     * @param uuid VIM UUID (unique identifier)
+     * @param uuid VIM ID
      * @param url VIM URL
      * @param type VIM Type
      */
@@ -38,10 +38,10 @@ public class VirtualInfrastructureManager extends OSMComponent{
     }
 
     /**
-     * Gets VIM UUID
-     * @return VIM UUID
+     * Gets VIM id
+     * @return VIM id
      */
-    public String getUUID()
+    public String getID()
     {
         return uuid;
     }
