@@ -1,6 +1,7 @@
 package com.girtel.osmclient;
 
 
+import com.girtel.osmclient.utils.Configuration;
 import com.girtel.osmclient.utils.HTTPResponse;
 import com.girtel.osmclient.utils.OSMConstants;
 import com.girtel.osmclient.utils.UUIDUtils;
@@ -648,20 +649,21 @@ class OSMController {
         return finalResponse;
     }
 
-    public HTTPResponse createVIM(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, boolean usingFloatingIPs, String... keyPairName)
+    public HTTPResponse createVIM(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, Configuration... configuration)
     {
+        if(configuration.length > 1)
+            throw new RuntimeException("No more than one configuration is allowed");
+
         JSONObject finalJSON = new JSONObject();
         JSONObject dataCenterJSON = new JSONObject();
 
         dataCenterJSON.put("name",new JSONValue(name));
         dataCenterJSON.put("type",new JSONValue(osmVimType.toString()));
 
-        JSONObject configJSON = new JSONObject();
-        configJSON.put("use_floating_ip",new JSONValue(usingFloatingIPs));
-        if(keyPairName.length == 1)
-            configJSON.put("keypair",new JSONValue(keyPairName[0]));
+        JSONObject configJSON = (configuration.length == 1) ? configuration[0].toJSON() : new JSONObject();
+        if(!configJSON.isEmpty())
+            dataCenterJSON.put("config",new JSONValue(configJSON));
 
-        dataCenterJSON.put("config",new JSONValue(configJSON));
         dataCenterJSON.put("vim_url",new JSONValue(authURL));
         dataCenterJSON.put("vim_url_admin",new JSONValue(authURL));
         dataCenterJSON.put("description",new JSONValue("default"));

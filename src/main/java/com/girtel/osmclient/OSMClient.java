@@ -4,6 +4,7 @@ package com.girtel.osmclient;
 
 
 
+import com.girtel.osmclient.utils.Configuration;
 import com.girtel.osmclient.utils.HTTPResponse;
 import com.girtel.osmclient.utils.OSMConstants;
 import com.shc.easyjson.JSONObject;
@@ -103,13 +104,12 @@ public class OSMClient {
      * @param password VIM password
      * @param authURL authentication URL, e.c. in Openstack: http://(IP_ADDRESS)/identity/v3
      * @param tenant VIM tenant to instantiate VMs
-     * @param usingFloatingIPs true if you want to assign floating ips automatically, false if not
-     * @param keyPairName SSH key pair name (optional)
+     * @param configuration optional configuration parameters
      * @return HTTPResponse from OSM (code, message, content)
      */
-    public HTTPResponse createVIM(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, boolean usingFloatingIPs, String... keyPairName)
+    public HTTPResponse createVIM(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, Configuration... configuration)
     {
-        HTTPResponse response = osmController.createVIM(name,osmVimType,user,password,authURL,tenant,usingFloatingIPs, keyPairName);
+        HTTPResponse response = osmController.createVIM(name,osmVimType,user,password,authURL,tenant, configuration);
         return response;
     }
 

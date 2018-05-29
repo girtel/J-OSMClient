@@ -53,6 +53,15 @@ public class Configuration
         return ((sizeBeforeAddingParameter + 1 == sizeAfterAddingParameter) && (json.containsKey(param)) && (json.containsValue(value)));
     }
 
+    /**
+     * Obtains JSON representation of this configuration
+     * @return JSONObject with all these configuration parameters;
+     */
+    public JSONObject toJSON()
+    {
+        return json;
+    }
+
     @Override
     public String toString()
     {
