@@ -295,6 +295,7 @@ class OSMController {
 
         JSONObject vnfdJSON = ob.get("vnfd").getValue();
 
+
         VirtualNetworkFunctionDescriptor finalVNFD = parseVNFD(vnfdJSON);
 
 
