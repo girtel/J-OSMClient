@@ -99,7 +99,7 @@ public class OSMClient {
     /**
      * Creates a new VIM
      * @param name new VIM name
-     * @param osmVimType new VIM type (Openvim, Openstack or AWS)
+     * @param osmVimType new VIM type (Openvim, Openstack, VMWare or AWS)
      * @param user VIM user
      * @param password VIM password
      * @param authURL authentication URL, e.c. in Openstack: http://(IP_ADDRESS)/identity/v3
