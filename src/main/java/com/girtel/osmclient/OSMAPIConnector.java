@@ -144,7 +144,7 @@ class OSMAPIConnector {
 
     }
 
-    private HTTPResponse HTTPCommunication(String url, HTTPMethod method, Object... optionalObjectToSend)
+    private HTTPResponse establishHTTPConnection(String url, HTTPMethod method, Object... optionalObjectToSend)
     {
         URL url_;
         HttpURLConnection conn = null;
@@ -228,135 +228,135 @@ class OSMAPIConnector {
     public HTTPResponse establishConnectionToReceiveVNFDList()
     {
         String url = "https://"+osmIPAddress+":8008"+ VNFD_URL.replace("{projectname}",project);
-        return HTTPCommunication(url, HTTPMethod.GET);
+        return establishHTTPConnection(url, HTTPMethod.GET);
     }
 
     public HTTPResponse establishConnectionToReceiveVNFList()
     {
         String url = "https://"+osmIPAddress+":8008"+ VNF_URL.replace("{projectname}",project);
-        return HTTPCommunication(url, HTTPMethod.GET);
+        return establishHTTPConnection(url, HTTPMethod.GET);
     }
 
     public HTTPResponse establishConnectionToReceiveNSDList()
     {
         String url = "https://"+osmIPAddress+":8008"+ NSD_URL.replace("{projectname}",project);
-        return HTTPCommunication(url, HTTPMethod.GET);
+        return establishHTTPConnection(url, HTTPMethod.GET);
     }
 
     public HTTPResponse establishConnectionToReceiveNSList()
     {
         String url = "https://"+osmIPAddress+":8008"+ NS_URL.replace("{projectname}",project);
-        return HTTPCommunication(url, HTTPMethod.GET);
+        return establishHTTPConnection(url, HTTPMethod.GET);
     }
 
 
     public HTTPResponse establishConnectionToReceiveDatacenterList(String tenantId)
     {
         String url = "http://"+osmIPAddress+":9090"+ DATACENTER_LIST_URL.replace("{tenant_id}",tenantId);
-        return HTTPCommunication(url, HTTPMethod.GET);
+        return establishHTTPConnection(url, HTTPMethod.GET);
     }
 
 
     public HTTPResponse establishConnectionToReceiveConfigAgentList()
     {
         String url = "https://"+osmIPAddress+":8008"+ CONFIG_AGENT_URL.replace("{projectname}",project);
-        return HTTPCommunication(url, HTTPMethod.GET);
+        return establishHTTPConnection(url, HTTPMethod.GET);
     }
 
     public HTTPResponse establishConnectionToCreateDatacenter(JSONObject dataCenterJSON)
     {
         String url = "http://"+osmIPAddress+":9090"+ DATACENTERS_URL;
-        return HTTPCommunication(url, HTTPMethod.POST, dataCenterJSON);
+        return establishHTTPConnection(url, HTTPMethod.POST, dataCenterJSON);
     }
 
     public HTTPResponse establishConnectionToAttachDatacenterToOSM(String tenantId, String datacenterId, JSONObject dataCenterJSON)
     {
         String url = "http://"+osmIPAddress+":9090"+ ATTACH_DETACH_DATACENTER_URL.replace("{osm_id}",tenantId).replace("{dc_id}",datacenterId);
-        return HTTPCommunication(url, HTTPMethod.POST, dataCenterJSON);
+        return establishHTTPConnection(url, HTTPMethod.POST, dataCenterJSON);
     }
 
     public HTTPResponse establishConnectionToReceiveOSMTenant()
     {
         String url = "http://"+osmIPAddress+":9090"+ GET_TENANTS_URL+"osm";
-        return HTTPCommunication(url, HTTPMethod.GET);
+        return establishHTTPConnection(url, HTTPMethod.GET);
     }
 
     public HTTPResponse establishConnectionToReceiveDefaultROAccount()
     {
         String url = "https://"+osmIPAddress+":8008"+ DEFAULTROACCOUNT_URL.replace("{projectname}",project);
-        return HTTPCommunication(url, HTTPMethod.GET);
+        return establishHTTPConnection(url, HTTPMethod.GET);
     }
 
     public HTTPResponse establishConnectionToUpdateROAccount(JSONObject updateJSON)
     {
         String url = "https://"+osmIPAddress+":8008"+ UPDATEROACCOUNT_URL;
-        return HTTPCommunication(url, HTTPMethod.POST, updateJSON);
+        return establishHTTPConnection(url, HTTPMethod.POST, updateJSON);
     }
 
     public HTTPResponse establishConnectionToUploadPackageToOSM(File packageToUpload)
     {
         String url = UPLOAD_PACKAGE_URL.replace("{osm_ip}",osmIPAddress).replace("{projectname}",project);
-        return HTTPCommunication(url, HTTPMethod.POST, packageToUpload);
+        return establishHTTPConnection(url, HTTPMethod.POST, packageToUpload);
     }
 
     public HTTPResponse establishConnectionToCreateNS(JSONObject nsJSON)
     {
         String url = "https://"+osmIPAddress+":8008"+ CREATE_NS_URL.replace("{projectname}",project);
-        return HTTPCommunication(url, HTTPMethod.POST, nsJSON);
+        return establishHTTPConnection(url, HTTPMethod.POST, nsJSON);
     }
 
     public HTTPResponse establishConnectionToAddConfigAgent(JSONObject configAgentJSON)
     {
         String url = "https://"+osmIPAddress+":8008" + CONFIG_AGENT_URL.replace("{projectname}",project);
-        return HTTPCommunication(url, HTTPMethod.POST, configAgentJSON);
+        return establishHTTPConnection(url, HTTPMethod.POST, configAgentJSON);
     }
 
     public HTTPResponse establishConnectionToDetachDatacenter(String tenantId, String datacenterName)
     {
         String url = "http://"+osmIPAddress+":9090" + ATTACH_DETACH_DATACENTER_URL.replace("{osm_id}",tenantId).replace("{dc_id}",datacenterName);
-        return HTTPCommunication(url, HTTPMethod.DELETE);
+        return establishHTTPConnection(url, HTTPMethod.DELETE);
     }
 
     public HTTPResponse establishConnectionToDeleteDatacenter(String datacenterName)
     {
         String url = "http://"+osmIPAddress+":9090"+ DATACENTERS_URL+"/"+datacenterName;
-        return HTTPCommunication(url, HTTPMethod.DELETE);
+        return establishHTTPConnection(url, HTTPMethod.DELETE);
     }
 
     public HTTPResponse establishConnectionToDeleteNS(String id)
     {
         String url = "https://"+osmIPAddress+":8008" + NS_DELETE_URL.replace("{ns_id}",id).replace("{projectname}",project);
-        return HTTPCommunication(url, HTTPMethod.DELETE);
+        return establishHTTPConnection(url, HTTPMethod.DELETE);
     }
 
     public HTTPResponse establishConnectionToDeleteNSD(String id)
     {
         String url = "https://"+osmIPAddress+":8008" + NSD_DELETE_URL.replace("{nsd_id}",id).replace("{projectname}",project);
-        return HTTPCommunication(url, HTTPMethod.DELETE);
+        return establishHTTPConnection(url, HTTPMethod.DELETE);
     }
 
     public HTTPResponse establishConnectionToDeleteVNFD(String id)
     {
         String url = "https://"+osmIPAddress+":8008" + VNFD_DELETE_URL.replace("{vnfd_id}",id).replace("{projectname}",project);
-        return HTTPCommunication(url, HTTPMethod.DELETE);
+        return establishHTTPConnection(url, HTTPMethod.DELETE);
     }
 
     public HTTPResponse establishConnectionToDeleteConfigAgent(String name)
     {
         String url = "https://"+osmIPAddress+":8008"+ CONFIG_AGENT_URL.replace("{projectname}",project)+"/account/"+name;
-        return HTTPCommunication(url, HTTPMethod.DELETE);
+        return establishHTTPConnection(url, HTTPMethod.DELETE);
     }
 
     public HTTPResponse establishConnectionToScaleNS(String nsId, String group, JSONObject scaleJSON)
     {
         String url = "https://"+osmIPAddress+":8008" +  SCALE_URL.replace("{ns_id}",nsId).replace("{group",group);
-        return HTTPCommunication(url, HTTPMethod.POST, scaleJSON);
+        return establishHTTPConnection(url, HTTPMethod.POST, scaleJSON);
     }
 
     public HTTPResponse establishConnectionToReceiveNSOperationalData(String id)
     {
         String url = "https://"+osmIPAddress+":8008" + NS_OPDATA_URL.replace("{ns_id}",id).replace("{projectname}",project);
-        return HTTPCommunication(url, HTTPMethod.GET);
+        return establishHTTPConnection(url, HTTPMethod.GET);
     }
 
 }
