@@ -6,7 +6,7 @@ import com.shc.easyjson.JSONObject;
 import com.shc.easyjson.JSONValue;
 
 /**
- * This class represents Configuration parameters when creating a new VIM
+ * This class represents Configuration parameters to customize interactions with OSM
  *
  * @author Cesar San-Nicolas-Martinez
  */

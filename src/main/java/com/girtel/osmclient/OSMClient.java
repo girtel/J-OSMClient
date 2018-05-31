@@ -118,9 +118,10 @@ public class OSMClient {
      * @param nsName new network service name
      * @param nsdName ns descritptor name
      * @param datacenterName VIM name where ns will be instantiated
+     * @param configuration optional configuration parameters
      * @return HTTPResponse from OSM (code, message, content)
      */
-    public HTTPResponse createNS(String nsName, String nsdName, String datacenterName)
+    public HTTPResponse createNS(String nsName, String nsdName, String datacenterName, Configuration... configuration)
     {
         HTTPResponse response = osmController.createNS(nsName, nsdName, datacenterName);
         return response;
