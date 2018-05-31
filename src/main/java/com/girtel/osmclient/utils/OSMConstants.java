@@ -16,7 +16,22 @@ public class OSMConstants {
      */
     public enum OSMVimType
     {
-        OPENSTACK("openstack"), OPENVIM("openvim"), VMWARE("vmware"), AWS("aws");
+        /**
+         * OpenStack Type
+         */
+        OPENSTACK("openstack"),
+        /**
+         * OpenVIM Type
+         */
+        OPENVIM("openvim"),
+        /**
+         * VMWARE Type
+         */
+        VMWARE("vmware"),
+        /**
+         * Amazon Web Services Type
+         */
+        AWS("aws");
 
         private String type;
 
@@ -41,6 +56,9 @@ public class OSMConstants {
      */
     public enum OSMConfigAgentType
     {
+        /**
+         * Juju type
+         */
         JUJU("juju");
 
         private String type;
@@ -66,12 +84,53 @@ public class OSMConstants {
      */
     public enum OSMComponentType
     {
-        CONFIG_AGENT("Configuration Agent"), CONNECTION_POINT("Connection Point"),
-        MONITORING_PARAMETER("Monitoring Parameter"), NS("NS"), NSD("NSD"), VDU("VDU"),
-        VIM("VIM"), VLD("VLD"), VNF("VNF"), VNFD("VNFD");
+        /**
+         * Configuration Agent type
+         */
+        CONFIG_AGENT("Configuration Agent"),
+        /**
+         * Connection Point type
+         */
+        CONNECTION_POINT("Connection Point"),
+        /**
+         * Monitoring Parameter type
+         */
+        MONITORING_PARAMETER("Monitoring Parameter"),
+        /**
+         * Network Service type
+         */
+        NS("NS"),
+        /**
+         * Network Service Descriptor type
+         */
+        NSD("NSD"),
+        /**
+         * Virtual Deployment Unit type
+         */
+        VDU("VDU"),
+        /**
+         * Virtual Infrastructure Manager type
+         */
+        VIM("VIM"),
+        /**
+         * Virtual Link Descriptor type
+         */
+        VLD("VLD"),
+        /**
+         * Virtual Network Function type
+         */
+        VNF("VNF"),
+        /**
+         * Virtual Network Function Descriptor type
+         */
+        VNFD("VNFD");
 
         private String type;
 
+        /**
+         * Constructor
+         * @param type OSMComponent type
+         */
         OSMComponentType(String type)
         {
             this.type = type;
