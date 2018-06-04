@@ -5,9 +5,8 @@ package com.girtel.osmclient;
 
 
 import com.girtel.osmclient.utils.Configuration;
-import com.girtel.osmclient.utils.HTTPResponse;
+import com.girtel.osmclient.internal.HTTPResponse;
 import com.girtel.osmclient.utils.OSMConstants;
-import com.shc.easyjson.JSONObject;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;

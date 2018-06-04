@@ -1,8 +1,9 @@
 package com.girtel.osmclient;
 
 
+import com.girtel.osmclient.internal.OSMException;
 import com.girtel.osmclient.utils.Configuration;
-import com.girtel.osmclient.utils.HTTPResponse;
+import com.girtel.osmclient.internal.HTTPResponse;
 import com.girtel.osmclient.utils.OSMConstants;
 import com.girtel.osmclient.utils.UUIDUtils;
 import com.shc.easyjson.*;
@@ -460,7 +461,7 @@ class OSMController {
 
         if(nsList.size() == 0)
         {
-            response = HTTPResponse.EMPTY_RESPONSE;
+            throw new OSMException("No Network Service instantiated in OSM");
         }
         else{
             JSONObject jObj = null;
@@ -489,7 +490,7 @@ class OSMController {
 
             if(nsIdToDelete.equals(""))
             {
-                response = HTTPResponse.EMPTY_RESPONSE;
+                throw new OSMException("No Network Service named "+name+" instantiated in OSM");
             }
             else
             {
@@ -507,7 +508,9 @@ class OSMController {
         String nsdJSON = osmConnector.establishConnectionToReceiveNSDList().getContent();
         List<NetworkServiceDescriptor> nsdList = osmClient.getNSDList();
         if(nsdList.size() == 0)
-            response = HTTPResponse.EMPTY_RESPONSE;
+        {
+            throw new OSMException("No Network Service Descriptor in OSM catalog");
+        }
         else{
             JSONObject jObj = null;
             try {
@@ -533,7 +536,7 @@ class OSMController {
 
             if(nsdIdToDelete.equals(""))
             {
-                response = HTTPResponse.EMPTY_RESPONSE;
+                throw new OSMException("No Network Service Descriptor named "+name+" in OSM catalog");
             }
             else
             {
@@ -551,7 +554,9 @@ class OSMController {
         String vnfdJSON = osmConnector.establishConnectionToReceiveVNFDList().getContent();
         List<VirtualNetworkFunctionDescriptor> vnfdList = osmClient.getVNFDList();
         if(vnfdList.size() == 0)
-            response = HTTPResponse.EMPTY_RESPONSE;
+        {
+            throw new OSMException("No Virtual Network Function Descriptor in OSM catalog");
+        }
         else{
 
             JSONObject jObj = null;
@@ -578,7 +583,7 @@ class OSMController {
 
             if(vnfdIdToDelete.equals(""))
             {
-                response = HTTPResponse.EMPTY_RESPONSE;
+                throw new OSMException("No Virtual Network Function Descriptor named "+name+" in OSM catalog");
             }
             else
             {
@@ -631,7 +636,7 @@ class OSMController {
         HTTPResponse finalResponse = null;
         if(!defaultROType.equals("openmano"))
         {
-            finalResponse = HTTPResponse.errorResponse("Error, openmano is not default account");
+            throw new OSMException("openmano is not default account in OSM");
         }
         else {
 
@@ -715,10 +720,10 @@ class OSMController {
 
         String defaultROType = defaultROJSON.get("ro-account-type").getValue();
 
-        HTTPResponse finalResponse = null;
+        HTTPResponse finalResponse;
         if(!defaultROType.equals("openmano"))
         {
-            finalResponse = HTTPResponse.errorResponse("Error, openmano is not default account");
+            throw new OSMException("openmano is not default account in OSM");
         }
         else {
 

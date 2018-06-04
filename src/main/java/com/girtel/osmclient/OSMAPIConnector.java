@@ -1,7 +1,8 @@
 package com.girtel.osmclient;
 
 
-import com.girtel.osmclient.utils.HTTPResponse;
+import com.girtel.osmclient.internal.HTTPResponse;
+import com.girtel.osmclient.internal.OSMException;
 import com.shc.easyjson.JSON;
 import com.shc.easyjson.JSONObject;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -206,11 +207,11 @@ class OSMAPIConnector {
                     response = HTTPResponse.getResponseFromHTTPConnection(conn);
                 }
                 else{
-                    throw new RuntimeException("Unsupported file type -> "+obj.getClass());
+                    throw new OSMException("Unsupported file type in OSM -> "+obj.getClass());
                 }
             }
             else{
-                throw new RuntimeException("More than one object is not allowed");
+                throw new OSMException("Sending to OSM more than one object is not allowed");
             }
 
 
