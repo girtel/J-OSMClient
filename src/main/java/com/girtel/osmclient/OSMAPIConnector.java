@@ -1,7 +1,7 @@
 package com.girtel.osmclient;
 
 
-import com.girtel.osmclient.internal.HTTPResponse;
+import com.girtel.osmclient.utils.HTTPResponse;
 import com.girtel.osmclient.internal.OSMException;
 import com.shc.easyjson.JSON;
 import com.shc.easyjson.JSONObject;

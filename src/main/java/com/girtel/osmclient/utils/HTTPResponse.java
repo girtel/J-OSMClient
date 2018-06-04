@@ -1,4 +1,4 @@
-package com.girtel.osmclient.internal;
+package com.girtel.osmclient.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;

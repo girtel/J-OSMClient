@@ -3,15 +3,15 @@ package com.girtel.osmclient;
 
 import com.girtel.osmclient.internal.OSMException;
 import com.girtel.osmclient.utils.Configuration;
-import com.girtel.osmclient.internal.HTTPResponse;
+import com.girtel.osmclient.utils.HTTPResponse;
 import com.girtel.osmclient.utils.OSMConstants;
-import com.girtel.osmclient.utils.UUIDUtils;
 import com.shc.easyjson.*;
 import javafx.util.Pair;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -28,6 +28,11 @@ class OSMController {
         this.osmConnector = new OSMAPIConnector(osmClient);
     }
 
+    private String generateUUID()
+    {
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString();
+    }
 
     public List<VirtualNetworkFunctionDescriptor> parseVFNDList()
     {
@@ -787,7 +792,7 @@ class OSMController {
         JSONObject postJSON = new JSONObject();
         JSONArray nsrArray = new JSONArray();
 
-        nsJSON.put("id", new JSONValue(UUIDUtils.generateUUID()));
+        nsJSON.put("id", new JSONValue(generateUUID()));
         nsJSON.put("nsd",new JSONValue(finalNSDJSON));
         nsJSON.put("name",new JSONValue(name));
         nsJSON.put("short-name",new JSONValue(name));
