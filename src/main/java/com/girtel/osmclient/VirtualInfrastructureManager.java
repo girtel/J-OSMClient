@@ -16,7 +16,7 @@ public class VirtualInfrastructureManager extends OSMComponent{
      * Constructor
      * @param name VIM name
      * @param uuid VIM ID
-     * @param url VIM URL
+     * @param url VIM authentication URL
      * @param type VIM Type
      */
     protected VirtualInfrastructureManager(String name, String uuid, String url, String type)
