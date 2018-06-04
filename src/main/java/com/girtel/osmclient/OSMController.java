@@ -378,8 +378,8 @@ class OSMController {
         String id = ob.get("uuid").getValue();
         String url = ob.get("vim_url").getValue();
         String type = ob.get("type").getValue();
-        VirtualInfrastructureManager dc = new VirtualInfrastructureManager(name,id,url,type);
-        return dc;
+        VirtualInfrastructureManager vim = new VirtualInfrastructureManager(name,id,url,type);
+        return vim;
     }
 
     private MonitoringParameter parseMonitoringParameter(JSONObject ob)

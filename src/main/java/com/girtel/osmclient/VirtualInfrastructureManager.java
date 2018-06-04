@@ -47,13 +47,13 @@ public class VirtualInfrastructureManager extends OSMComponent{
     }
 
     /**
-     * Gets VIM URL
-     * @return VIM URL
+     * Gets VIM authentication URL
+     * @return VIM authentication URL
      */
     public String getUrl()
 
     {
-        return url.split("/")[2];
+        return url;
     }
 
     /**
