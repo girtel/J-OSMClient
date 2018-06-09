@@ -108,6 +108,9 @@
                             <sourceFileIncludes>
                                 <include>**</include>
                             </sourceFileIncludes>
+                            <sourceFileExcludes>
+                                <exclude>com/girtel/osmclient/internal/**</exclude>
+                            </sourceFileExcludes>
                             <additionalparam>-Xdoclint:all</additionalparam> <!-- Requires well constructed Javadocs -->
                         </configuration>
                     </execution>

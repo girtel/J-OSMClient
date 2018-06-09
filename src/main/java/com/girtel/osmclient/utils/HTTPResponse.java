@@ -12,12 +12,6 @@ import java.net.HttpURLConnection;
  */
 public class HTTPResponse
 {
-
-    /**
-     * Returns an empty HTTPResponse
-     */
-    public static HTTPResponse EMPTY_RESPONSE = new HTTPResponse(0,"EMPTY","EMPTY");
-
     private Integer code;
     private String message, content;
     /**
@@ -98,14 +92,4 @@ public class HTTPResponse
 
         return new HTTPResponse(code, message, response);
     }
-    /**
-     * Returns a HTTPResponse which represents an error
-     * @param content error content
-     * @return Error HTTPResponse
-     */
-    public static HTTPResponse errorResponse(String content)
-    {
-        return new HTTPResponse(0,"ERROR",content);
-    }
-
 }

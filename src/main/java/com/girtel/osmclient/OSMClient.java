@@ -1,13 +1,9 @@
 package com.girtel.osmclient;
 
-
-
-
-
+import com.girtel.osmclient.internal.OSMException;
 import com.girtel.osmclient.utils.Configuration;
 import com.girtel.osmclient.utils.HTTPResponse;
 import com.girtel.osmclient.utils.OSMConstants;
-import com.shc.easyjson.JSONObject;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;
@@ -49,7 +45,7 @@ public class OSMClient {
         else if(project.length == 1)
             this.project = project[0];
         else
-            throw new RuntimeException("More than one project is not allowed");
+            throw new OSMException("More than one project is not allowed in OSM");
 
         this.osmController = new OSMController(this);
     }

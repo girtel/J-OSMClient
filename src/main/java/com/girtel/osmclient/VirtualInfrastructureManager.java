@@ -16,7 +16,7 @@ public class VirtualInfrastructureManager extends OSMComponent{
      * Constructor
      * @param name VIM name
      * @param uuid VIM ID
-     * @param url VIM URL
+     * @param url VIM authentication URL
      * @param type VIM Type
      */
     protected VirtualInfrastructureManager(String name, String uuid, String url, String type)
@@ -47,13 +47,13 @@ public class VirtualInfrastructureManager extends OSMComponent{
     }
 
     /**
-     * Gets VIM URL
-     * @return VIM URL
+     * Gets VIM authentication URL
+     * @return VIM authentication URL
      */
     public String getUrl()
 
     {
-        return url.split("/")[2];
+        return url;
     }
 
     /**
