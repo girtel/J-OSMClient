@@ -37,9 +37,9 @@ public class ConfigAgent extends OSMComponent
      * @return agent's name
      */
     public String getName()
-        {
+    {
             return name;
-        }
+    }
 
     /**
      * Gets agent's type, e.c. Juju
