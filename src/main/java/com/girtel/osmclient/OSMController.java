@@ -752,7 +752,7 @@ class OSMController {
         return response;
     }
 
-    public HTTPResponse createNS(String name, String nsdName, String datacenter)
+    public HTTPResponse createNS(String name, String nsdName, String datacenter, Configuration... optionalConfiguration)
     {
         String nsdJSON = osmConnector.establishConnectionToReceiveNSDList().getContent();
 
