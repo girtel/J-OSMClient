@@ -10,6 +10,6 @@ public class NSConfiguration
 {
     public NSConfiguration()
     {
-        
+
     }
 }
