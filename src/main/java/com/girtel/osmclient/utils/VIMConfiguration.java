@@ -6,18 +6,18 @@ import com.shc.easyjson.JSONObject;
 import com.shc.easyjson.JSONValue;
 
 /**
- * This class represents Configuration parameters to customize interactions with OSM
+ * This class represents Configuration parameters to customize VIMs creation
  *
  * @author Cesar San-Nicolas-Martinez
  */
-public class Configuration
+public class VIMConfiguration
 {
     private JSONObject json;
 
     /**
      * Default constructor
      */
-    public Configuration()
+    public VIMConfiguration()
     {
         this.json = new JSONObject();
     }

@@ -59,14 +59,14 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.0.2</version>
-                <configuration>
+                <VIMConfiguration>
                     <archive>
                         <manifest>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                         </manifest>
                     </archive>
-                </configuration>
+                </VIMConfiguration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -93,7 +93,7 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
-                        <configuration>
+                        <VIMConfiguration>
                             <show>public</show>
                             <author>true</author>
                             <nodeprecated>true</nodeprecated>
@@ -112,7 +112,7 @@
                                 <exclude>com/girtel/osmclient/internal/**</exclude>
                             </sourceFileExcludes>
                             <additionalparam>-Xdoclint:all</additionalparam> <!-- Requires well constructed Javadocs -->
-                        </configuration>
+                        </VIMConfiguration>
                     </execution>
                 </executions>
             </plugin>

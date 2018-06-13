@@ -2,7 +2,7 @@ package com.girtel.osmclient;
 
 
 import com.girtel.osmclient.internal.OSMException;
-import com.girtel.osmclient.utils.Configuration;
+import com.girtel.osmclient.utils.VIMConfiguration;
 import com.girtel.osmclient.utils.HTTPResponse;
 import com.girtel.osmclient.utils.OSMConstants;
 import com.shc.easyjson.*;
@@ -659,10 +659,10 @@ class OSMController {
         return finalResponse;
     }
 
-    public HTTPResponse createVIM(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, Configuration... configuration)
+    public HTTPResponse createVIM(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, VIMConfiguration... VIMConfiguration)
     {
-        if(configuration.length > 1)
-            throw new RuntimeException("No more than one configuration is allowed");
+        if(VIMConfiguration.length > 1)
+            throw new RuntimeException("No more than one VIMConfiguration is allowed");
 
         JSONObject finalJSON = new JSONObject();
         JSONObject dataCenterJSON = new JSONObject();
@@ -670,7 +670,7 @@ class OSMController {
         dataCenterJSON.put("name",new JSONValue(name));
         dataCenterJSON.put("type",new JSONValue(osmVimType.toString()));
 
-        JSONObject configJSON = (configuration.length == 1) ? configuration[0].toJSON() : new JSONObject();
+        JSONObject configJSON = (VIMConfiguration.length == 1) ? VIMConfiguration[0].toJSON() : new JSONObject();
         if(!configJSON.isEmpty())
             dataCenterJSON.put("config",new JSONValue(configJSON));
 
@@ -752,7 +752,7 @@ class OSMController {
         return response;
     }
 
-    public HTTPResponse createNS(String name, String nsdName, String datacenter, Configuration... optionalConfiguration)
+    public HTTPResponse createNS(String name, String nsdName, String datacenter, VIMConfiguration... optionalVIMConfiguration)
     {
         String nsdJSON = osmConnector.establishConnectionToReceiveNSDList().getContent();
 

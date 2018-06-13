@@ -52,7 +52,7 @@ public class OSMConstants {
     };
 
     /**
-     * Configuration Agent Types
+     * VIMConfiguration Agent Types
      */
     public enum OSMConfigAgentType
     {
@@ -85,9 +85,9 @@ public class OSMConstants {
     public enum OSMComponentType
     {
         /**
-         * Configuration Agent type
+         * VIMConfiguration Agent type
          */
-        CONFIG_AGENT("Configuration Agent"),
+        CONFIG_AGENT("VIMConfiguration Agent"),
         /**
          * Connection Point type
          */

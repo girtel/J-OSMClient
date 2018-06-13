@@ -2,7 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fd01548a-7236-43e5-bade-479932b14bc0" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/NSConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/ConfigAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/ConfigAgent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/Configuration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/VIMConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/OSMConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/OSMConstants.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -26,7 +34,7 @@
       <file leaf-file-name="OSMAPIConnector.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnector.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3230">
+            <state relative-caret-position="3179">
               <caret line="214" column="13" selection-start-line="214" selection-start-column="13" selection-end-line="214" selection-end-column="13" />
             </state>
           </provider>
@@ -41,15 +49,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Configuration.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/Configuration.java">
+      <file leaf-file-name="VIMConfiguration.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/VIMConfiguration.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="30" column="62" selection-start-line="30" selection-start-column="62" selection-end-line="30" selection-end-column="62" />
+            <state relative-caret-position="85">
+              <caret line="8" column="25" lean-forward="true" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
               <folding>
                 <element signature="e#1997#1998#0" expanded="true" />
                 <element signature="e#2024#2025#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="NSConfiguration.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/NSConfiguration.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="12" column="8" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -63,11 +80,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="8" column="16" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
+            <state relative-caret-position="646">
+              <caret line="38" selection-start-line="38" selection-end-line="38" />
             </state>
           </provider>
         </entry>
@@ -117,6 +134,9 @@
         <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/VirtualInfrastructureManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/ConfigAgent.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/Configuration.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/VIMConfiguration.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/NSConfiguration.java" />
       </list>
     </option>
   </component>
@@ -138,7 +158,7 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-5" />
     <option name="width" value="1918" />
     <option name="height" value="1028" />
@@ -149,9 +169,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="AndroidView" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -159,10 +176,48 @@
               <item name="osmclient" type="b2602c69:ProjectViewProjectNode" />
               <item name="Java OSMClient" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="osmclient" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Java OSMClient" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="osmclient" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Java OSMClient" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="osmclient" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Java OSMClient" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="osmclient" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Java OSMClient" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="osmclient" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="osmclient" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Java OSMClient" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="osmclient" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -328,7 +383,8 @@
       <window_info anchor="bottom" id="Terminal" order="2" />
       <window_info id="Capture Tool" order="0" />
       <window_info id="Designer" order="1" />
-      <window_info active="true" content_ui="combo" id="Project" order="4" visible="true" weight="0.23854166" />
+      <window_info active="true" content_ui="combo" id="Project" order="4" visible="true" weight="0.2359375" />
+      <window_info anchor="bottom" id="Find" order="4" weight="0.32731137" />
       <window_info id="Structure" order="5" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="6" weight="0.25" />
       <window_info id="UI Designer" order="2" />
@@ -342,7 +398,6 @@
       <window_info anchor="right" id="Commander" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Message" order="3" />
       <window_info anchor="bottom" id="Cvs" order="7" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="4" weight="0.32801822" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -354,13 +409,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnector.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="782">
-          <caret line="63" column="21" selection-start-line="63" selection-start-column="21" selection-end-line="63" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="442">
@@ -513,17 +561,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/internal/OSMException.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/Configuration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="30" column="62" selection-start-line="30" selection-start-column="62" selection-end-line="30" selection-end-column="62" />
-          <folding>
-            <element signature="e#1997#1998#0" expanded="true" />
-            <element signature="e#2024#2025#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_112/src.zip!/java/lang/Object.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMComponent.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -548,7 +585,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnector.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3230">
+        <state relative-caret-position="3179">
           <caret line="214" column="13" selection-start-line="214" selection-start-column="13" selection-end-line="214" selection-end-column="13" />
         </state>
       </provider>
@@ -604,8 +641,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="8" column="16" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
+        <state relative-caret-position="646">
+          <caret line="38" selection-start-line="38" selection-end-line="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/VIMConfiguration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="8" column="25" lean-forward="true" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
+          <folding>
+            <element signature="e#1997#1998#0" expanded="true" />
+            <element signature="e#2024#2025#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/NSConfiguration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="8" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="8" />
         </state>
       </provider>
     </entry>
