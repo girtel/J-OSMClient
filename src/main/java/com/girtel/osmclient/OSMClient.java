@@ -457,4 +457,10 @@ public class OSMClient {
         return response;
     }
 
+    public static void main(String [] args)
+    {
+        OSMClient osmClient = new OSMClient("192.168.10.130","admin","admin");
+
+    }
+
 }

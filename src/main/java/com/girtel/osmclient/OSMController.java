@@ -10,6 +10,7 @@ import javafx.util.Pair;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -411,7 +412,7 @@ class OSMController {
         String nsdId = ob.get("id").getValue();
         String nsdName = ob.get("name").getValue();
 
-        List<VirtualLinkDescriptor> vldList = new ArrayList<>();
+        List<VirtualLinkDescriptor> vldList = new LinkedList<>();
         JSONArray vldJSON = ob.get("vld").getValue();
 
         for(JSONValue item : vldJSON)
@@ -422,7 +423,7 @@ class OSMController {
         }
 
         JSONArray constituentVNFDJSON = ob.get("constituent-vnfd").getValue();
-        List<VirtualNetworkFunctionDescriptor> constituentVNFDs = new ArrayList<>();
+        List<VirtualNetworkFunctionDescriptor> constituentVNFDs = new LinkedList<>();
 
         for(JSONValue item: constituentVNFDJSON)
         {
@@ -705,7 +706,7 @@ class OSMController {
         if(response.getCode() > 299)
         {
             try {
-                throw new RuntimeException("Error!! Unable to attach datacenter to OSM");
+                throw new OSMException("Error!! Unable to attach datacenter to OSM");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -783,7 +784,7 @@ class OSMController {
 
         if(!containsNSD)
             try {
-                throw new RuntimeException("NSD named "+nsdName+" not found");
+                throw new OSMException("NSD named "+nsdName+" not found");
             } catch (Exception e) {
                 e.printStackTrace();
             }
