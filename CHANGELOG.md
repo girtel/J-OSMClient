@@ -4,6 +4,12 @@ All notable changes to J-OSMClient will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0] - 2019-03-01
+### Added
+    - OSMClient release 5 implementing sol005
+	
+####
+
 ## [1.2] - 2018-06-12
 ### Added
     - Configuration class to allow customize VIM and NS creation.
