@@ -6,7 +6,7 @@
 
     <groupId>com.cfsnm</groupId>
     <artifactId>osmclient</artifactId>
-    <version>1.2</version>
+    <version>1.3</version>
 
     <name>OSM Client</name>
     <description>Java Client to work with OSM (OpenSource MANO) REST API.</description>
@@ -22,14 +22,6 @@
 
 
     <dependencies>
-        <dependency>
-            <groupId>com.goharsha</groupId>
-            <artifactId>easyjson</artifactId>
-            <classifier>gwt</classifier>
-            <version>0.3</version>
-            <scope>compile</scope>
-        </dependency>
-
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>

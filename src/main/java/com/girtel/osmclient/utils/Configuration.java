@@ -1,9 +1,6 @@
 package com.girtel.osmclient.utils;
 
-import com.shc.easyjson.JSON;
-import com.shc.easyjson.JSONArray;
-import com.shc.easyjson.JSONObject;
-import com.shc.easyjson.JSONValue;
+
 
 /**
  * This class represents Configuration parameters to customize interactions with OSM
@@ -65,6 +62,6 @@ public class Configuration
     @Override
     public String toString()
     {
-        return JSON.write(json);
+        return JSONUtils.write(json);
     }
 }

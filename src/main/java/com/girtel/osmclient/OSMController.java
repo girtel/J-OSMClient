@@ -2,10 +2,7 @@ package com.girtel.osmclient;
 
 
 import com.girtel.osmclient.internal.OSMException;
-import com.girtel.osmclient.utils.Configuration;
-import com.girtel.osmclient.utils.HTTPResponse;
-import com.girtel.osmclient.utils.OSMConstants;
-import com.shc.easyjson.*;
+import com.girtel.osmclient.utils.*;
 import javafx.util.Pair;
 
 import java.io.File;
@@ -43,7 +40,7 @@ class OSMController {
         {
             JSONObject jObj = null;
             try {
-                jObj = JSON.parse(receivedJSON);
+                jObj = JSONUtils.parse(receivedJSON);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -71,7 +68,7 @@ class OSMController {
 
             if(receivedJSON != null) {
                 try {
-                    jObj = JSON.parse(receivedJSON);
+                    jObj = JSONUtils.parse(receivedJSON);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -97,7 +94,7 @@ class OSMController {
         {
             JSONObject jObj = null;
             try {
-                jObj = JSON.parse(receivedJSON);
+                jObj = JSONUtils.parse(receivedJSON);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -123,7 +120,7 @@ class OSMController {
         {
             JSONObject jObj = null;
             try {
-                jObj = JSON.parse(receivedJSON);
+                jObj = JSONUtils.parse(receivedJSON);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -160,7 +157,7 @@ class OSMController {
         {
             JSONObject jObjDatacenters = null;
             try {
-                jObjDatacenters = JSON.parse(osmTenant);
+                jObjDatacenters = JSONUtils.parse(osmTenant);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -172,7 +169,7 @@ class OSMController {
             {
                 JSONObject jObj = null;
                 try {
-                    jObj = JSON.parse(receivedDatacenterAdvancedInfo);
+                    jObj = JSONUtils.parse(receivedDatacenterAdvancedInfo);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -202,7 +199,7 @@ class OSMController {
         {
             JSONObject jObj = null;
             try {
-                jObj = JSON.parse(receivedJSON);
+                jObj = JSONUtils.parse(receivedJSON);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -471,7 +468,7 @@ class OSMController {
         else{
             JSONObject jObj = null;
             try {
-                jObj = JSON.parse(nsJSON);
+                jObj = JSONUtils.parse(nsJSON);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -519,7 +516,7 @@ class OSMController {
         else{
             JSONObject jObj = null;
             try {
-                jObj = JSON.parse(nsdJSON);
+                jObj = JSONUtils.parse(nsdJSON);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -566,7 +563,7 @@ class OSMController {
 
             JSONObject jObj = null;
             try {
-                jObj = JSON.parse(vnfdJSON);
+                jObj = JSONUtils.parse(vnfdJSON);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -614,7 +611,7 @@ class OSMController {
         JSONObject tenantJSONOb = null;
 
         try {
-            tenantJSONOb = JSON.parse(tenantJSON);
+            tenantJSONOb = JSONUtils.parse(tenantJSON);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -629,7 +626,7 @@ class OSMController {
         JSONObject defaultROJSON = null;
 
         try {
-            defaultROJSON = JSON.parse(roAccJSON);
+            defaultROJSON = JSONUtils.parse(roAccJSON);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -690,8 +687,8 @@ class OSMController {
         JSONObject tenantJSON = null;
 
         try {
-            datacenterJSON = JSON.parse(createDatacenterResponse);
-            tenantJSON = JSON.parse(osmTenant);
+            datacenterJSON = JSONUtils.parse(createDatacenterResponse);
+            tenantJSON = JSONUtils.parse(osmTenant);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -716,7 +713,7 @@ class OSMController {
         JSONObject defaultROJSON = null;
 
         try {
-            defaultROJSON = JSON.parse(roAccJSON);
+            defaultROJSON = JSONUtils.parse(roAccJSON);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -758,7 +755,7 @@ class OSMController {
 
         JSONObject nsdJSONOb = null;
         try {
-            nsdJSONOb = JSON.parse(nsdJSON);
+            nsdJSONOb = JSONUtils.parse(nsdJSON);
         } catch (ParseException e) {
             e.printStackTrace();
         }
