@@ -2,7 +2,7 @@ package com.girtel.osmclient;
 
 import com.girtel.osmclient.internal.OSMException;
 import com.girtel.osmclient.utils.HTTPResponse;
-import com.girtel.osmclient.utils.JSONObject;
+import com.girtel.osmclient.internal.JSONObject;
 import com.girtel.osmclient.utils.JSONUtils;
 import com.girtel.osmclient.utils.ParseException;
 
@@ -110,7 +110,7 @@ public class OSMClient005
         return osmController005.parseNSList();
     }
 
-    public HTTPResponse createNS(String nsName, String vimName, String nsdName)
+    public HTTPResponse createNS(String nsName, String nsdName, String vimName)
     {
         return osmController005.createNS(nsName, nsdName, vimName);
     }

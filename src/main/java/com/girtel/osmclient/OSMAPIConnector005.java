@@ -2,9 +2,9 @@ package com.girtel.osmclient;
 
 import com.girtel.osmclient.internal.OSMException;
 import com.girtel.osmclient.utils.HTTPResponse;
-import com.girtel.osmclient.utils.JSONObject;
+import com.girtel.osmclient.internal.JSONObject;
 import com.girtel.osmclient.utils.JSONUtils;
-import com.girtel.osmclient.utils.JSONValue;
+import com.girtel.osmclient.internal.JSONValue;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;

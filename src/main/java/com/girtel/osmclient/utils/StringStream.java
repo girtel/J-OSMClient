@@ -10,7 +10,7 @@ class StringStream
     private int charColumn;
     private int charIndex;
 
-    StringStream(String string)
+    public StringStream(String string)
     {
         this.string = string.toCharArray();
 

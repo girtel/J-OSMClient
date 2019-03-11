@@ -1,13 +1,15 @@
 package com.girtel.osmclient;
 
+import com.girtel.osmclient.internal.JSONArray;
+import com.girtel.osmclient.internal.JSONObject;
+import com.girtel.osmclient.internal.JSONValue;
+import com.girtel.osmclient.utils.ParseException;
 import com.girtel.osmclient.utils.*;
 import javafx.util.Pair;
-import sun.awt.image.ImageWatched;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class OSMController005
 {
@@ -336,11 +338,11 @@ public class OSMController005
 
     }
 
-    public HTTPResponse createNS(String name, String nsdName, String datacenter)
+    public HTTPResponse createNS(String name, String nsdName, String vim)
     {
         JSONObject nsJSON = new JSONObject();
         nsJSON.put("nsDescription",new JSONValue("default"));
-        String vimId = osmClient005.getVIMByName(datacenter).getID();
+        String vimId = osmClient005.getVIMByName(vim).getID();
         String nsdId = osmClient005.getNSDByName(nsdName).getId();
         nsJSON.put("vimAccountId",new JSONValue(vimId));
         nsJSON.put("nsdId", new JSONValue(nsdId));

@@ -1,7 +1,7 @@
 package com.girtel.osmclient;
 
 
-import com.girtel.osmclient.internal.OSMException;
+import com.girtel.osmclient.internal.*;
 import com.girtel.osmclient.utils.*;
 import javafx.util.Pair;
 

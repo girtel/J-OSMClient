@@ -1,6 +1,9 @@
 package com.girtel.osmclient.utils;
 
 
+import com.girtel.osmclient.internal.JSONArray;
+import com.girtel.osmclient.internal.JSONObject;
+import com.girtel.osmclient.internal.JSONValue;
 
 /**
  * This class represents Configuration parameters to customize interactions with OSM

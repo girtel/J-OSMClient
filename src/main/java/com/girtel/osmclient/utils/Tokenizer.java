@@ -1,7 +1,6 @@
 package com.girtel.osmclient.utils;
 
 
-
 public class Tokenizer
 {
     private StringStream source;

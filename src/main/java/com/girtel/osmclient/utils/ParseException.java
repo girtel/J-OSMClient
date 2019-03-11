@@ -1,7 +1,6 @@
 package com.girtel.osmclient.utils;
 
 
-
 public class ParseException extends Exception
 {
     ParseException(StringStream source, String description)
