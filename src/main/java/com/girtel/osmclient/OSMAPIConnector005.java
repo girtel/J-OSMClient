@@ -23,8 +23,8 @@ import java.security.NoSuchAlgorithmException;
 
 public class OSMAPIConnector005
 {
-    private static String TOKEN_URL_005 = "/osm/{project}/v1/tokens";
-    private static String VIM_URL_005 = "/osm/{project}/v1/vim_accounts";
+    private static String TOKEN_URL_005 = "/osm/admin/v1/tokens";
+    private static String VIM_URL_005 = "/osm/admin/v1/vim_accounts";
     private static String VNFD_URL_005 = "/osm/vnfpkgm/v1/vnf_packages";
     private static String VNF_URL_005 = "/osm/nslcm/v1/vnfrs";
     private static String NSD_URL_005 = "/osm/nsd/v1/ns_descriptors";
