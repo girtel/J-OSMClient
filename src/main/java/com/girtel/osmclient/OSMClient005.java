@@ -85,10 +85,10 @@ public class OSMClient005
         return osmController005.parseVIMList();
     }
 
-    /*public List<VirtualNetworkFunctionDescriptor> getVNFDList()
+    public List<VirtualNetworkFunctionDescriptor> getVNFDList()
     {
         return osmController005.parseVNFDList();
-    }*/
+    }
 
     public List<NetworkServiceDescriptor> getNSDList()
     {

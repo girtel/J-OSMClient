@@ -2,21 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="049b0617-1b33-46dd-8777-7ecdd87e687d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnector005.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnector005.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient005.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient005.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController005.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController005.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/internal/JSONArray.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/json/JSONArray.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/internal/JSONObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/json/JSONObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/internal/JSONValue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/json/JSONValue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/JSONUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/json/JSONFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/ParseException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/json/ParseException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/StringStream.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/json/StringStream.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/Token.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/json/Token.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/Tokenizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/json/Tokenizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/VIMConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/VIMConfiguration.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -32,31 +18,32 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnector005.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-412">
-              <caret line="664" column="55" selection-start-line="664" selection-start-column="55" selection-end-line="664" selection-end-column="55" />
+            <state relative-caret-position="356">
+              <caret line="207" column="54" selection-start-line="207" selection-start-column="54" selection-end-line="207" selection-end-column="54" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient005.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="416">
+              <caret line="167" column="68" selection-start-line="167" selection-start-column="68" selection-end-line="167" selection-end-column="68" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#2239#2240#0" expanded="true" />
+                <element signature="e#2294#2295#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/json/ParseException.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="13" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController005.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="612">
-              <caret line="72" column="9" selection-start-line="72" selection-start-column="9" selection-end-line="72" selection-end-column="9" />
+            <state relative-caret-position="-1173">
+              <caret line="90" column="9" selection-start-line="90" selection-start-column="9" selection-end-line="90" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -78,8 +65,6 @@
       <list>
         <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/internal/StringStream.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/ParseException.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient005.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnector005.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/JSONUtils.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnector.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/json/JSONController.java" />
@@ -88,6 +73,9 @@
         <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/json/JSONFactory.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController005.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnector005.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/VIMConfiguration.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient005.java" />
       </list>
     </option>
   </component>
@@ -98,7 +86,7 @@
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="13" />
     <option name="width" value="1918" />
     <option name="height" value="1028" />
@@ -200,7 +188,7 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
@@ -215,7 +203,7 @@
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Terminal" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.32910052" />
+      <window_info active="true" anchor="bottom" id="Messages" order="10" visible="true" weight="0.32910052" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -225,13 +213,6 @@
     </layout>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient005.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="65" column="55" selection-start-line="65" selection-start-column="55" selection-end-line="65" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/Configuration.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="756">
@@ -274,13 +255,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/VIMConfiguration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-136">
-          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/internal/OSMException.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -299,13 +273,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="42">
           <caret line="3" column="13" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnector005.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="575">
-          <caret line="279" column="13" selection-start-line="279" selection-start-column="13" selection-end-line="279" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -354,20 +321,45 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController005.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1173">
+          <caret line="90" column="9" selection-start-line="90" selection-start-column="9" selection-end-line="90" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnector005.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="207" column="54" selection-start-line="207" selection-start-column="54" selection-end-line="207" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-412">
-          <caret line="664" column="55" selection-start-line="664" selection-start-column="55" selection-end-line="664" selection-end-column="55" />
+        <state relative-caret-position="263">
+          <caret line="593" column="33" lean-forward="true" selection-start-line="593" selection-start-column="33" selection-end-line="593" selection-end-column="33" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController005.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/VIMConfiguration.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="72" column="9" selection-start-line="72" selection-start-column="9" selection-end-line="72" selection-end-column="9" />
+        <state relative-caret-position="807">
+          <caret line="60" column="24" lean-forward="true" selection-start-line="60" selection-start-column="24" selection-end-line="60" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient005.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="416">
+          <caret line="167" column="68" selection-start-line="167" selection-start-column="68" selection-end-line="167" selection-end-column="68" />
+          <folding>
+            <element signature="e#2239#2240#0" expanded="true" />
+            <element signature="e#2294#2295#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
