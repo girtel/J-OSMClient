@@ -23,12 +23,14 @@ import java.security.NoSuchAlgorithmException;
 
 public class OSMAPIConnector005
 {
-    private static String TOKEN_URL_005 = "/osm/admin/v1/tokens";
-    private static String VIM_URL_005 = "/osm/admin/v1/vim_accounts";
-    private static String VNFD_URL_005 = "/osm/vnfpkgm/v1/vnf_packages";
-    private static String VNF_URL_005 = "/osm/nslcm/v1/vnfrs";
-    private static String NSD_URL_005 = "/osm/nsd/v1/ns_descriptors";
-    private static String NS_URL_005 = "/osm/nslcm/v1/ns_instances_content";
+    private String TOKEN_URL_005 = "/osm/admin/v1/tokens";
+    private String VIM_URL_005 = "/osm/admin/v1/vim_accounts";
+    private String VNFD_URL_005 = "/osm/vnfpkgm/v1/vnf_packages";
+    private String VNF_URL_005 = "/osm/nslcm/v1/vnfrs";
+    private String NSD_URL_005 = "/osm/nsd/v1/ns_descriptors";
+    private String NS_URL_005 = "/osm/nslcm/v1/ns_instances_content";
+    private String UPLOAD_VNFD_URL_005 = "/osm/vnfpkgm/v1/vnf_packages_content";
+    private String UPLOAD_NSD_URL_005 = "/osm/nsd/v1/ns_descriptors_content";
 
 
     private OSMClient005 osmClient005;
@@ -36,7 +38,7 @@ public class OSMAPIConnector005
     private String project;
     private JSONObject authJSON;
 
-    public OSMAPIConnector005(OSMClient005 osmClient005)
+    protected OSMAPIConnector005(OSMClient005 osmClient005)
     {
         this.osmClient005 = osmClient005;
         this.osmIPAddress = osmClient005.getOSMIPAddress();
@@ -230,52 +232,52 @@ public class OSMAPIConnector005
         return response;
     }
 
-    public HTTPResponse establishConnectionToCreateSessionToken()
+    protected HTTPResponse establishConnectionToCreateSessionToken()
     {
-        String url = "https://"+osmIPAddress+":9999"+TOKEN_URL_005.replace("{project}",project);
+        String url = "https://"+osmIPAddress+":9999"+TOKEN_URL_005;
         HTTPResponse response =  establishHTTPConnection(url, HTTPMethod.POST, false, authJSON);
         return response;
     }
 
-    public HTTPResponse establishConnectionToReceiveVIMList()
+    protected HTTPResponse establishConnectionToReceiveVIMList()
     {
-        String url = "https://"+osmIPAddress+":9999"+VIM_URL_005.replace("{project}",project);
+        String url = "https://"+osmIPAddress+":9999"+VIM_URL_005;
         HTTPResponse response =  establishHTTPConnection(url, HTTPMethod.GET, true);
         return response;
     }
 
-    public HTTPResponse establishConnectionToReceiveVNFDList()
+    protected HTTPResponse establishConnectionToReceiveVNFDList()
     {
-        String url = "https://"+osmIPAddress+":9999"+ VNFD_URL_005.replace("{project}",project);
+        String url = "https://"+osmIPAddress+":9999"+ VNFD_URL_005;
         return establishHTTPConnection(url, HTTPMethod.GET, true);
     }
 
-    public HTTPResponse establishConnectionToReceiveVNFList()
+    protected HTTPResponse establishConnectionToReceiveVNFList()
     {
-        String url = "https://"+osmIPAddress+":9999"+ VNF_URL_005.replace("{project}",project);
+        String url = "https://"+osmIPAddress+":9999"+ VNF_URL_005;
         return establishHTTPConnection(url, HTTPMethod.GET, true);
     }
 
-    public HTTPResponse establishConnectionToReceiveNSDList()
+    protected HTTPResponse establishConnectionToReceiveNSDList()
     {
-        String url = "https://"+osmIPAddress+":9999"+ NSD_URL_005.replace("{project}",project);
+        String url = "https://"+osmIPAddress+":9999"+ NSD_URL_005;
         return establishHTTPConnection(url, HTTPMethod.GET, true);
     }
 
-    public HTTPResponse establishConnectionToReceiveNSList()
+    protected HTTPResponse establishConnectionToReceiveNSList()
     {
-        String url = "https://"+osmIPAddress+":9999"+ NS_URL_005.replace("{project}",project);
+        String url = "https://"+osmIPAddress+":9999"+ NS_URL_005;
         return establishHTTPConnection(url, HTTPMethod.GET, true);
     }
 
-    public HTTPResponse establishConnectionToCreateNS(JSONObject nsJSON)
+    protected HTTPResponse establishConnectionToCreateNS(JSONObject nsJSON)
     {
-        String url = "https://"+osmIPAddress+":9999"+NS_URL_005.replace("{project}",project);
+        String url = "https://"+osmIPAddress+":9999"+NS_URL_005;
         HTTPResponse response =  establishHTTPConnection(url, HTTPMethod.POST, true, nsJSON);
         return response;
     }
 
-    public HTTPResponse establishConnectionToDeleteNS(String nsId)
+    protected HTTPResponse establishConnectionToDeleteNS(String nsId)
     {
         String url = "https://"+osmIPAddress+":9999"+NS_URL_005+"/"+nsId;
         HTTPResponse response =  establishHTTPConnection(url, HTTPMethod.DELETE, true);

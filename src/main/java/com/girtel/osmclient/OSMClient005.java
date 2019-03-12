@@ -62,7 +62,18 @@ public class OSMClient005
     protected String getSessionToken()
     {
         if(this.sessionToken == null)
-            createSessionToken();
+        {
+            HTTPResponse resp = osmController005.createSessionToken();
+            String token = resp.getContent();
+            try {
+                JSONObject tokenJSON = JSONUtils.parse(token);
+                String tokenID = tokenJSON.get("_id").getValue();
+                this.sessionToken = tokenID;
+            } catch (ParseException e)
+            {
+                e.printStackTrace();
+            }
+        }
         return this.sessionToken;
     }
     /**
@@ -72,22 +83,6 @@ public class OSMClient005
     protected String getProject()
     {
         return this.project;
-    }
-
-    private HTTPResponse createSessionToken()
-    {
-        HTTPResponse resp = osmController005.createSessionToken();
-        String token = resp.getContent();
-        try {
-            JSONObject tokenJSON = JSONUtils.parse(token);
-            String tokenID = tokenJSON.get("_id").getValue();
-            this.sessionToken = tokenID;
-        } catch (ParseException e)
-        {
-            e.printStackTrace();
-        }
-
-        return resp;
     }
 
     public List<VirtualInfrastructureManager> getVIMList()
@@ -171,7 +166,7 @@ public class OSMClient005
     public static void main(String [] args)
     {
         OSMClient005 osmClient005 = new OSMClient005("10.0.2.15","admin","admin");
-        System.out.println(osmClient005.createSessionToken());
+        System.out.println(osmClient005.getSessionToken());
         System.out.println(osmClient005.getVIMList());
         System.out.println(osmClient005.getNSDList());
         System.out.println(osmClient005.getNSList());

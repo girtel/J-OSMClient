@@ -17,18 +17,18 @@ public class OSMController005
     private OSMClient005 osmClient005;
     private String emptyJSON = "{}";
 
-    public OSMController005(OSMClient005 osmClient005)
+    protected OSMController005(OSMClient005 osmClient005)
     {
        this.osmClient005 = osmClient005;
        this.osmConnector005 = new OSMAPIConnector005(osmClient005);
     }
 
-    public HTTPResponse createSessionToken()
+    protected HTTPResponse createSessionToken()
     {
         return osmConnector005.establishConnectionToCreateSessionToken();
     }
 
-    public List<VirtualInfrastructureManager> parseVIMList()
+    protected List<VirtualInfrastructureManager> parseVIMList()
     {
         List<VirtualInfrastructureManager> vims = new LinkedList<>();
         HTTPResponse vimResponse = osmConnector005.establishConnectionToReceiveVIMList();
@@ -50,7 +50,7 @@ public class OSMController005
         return vims;
     }
 
-    public List<VirtualNetworkFunctionDescriptor> parseVNFDList()
+    protected List<VirtualNetworkFunctionDescriptor> parseVNFDList()
     {
         List<VirtualNetworkFunctionDescriptor> vnfds = new LinkedList<>();
         HTTPResponse vnfdResponse = osmConnector005.establishConnectionToReceiveVNFDList();
@@ -72,7 +72,7 @@ public class OSMController005
         return vnfds;
     }
 
-    public List<NetworkServiceDescriptor> parseNSDList()
+    protected List<NetworkServiceDescriptor> parseNSDList()
     {
         List<NetworkServiceDescriptor> nsds = new LinkedList<>();
         HTTPResponse nsdResponse = osmConnector005.establishConnectionToReceiveNSDList();
@@ -96,7 +96,7 @@ public class OSMController005
         return nsds;
     }
 
-    public List<NetworkService> parseNSList()
+    protected List<NetworkService> parseNSList()
     {
         List<NetworkService> nss = new LinkedList<>();
         HTTPResponse nsResponse = osmConnector005.establishConnectionToReceiveNSList();
@@ -119,6 +119,25 @@ public class OSMController005
         }
 
         return nss;
+    }
+
+    protected HTTPResponse createNS(String name, String nsdName, String vim)
+    {
+        JSONObject nsJSON = new JSONObject();
+        nsJSON.put("nsDescription",new JSONValue("default"));
+        String vimId = osmClient005.getVIMByName(vim).getID();
+        String nsdId = osmClient005.getNSDByName(nsdName).getId();
+        nsJSON.put("vimAccountId",new JSONValue(vimId));
+        nsJSON.put("nsdId", new JSONValue(nsdId));
+        nsJSON.put("nsName", new JSONValue(name));
+
+        return osmConnector005.establishConnectionToCreateNS(nsJSON);
+    }
+
+    protected HTTPResponse deleteNS(String name)
+    {
+        String nsId = osmClient005.getNSByName(name).getId();
+        return osmConnector005.establishConnectionToDeleteNS(nsId);
     }
 
     private VirtualInfrastructureManager parseVIM(JSONObject ob)
@@ -323,7 +342,7 @@ public class OSMController005
 
     }
 
-    public NetworkService parseNS(JSONObject ob)
+    private NetworkService parseNS(JSONObject ob)
     {
         String nsId = ob.get("id").getValue();
         String nsName = ob.get("name").getValue();
@@ -338,22 +357,4 @@ public class OSMController005
 
     }
 
-    public HTTPResponse createNS(String name, String nsdName, String vim)
-    {
-        JSONObject nsJSON = new JSONObject();
-        nsJSON.put("nsDescription",new JSONValue("default"));
-        String vimId = osmClient005.getVIMByName(vim).getID();
-        String nsdId = osmClient005.getNSDByName(nsdName).getId();
-        nsJSON.put("vimAccountId",new JSONValue(vimId));
-        nsJSON.put("nsdId", new JSONValue(nsdId));
-        nsJSON.put("nsName", new JSONValue(name));
-
-        return osmConnector005.establishConnectionToCreateNS(nsJSON);
-    }
-
-    public HTTPResponse deleteNS(String name)
-    {
-        String nsId = osmClient005.getNSByName(name).getId();
-        return osmConnector005.establishConnectionToDeleteNS(nsId);
-    }
 }
