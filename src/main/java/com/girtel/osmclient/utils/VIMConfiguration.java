@@ -6,18 +6,18 @@ import com.girtel.osmclient.internal.JSONObject;
 import com.girtel.osmclient.internal.JSONValue;
 
 /**
- * This class represents Configuration parameters to customize interactions with OSM
+ * This class represents Configuration parameters to customize VIM creation
  *
  * @author Cesar San-Nicolas-Martinez
  */
-public class Configuration
+public class VIMConfiguration
 {
     private JSONObject json;
 
     /**
      * Default constructor
      */
-    public Configuration()
+    public VIMConfiguration()
     {
         this.json = new JSONObject();
     }

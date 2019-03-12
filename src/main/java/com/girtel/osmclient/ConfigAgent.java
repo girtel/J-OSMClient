@@ -4,7 +4,7 @@ package com.girtel.osmclient;
 import com.girtel.osmclient.utils.OSMConstants;
 
 /**
- * This class represents Open Source MANO Configuration Agent component.
+ * This class represents Open Source MANO VIMConfiguration Agent component.
  *
  * @author Cesar San-Nicolas-Martinez
  *

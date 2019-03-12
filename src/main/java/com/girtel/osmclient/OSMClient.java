@@ -1,7 +1,7 @@
 package com.girtel.osmclient;
 
 import com.girtel.osmclient.internal.OSMException;
-import com.girtel.osmclient.utils.Configuration;
+import com.girtel.osmclient.utils.VIMConfiguration;
 import com.girtel.osmclient.utils.HTTPResponse;
 import com.girtel.osmclient.utils.OSMConstants;
 
@@ -100,12 +100,12 @@ public class OSMClient {
      * @param password VIM password
      * @param authURL authentication URL, e.c. in Openstack: http://(IP_ADDRESS)/identity/v3
      * @param tenant VIM tenant to instantiate VMs
-     * @param configuration optional configuration parameters
+     * @param VIMConfiguration optional VIMConfiguration parameters
      * @return HTTPResponse from OSM (code, message, content)
      */
-    public HTTPResponse createVIM(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, Configuration... configuration)
+    public HTTPResponse createVIM(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, VIMConfiguration... VIMConfiguration)
     {
-        HTTPResponse response = osmController.createVIM(name,osmVimType,user,password,authURL,tenant, configuration);
+        HTTPResponse response = osmController.createVIM(name,osmVimType,user,password,authURL,tenant, VIMConfiguration);
         return response;
     }
 
@@ -114,10 +114,10 @@ public class OSMClient {
      * @param nsName new network service name
      * @param nsdName ns descritptor name
      * @param datacenterName VIM name where ns will be instantiated
-     * @param configuration optional configuration parameters
+     * @param VIMConfiguration optional VIMConfiguration parameters
      * @return HTTPResponse from OSM (code, message, content)
      */
-    public HTTPResponse createNS(String nsName, String nsdName, String datacenterName, Configuration... configuration)
+    public HTTPResponse createNS(String nsName, String nsdName, String datacenterName, VIMConfiguration... VIMConfiguration)
     {
         HTTPResponse response = osmController.createNS(nsName, nsdName, datacenterName);
         return response;
@@ -455,6 +455,12 @@ public class OSMClient {
     {
         HTTPResponse response = osmController.uploadPackage(file);
         return response;
+    }
+
+    public static void main(String [] args)
+    {
+        OSMClient osmClient = new OSMClient("192.168.10.130","admin","admin");
+
     }
 
 }

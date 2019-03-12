@@ -32,7 +32,7 @@ hs_err_pid*
 *.iws
 
 # Netbeans
-nb-configuration.xml
+nb-VIMConfiguration.xml
 nbactions.xml
 build.xml
 

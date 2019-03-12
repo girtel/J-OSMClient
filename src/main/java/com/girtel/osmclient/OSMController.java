@@ -1,12 +1,16 @@
 package com.girtel.osmclient;
 
 
-import com.girtel.osmclient.internal.*;
-import com.girtel.osmclient.utils.*;
+import com.girtel.osmclient.internal.OSMException;
+import com.girtel.osmclient.utils.VIMConfiguration;
+import com.girtel.osmclient.utils.HTTPResponse;
+import com.girtel.osmclient.utils.OSMConstants;
+import com.shc.easyjson.*;
 import javafx.util.Pair;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -40,7 +44,7 @@ class OSMController {
         {
             JSONObject jObj = null;
             try {
-                jObj = JSONUtils.parse(receivedJSON);
+                jObj = JSON.parse(receivedJSON);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -68,7 +72,7 @@ class OSMController {
 
             if(receivedJSON != null) {
                 try {
-                    jObj = JSONUtils.parse(receivedJSON);
+                    jObj = JSON.parse(receivedJSON);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -94,7 +98,7 @@ class OSMController {
         {
             JSONObject jObj = null;
             try {
-                jObj = JSONUtils.parse(receivedJSON);
+                jObj = JSON.parse(receivedJSON);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -120,7 +124,7 @@ class OSMController {
         {
             JSONObject jObj = null;
             try {
-                jObj = JSONUtils.parse(receivedJSON);
+                jObj = JSON.parse(receivedJSON);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -157,7 +161,7 @@ class OSMController {
         {
             JSONObject jObjDatacenters = null;
             try {
-                jObjDatacenters = JSONUtils.parse(osmTenant);
+                jObjDatacenters = JSON.parse(osmTenant);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -169,7 +173,7 @@ class OSMController {
             {
                 JSONObject jObj = null;
                 try {
-                    jObj = JSONUtils.parse(receivedDatacenterAdvancedInfo);
+                    jObj = JSON.parse(receivedDatacenterAdvancedInfo);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -199,7 +203,7 @@ class OSMController {
         {
             JSONObject jObj = null;
             try {
-                jObj = JSONUtils.parse(receivedJSON);
+                jObj = JSON.parse(receivedJSON);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -408,7 +412,7 @@ class OSMController {
         String nsdId = ob.get("id").getValue();
         String nsdName = ob.get("name").getValue();
 
-        List<VirtualLinkDescriptor> vldList = new ArrayList<>();
+        List<VirtualLinkDescriptor> vldList = new LinkedList<>();
         JSONArray vldJSON = ob.get("vld").getValue();
 
         for(JSONValue item : vldJSON)
@@ -419,7 +423,7 @@ class OSMController {
         }
 
         JSONArray constituentVNFDJSON = ob.get("constituent-vnfd").getValue();
-        List<VirtualNetworkFunctionDescriptor> constituentVNFDs = new ArrayList<>();
+        List<VirtualNetworkFunctionDescriptor> constituentVNFDs = new LinkedList<>();
 
         for(JSONValue item: constituentVNFDJSON)
         {
@@ -468,7 +472,7 @@ class OSMController {
         else{
             JSONObject jObj = null;
             try {
-                jObj = JSONUtils.parse(nsJSON);
+                jObj = JSON.parse(nsJSON);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -516,7 +520,7 @@ class OSMController {
         else{
             JSONObject jObj = null;
             try {
-                jObj = JSONUtils.parse(nsdJSON);
+                jObj = JSON.parse(nsdJSON);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -563,7 +567,7 @@ class OSMController {
 
             JSONObject jObj = null;
             try {
-                jObj = JSONUtils.parse(vnfdJSON);
+                jObj = JSON.parse(vnfdJSON);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -611,7 +615,7 @@ class OSMController {
         JSONObject tenantJSONOb = null;
 
         try {
-            tenantJSONOb = JSONUtils.parse(tenantJSON);
+            tenantJSONOb = JSON.parse(tenantJSON);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -626,7 +630,7 @@ class OSMController {
         JSONObject defaultROJSON = null;
 
         try {
-            defaultROJSON = JSONUtils.parse(roAccJSON);
+            defaultROJSON = JSON.parse(roAccJSON);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -656,10 +660,10 @@ class OSMController {
         return finalResponse;
     }
 
-    public HTTPResponse createVIM(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, Configuration... configuration)
+    public HTTPResponse createVIM(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, VIMConfiguration... VIMConfiguration)
     {
-        if(configuration.length > 1)
-            throw new RuntimeException("No more than one configuration is allowed");
+        if(VIMConfiguration.length > 1)
+            throw new RuntimeException("No more than one VIMConfiguration is allowed");
 
         JSONObject finalJSON = new JSONObject();
         JSONObject dataCenterJSON = new JSONObject();
@@ -667,7 +671,7 @@ class OSMController {
         dataCenterJSON.put("name",new JSONValue(name));
         dataCenterJSON.put("type",new JSONValue(osmVimType.toString()));
 
-        JSONObject configJSON = (configuration.length == 1) ? configuration[0].toJSON() : new JSONObject();
+        JSONObject configJSON = (VIMConfiguration.length == 1) ? VIMConfiguration[0].toJSON() : new JSONObject();
         if(!configJSON.isEmpty())
             dataCenterJSON.put("config",new JSONValue(configJSON));
 
@@ -687,8 +691,8 @@ class OSMController {
         JSONObject tenantJSON = null;
 
         try {
-            datacenterJSON = JSONUtils.parse(createDatacenterResponse);
-            tenantJSON = JSONUtils.parse(osmTenant);
+            datacenterJSON = JSON.parse(createDatacenterResponse);
+            tenantJSON = JSON.parse(osmTenant);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -702,7 +706,7 @@ class OSMController {
         if(response.getCode() > 299)
         {
             try {
-                throw new RuntimeException("Error!! Unable to attach datacenter to OSM");
+                throw new OSMException("Error!! Unable to attach datacenter to OSM");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -713,7 +717,7 @@ class OSMController {
         JSONObject defaultROJSON = null;
 
         try {
-            defaultROJSON = JSONUtils.parse(roAccJSON);
+            defaultROJSON = JSON.parse(roAccJSON);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -749,13 +753,13 @@ class OSMController {
         return response;
     }
 
-    public HTTPResponse createNS(String name, String nsdName, String datacenter, Configuration... optionalConfiguration)
+    public HTTPResponse createNS(String name, String nsdName, String datacenter, VIMConfiguration... optionalVIMConfiguration)
     {
         String nsdJSON = osmConnector.establishConnectionToReceiveNSDList().getContent();
 
         JSONObject nsdJSONOb = null;
         try {
-            nsdJSONOb = JSONUtils.parse(nsdJSON);
+            nsdJSONOb = JSON.parse(nsdJSON);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -780,7 +784,7 @@ class OSMController {
 
         if(!containsNSD)
             try {
-                throw new RuntimeException("NSD named "+nsdName+" not found");
+                throw new OSMException("NSD named "+nsdName+" not found");
             } catch (Exception e) {
                 e.printStackTrace();
             }
