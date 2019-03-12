@@ -1,7 +1,7 @@
-package com.girtel.osmclient.utils;
+package com.girtel.osmclient.json;
 
 
-import static com.girtel.osmclient.utils.StringStream.END_OF_INPUT;
+import static com.girtel.osmclient.json.StringStream.END_OF_INPUT;
 
 
 public class Token

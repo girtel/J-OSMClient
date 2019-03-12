@@ -2,9 +2,9 @@ package com.girtel.osmclient;
 
 import com.girtel.osmclient.internal.OSMException;
 import com.girtel.osmclient.utils.HTTPResponse;
-import com.girtel.osmclient.internal.JSONObject;
-import com.girtel.osmclient.utils.JSONUtils;
-import com.girtel.osmclient.utils.ParseException;
+import com.girtel.osmclient.json.JSONObject;
+import com.girtel.osmclient.json.JSONFactory;
+import com.girtel.osmclient.json.ParseException;
 
 import java.util.List;
 
@@ -65,14 +65,9 @@ public class OSMClient005
         {
             HTTPResponse resp = osmController005.createSessionToken();
             String token = resp.getContent();
-            try {
-                JSONObject tokenJSON = JSONUtils.parse(token);
-                String tokenID = tokenJSON.get("_id").getValue();
-                this.sessionToken = tokenID;
-            } catch (ParseException e)
-            {
-                e.printStackTrace();
-            }
+            JSONObject tokenJSON = new JSONObject(token);
+            String tokenID = tokenJSON.get("_id").getValue();
+            this.sessionToken = tokenID;
         }
         return this.sessionToken;
     }

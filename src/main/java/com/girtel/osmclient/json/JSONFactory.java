@@ -1,37 +1,32 @@
-package com.girtel.osmclient.utils;
+package com.girtel.osmclient.json;
 
-
-import com.girtel.osmclient.internal.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public final class JSONUtils
+public final class JSONFactory
 {
-    private JSONUtils()
+    private JSONFactory()
     {
     }
 
-    public static JSONObject parse(String text) throws ParseException
+    protected static void parseJSONObject(String text, JSONObject json) throws ParseException
     {
         Tokenizer tokenizer = new Tokenizer(text);
         tokenizer.getNextToken();
-
-        return parseObject(tokenizer); // Root JSON is an object
+        parseObject(tokenizer, json);
     }
 
-    public static JSONArray parseArray(String text) throws ParseException
+    protected static void parseJSONArray(String text, JSONArray json) throws ParseException
     {
         Tokenizer tokenizer = new Tokenizer(text);
         tokenizer.getNextToken();
-
-        return parseArray(tokenizer);
+        parseArray(tokenizer, json);
     }
 
-    private static JSONObject parseObject(Tokenizer tokenizer) throws ParseException
+    private static void parseObject(Tokenizer tokenizer, JSONObject object) throws ParseException
     {
-        JSONObject object = new JSONObject();
 
         Token token = tokenizer.getCurrentToken();
 
@@ -46,8 +41,6 @@ public final class JSONUtils
             throw new ParseException(tokenizer, "Expected '}' token to end the object.");
 
         tokenizer.getNextToken();
-
-        return object;
     }
 
     private static void parseProperties(JSONObject jsonObject, Tokenizer tokenizer) throws ParseException
@@ -71,9 +64,8 @@ public final class JSONUtils
         }
     }
 
-    private static JSONArray parseArray(Tokenizer tokenizer) throws ParseException
+    private static void parseArray(Tokenizer tokenizer, JSONArray array) throws ParseException
     {
-        JSONArray array = new JSONArray();
 
         Token currentToken = tokenizer.getCurrentToken();
 
@@ -111,8 +103,6 @@ public final class JSONUtils
 
         // Consume the array end token
         tokenizer.getNextToken();
-
-        return array;
     }
 
     private static JSONValue parseValue(Tokenizer tokenizer) throws ParseException
@@ -138,20 +128,31 @@ public final class JSONUtils
                 return new JSONValue();
 
             case ARRAY_BEGIN:
-                return new JSONValue(parseArray(tokenizer));
+                JSONArray array = new JSONArray();
+                parseArray(tokenizer, array);
+                return new JSONValue(array);
 
             case OBJECT_BEGIN:
-                return new JSONValue(parseObject(tokenizer));
+                JSONObject json = new JSONObject();
+                parseObject(tokenizer, json);
+                return new JSONValue(json);
 
             default:
                 throw new ParseException(tokenizer, "Expected a value token.");
         }
     }
 
-    public static String write(JSONObject json)
+    protected static String write(JSONObject json)
     {
         StringBuilder sb = new StringBuilder();
         writeObject(sb, 0, json);
+        return sb.toString();
+    }
+
+    protected static String write(JSONArray json)
+    {
+        StringBuilder sb = new StringBuilder();
+        writeArray(sb, 0, json);
         return sb.toString();
     }
 

@@ -1,9 +1,6 @@
 package com.girtel.osmclient;
 
-import com.girtel.osmclient.internal.JSONArray;
-import com.girtel.osmclient.internal.JSONObject;
-import com.girtel.osmclient.internal.JSONValue;
-import com.girtel.osmclient.utils.ParseException;
+import com.girtel.osmclient.json.*;
 import com.girtel.osmclient.utils.*;
 import javafx.util.Pair;
 
@@ -34,19 +31,13 @@ public class OSMController005
         HTTPResponse vimResponse = osmConnector005.establishConnectionToReceiveVIMList();
         String vimResponseContent = vimResponse.getContent();
 
-        JSONArray vimsArray = null;
-        try {
-            vimsArray = JSONUtils.parseArray(vimResponseContent);
-            for(JSONValue item : vimsArray)
-            {
-                JSONObject ob = item.getValue();
-                VirtualInfrastructureManager vim = parseVIM(ob);
-                vims.add(vim);
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
+        JSONArray vimsArray = new JSONArray(vimResponseContent);
+        for(JSONValue item : vimsArray)
+        {
+            JSONObject ob = item.getValue();
+            VirtualInfrastructureManager vim = parseVIM(ob);
+            vims.add(vim);
         }
-
         return vims;
     }
 
@@ -56,18 +47,12 @@ public class OSMController005
         HTTPResponse vnfdResponse = osmConnector005.establishConnectionToReceiveVNFDList();
         String vnfdResponseContent = vnfdResponse.getContent();
 
-        JSONArray vnfdsArray = null;
-        try {
-            vnfdsArray = JSONUtils.parseArray(vnfdResponseContent);
-            for(JSONValue item : vnfdsArray)
-            {
-                JSONObject ob = item.getValue();
-                VirtualNetworkFunctionDescriptor vnfd = parseVNFD(ob);
-                vnfds.add(vnfd);
-            }
-        } catch (ParseException e)
+        JSONArray vnfdsArray = new JSONArray(vnfdResponseContent);
+        for(JSONValue item : vnfdsArray)
         {
-            e.printStackTrace();
+            JSONObject ob = item.getValue();
+            VirtualNetworkFunctionDescriptor vnfd = parseVNFD(ob);
+            vnfds.add(vnfd);
         }
         return vnfds;
     }
@@ -79,20 +64,13 @@ public class OSMController005
         String nsdResponseContent = nsdResponse.getContent();
         String nsdResponseContent_mod = nsdResponseContent.replace(",            \"userDefinedData\": {}","");
 
-        JSONArray nsdsArray = null;
-        try {
-            nsdsArray = JSONUtils.parseArray(nsdResponseContent_mod);
-            for(JSONValue item : nsdsArray)
-            {
-                JSONObject ob = item.getValue();
-                NetworkServiceDescriptor nsd = parseNSD(ob);
-                nsds.add(nsd);
-            }
-        } catch (ParseException e)
+        JSONArray nsdsArray = new JSONArray(nsdResponseContent_mod);
+        for(JSONValue item : nsdsArray)
         {
-            e.printStackTrace();
+            JSONObject ob = item.getValue();
+            NetworkServiceDescriptor nsd = parseNSD(ob);
+            nsds.add(nsd);
         }
-
         return nsds;
     }
 
@@ -104,20 +82,13 @@ public class OSMController005
         System.out.println(nsResponseContent);
         String nsResponseContent_mod = nsResponseContent.replace("\"orchestration-progress\": {},","").replace(",                \"userDefinedData\": {}","");
 
-        JSONArray nssArray = null;
-        try {
-            nssArray = JSONUtils.parseArray(nsResponseContent_mod);
-            for(JSONValue item : nssArray)
-            {
-                JSONObject ob = item.getValue();
-                NetworkService ns = parseNS(ob);
-                nss.add(ns);
-            }
-        } catch (ParseException e)
+        JSONArray nssArray = new JSONArray(nsResponseContent_mod);
+        for(JSONValue item : nssArray)
         {
-            e.printStackTrace();
+            JSONObject ob = item.getValue();
+            NetworkService ns = parseNS(ob);
+            nss.add(ns);
         }
-
         return nss;
     }
 

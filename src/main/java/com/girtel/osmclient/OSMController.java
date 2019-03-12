@@ -2,10 +2,10 @@ package com.girtel.osmclient;
 
 
 import com.girtel.osmclient.internal.OSMException;
+import com.girtel.osmclient.json.*;
 import com.girtel.osmclient.utils.VIMConfiguration;
 import com.girtel.osmclient.utils.HTTPResponse;
 import com.girtel.osmclient.utils.OSMConstants;
-import com.shc.easyjson.*;
 import javafx.util.Pair;
 
 import java.io.File;
@@ -42,13 +42,7 @@ class OSMController {
         String receivedJSON = osmConnector.establishConnectionToReceiveVNFDList().getContent();
         if(!receivedJSON.equalsIgnoreCase(emptyJSON))
         {
-            JSONObject jObj = null;
-            try {
-                jObj = JSON.parse(receivedJSON);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
+            JSONObject jObj = new JSONObject(receivedJSON);
             JSONArray jarray = jObj.get("project-vnfd:vnfd").getValue();
 
             for(JSONValue item : jarray)
@@ -68,21 +62,17 @@ class OSMController {
         String receivedJSON = osmConnector.establishConnectionToReceiveVNFList().getContent();
         if(!receivedJSON.equalsIgnoreCase(emptyJSON))
         {
-            JSONObject jObj = null;
+            if(receivedJSON != null)
+            {
 
-            if(receivedJSON != null) {
-                try {
-                    jObj = JSON.parse(receivedJSON);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
+                JSONObject jObj = new JSONObject(receivedJSON);
                 JSONArray jArray = jObj.get("vnfr:vnfr").getValue();
-                for (JSONValue item : jArray) {
+
+                for (JSONValue item : jArray)
+                {
                     JSONObject ob = item.getValue();
                     VirtualNetworkFunction vnf = parseVNF(ob);
                     vnfList.add(vnf);
-
                 }
             }
         }
@@ -96,20 +86,14 @@ class OSMController {
         String receivedJSON = osmConnector.establishConnectionToReceiveNSDList().getContent();
         if(!receivedJSON.equalsIgnoreCase(emptyJSON))
         {
-            JSONObject jObj = null;
-            try {
-                jObj = JSON.parse(receivedJSON);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
+            JSONObject jObj = new JSONObject(receivedJSON);
             JSONArray jArray = jObj.get("project-nsd:nsd").getValue();
+
             for(JSONValue item: jArray)
             {
                 JSONObject ob = item.getValue();
                 NetworkServiceDescriptor nsd = parseNSD(ob);
                 nsdList.add(nsd);
-
             }
         }
 
@@ -122,15 +106,8 @@ class OSMController {
         String receivedJSON = osmConnector.establishConnectionToReceiveNSList().getContent();
         if(!receivedJSON.equalsIgnoreCase(emptyJSON))
         {
-            JSONObject jObj = null;
-            try {
-                jObj = JSON.parse(receivedJSON);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
+            JSONObject jObj = new JSONObject(receivedJSON);
             JSONObject json = jObj.get("nsr:ns-instance-config").getValue();
-
             JSONValue nsr = json.get("nsr");
 
             if(nsr != null)
@@ -142,9 +119,7 @@ class OSMController {
                     JSONObject ob = item.getValue();
                     NetworkService ns = parseNS(ob);
                     nsList.add(ns);
-
                 }
-
             }
         }
 
@@ -159,26 +134,13 @@ class OSMController {
 
         if(!osmTenant.equalsIgnoreCase(emptyJSON))
         {
-            JSONObject jObjDatacenters = null;
-            try {
-                jObjDatacenters = JSON.parse(osmTenant);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
+            JSONObject jObjDatacenters = new JSONObject(osmTenant);
             String tenantId = ((JSONObject)jObjDatacenters.get("tenant").getValue()).get("uuid").getValue();
             String receivedDatacenterAdvancedInfo = osmConnector.establishConnectionToReceiveDatacenterList(tenantId).getContent();
 
             if(receivedDatacenterAdvancedInfo != null)
             {
-                JSONObject jObj = null;
-                try {
-                    jObj = JSON.parse(receivedDatacenterAdvancedInfo);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-
+                JSONObject jObj = new JSONObject(receivedDatacenterAdvancedInfo);
                 JSONArray dataCenterArray = jObj.get("datacenters").getValue();
 
                 for(JSONValue dcJSON : dataCenterArray)
@@ -201,13 +163,7 @@ class OSMController {
 
         if(!receivedJSON.equalsIgnoreCase(emptyJSON))
         {
-            JSONObject jObj = null;
-            try {
-                jObj = JSON.parse(receivedJSON);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
+            JSONObject jObj = new JSONObject(receivedJSON);
             JSONArray jArray = ((JSONObject)jObj.get("rw-config-agent:config-agent").getValue()).get("account").getValue();
 
             for(JSONValue item : jArray)
@@ -470,13 +426,7 @@ class OSMController {
             throw new OSMException("No Network Service instantiated in OSM");
         }
         else{
-            JSONObject jObj = null;
-            try {
-                jObj = JSON.parse(nsJSON);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
+            JSONObject jObj = new JSONObject(nsJSON);
             JSONObject json = jObj.get("nsr:ns-instance-config").getValue();
             JSONArray jArray = json.get("nsr").getValue();
 
@@ -518,13 +468,7 @@ class OSMController {
             throw new OSMException("No Network Service Descriptor in OSM catalog");
         }
         else{
-            JSONObject jObj = null;
-            try {
-                jObj = JSON.parse(nsdJSON);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
+            JSONObject jObj = new JSONObject(nsdJSON);
             JSONArray jArray = jObj.get("project-nsd:nsd").getValue();
 
             String nsdIdToDelete = "";
@@ -565,13 +509,7 @@ class OSMController {
         }
         else{
 
-            JSONObject jObj = null;
-            try {
-                jObj = JSON.parse(vnfdJSON);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
+            JSONObject jObj = new JSONObject(vnfdJSON);
             JSONArray jArray = jObj.get("project-vnfd:vnfd").getValue();
 
             String vnfdIdToDelete = "";
@@ -611,35 +549,16 @@ class OSMController {
     public HTTPResponse deleteVIM(String name)
     {
         String tenantJSON = osmConnector.establishConnectionToReceiveOSMTenant().getContent();
-
-        JSONObject tenantJSONOb = null;
-
-        try {
-            tenantJSONOb = JSON.parse(tenantJSON);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        JSONObject tenantJSONOb = new JSONObject(tenantJSON);
         String tenantId = ((JSONObject)tenantJSONOb.get("tenant").getValue()).get("uuid").getValue();
-
         osmConnector.establishConnectionToDetachDatacenter(tenantId, name).getContent();
-
         osmConnector.establishConnectionToDeleteDatacenter(name);
-
         String roAccJSON = osmConnector.establishConnectionToReceiveDefaultROAccount().getContent();
-
-        JSONObject defaultROJSON = null;
-
-        try {
-            defaultROJSON = JSON.parse(roAccJSON);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
+        JSONObject defaultROJSON = new JSONObject(roAccJSON);
         defaultROJSON = ((JSONArray)((JSONObject)defaultROJSON.get("rw-ro-account:ro-account").getValue()).get("account").getValue()).get(0).getValue();
-
         String defaultROType = defaultROJSON.get("ro-account-type").getValue();
-
         HTTPResponse finalResponse = null;
+
         if(!defaultROType.equals("openmano"))
         {
             throw new OSMException("openmano is not default account in OSM");
@@ -687,16 +606,8 @@ class OSMController {
         String createDatacenterResponse = osmConnector.establishConnectionToCreateDatacenter(finalJSON).getContent();
         String osmTenant = osmConnector.establishConnectionToReceiveOSMTenant().getContent();
 
-        JSONObject datacenterJSON = null;
-        JSONObject tenantJSON = null;
-
-        try {
-            datacenterJSON = JSON.parse(createDatacenterResponse);
-            tenantJSON = JSON.parse(osmTenant);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
+        JSONObject datacenterJSON = new JSONObject(createDatacenterResponse);
+        JSONObject tenantJSON = new JSONObject(osmTenant);
 
         String datacenterId = ((JSONObject)datacenterJSON.get("datacenter").getValue()).get("uuid").getValue();
         String tenantId = ((JSONObject)tenantJSON.get("tenant").getValue()).get("uuid").getValue();
@@ -714,13 +625,7 @@ class OSMController {
 
         String roAccJSON = osmConnector.establishConnectionToReceiveDefaultROAccount().getContent();
 
-        JSONObject defaultROJSON = null;
-
-        try {
-            defaultROJSON = JSON.parse(roAccJSON);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        JSONObject defaultROJSON = new JSONObject(roAccJSON);
 
         defaultROJSON = ((JSONArray)((JSONObject)defaultROJSON.get("rw-ro-account:ro-account").getValue()).get("account").getValue()).get(0).getValue();
 
@@ -757,13 +662,7 @@ class OSMController {
     {
         String nsdJSON = osmConnector.establishConnectionToReceiveNSDList().getContent();
 
-        JSONObject nsdJSONOb = null;
-        try {
-            nsdJSONOb = JSON.parse(nsdJSON);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
+        JSONObject nsdJSONOb = new JSONObject(nsdJSON);
         JSONArray jArray = nsdJSONOb.get("project-nsd:nsd").getValue();
         boolean containsNSD = false;
 

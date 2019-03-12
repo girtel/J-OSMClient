@@ -1,9 +1,10 @@
 package com.girtel.osmclient.utils;
 
 
-import com.girtel.osmclient.internal.JSONArray;
-import com.girtel.osmclient.internal.JSONObject;
-import com.girtel.osmclient.internal.JSONValue;
+import com.girtel.osmclient.json.JSONArray;
+import com.girtel.osmclient.json.JSONObject;
+import com.girtel.osmclient.json.JSONFactory;
+import com.girtel.osmclient.json.JSONValue;
 
 /**
  * This class represents Configuration parameters to customize VIM creation
@@ -65,6 +66,6 @@ public class VIMConfiguration
     @Override
     public String toString()
     {
-        return JSONUtils.write(json);
+        return json.toString();
     }
 }

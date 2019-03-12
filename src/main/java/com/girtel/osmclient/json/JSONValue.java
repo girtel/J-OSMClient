@@ -1,4 +1,4 @@
-package com.girtel.osmclient.internal;
+package com.girtel.osmclient.json;
 
 
 public class JSONValue

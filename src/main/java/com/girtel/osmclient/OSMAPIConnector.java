@@ -3,8 +3,7 @@ package com.girtel.osmclient;
 
 import com.girtel.osmclient.utils.HTTPResponse;
 import com.girtel.osmclient.internal.OSMException;
-import com.girtel.osmclient.internal.JSONObject;
-import com.girtel.osmclient.utils.JSONUtils;
+import com.girtel.osmclient.json.JSONObject;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
@@ -199,7 +198,7 @@ class OSMAPIConnector {
                     DataOutputStream out = null;
                     try {
                         out = new DataOutputStream(conn.getOutputStream());
-                        out.writeBytes(JSONUtils.write(json));
+                        out.writeBytes(json.toString());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
