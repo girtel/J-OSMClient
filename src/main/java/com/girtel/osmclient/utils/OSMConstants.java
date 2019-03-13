@@ -143,5 +143,35 @@ public class OSMConstants {
         }
     }
 
+    /**
+     * OSM Client version types
+     */
+    public enum OSMClientVersion
+    {
+        /**
+         * Release three
+         */
+        RELEASE_THREE,
+        /**
+         * sol005 version
+         */
+        SOL_005;
+    }
+
+    /**
+     * OSM Package type
+     */
+    public enum OSMPackageType
+    {
+        /**
+         * VNFD type
+         */
+        VNFD,
+        /**
+         * NSD type
+         */
+        NSD;
+    }
+
 }
 

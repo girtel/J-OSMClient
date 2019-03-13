@@ -19,14 +19,14 @@ import java.util.stream.Collectors;
 class OSMControllerR3 {
 
     private OSMAPIConnectorR3 osmConnector;
-    private OSMClientR3 osmClientR3;
+    private OSMClient osmClient;
     private String emptyJSON = "{}";
 
 
-    protected OSMControllerR3(OSMClientR3 osmClientR3)
+    protected OSMControllerR3(OSMClient osmClient)
     {
-        this.osmClientR3 = osmClientR3;
-        this.osmConnector = new OSMAPIConnectorR3(osmClientR3);
+        this.osmClient = osmClient;
+        this.osmConnector = new OSMAPIConnectorR3(osmClient);
     }
 
     private String generateUUID()
@@ -385,7 +385,7 @@ class OSMControllerR3 {
         {
             JSONObject cVNFDOb = item.getValue();
             String cVNFDId = cVNFDOb.get("vnfd-id-ref").getValue();
-            VirtualNetworkFunctionDescriptor cVNFD = osmClientR3.getVNFDById(cVNFDId);
+            VirtualNetworkFunctionDescriptor cVNFD = osmClient.getVNFDById(cVNFDId);
             constituentVNFDs.add(cVNFD);
         }
 
@@ -406,7 +406,7 @@ class OSMControllerR3 {
         JSONObject nsdJSON = ob.get("nsd").getValue();
         NetworkServiceDescriptor nsNSD = parseNSD(nsdJSON);
 
-        List<VirtualNetworkFunction> vnfs = osmClientR3.getVNFList();
+        List<VirtualNetworkFunction> vnfs = osmClient.getVNFList();
         List<VirtualNetworkFunction> thisNS_VNFs = vnfs.stream().filter(vnf -> vnf.getNSID().equalsIgnoreCase(nsId)).collect(Collectors.toList());
 
         NetworkService ns = new NetworkService(nsId,nsName,nsDescription,nsStatus,nsDatacenter,nsNSD,thisNS_VNFs);
@@ -418,7 +418,7 @@ class OSMControllerR3 {
     public HTTPResponse deleteNS(String name)
     {
         String nsJSON = osmConnector.establishConnectionToReceiveNSList().getContent();
-        List<NetworkService> nsList = osmClientR3.getNSList();
+        List<NetworkService> nsList = osmClient.getNSList();
         HTTPResponse response;
 
         if(nsList.size() == 0)
@@ -462,7 +462,7 @@ class OSMControllerR3 {
     {
         HTTPResponse response;
         String nsdJSON = osmConnector.establishConnectionToReceiveNSDList().getContent();
-        List<NetworkServiceDescriptor> nsdList = osmClientR3.getNSDList();
+        List<NetworkServiceDescriptor> nsdList = osmClient.getNSDList();
         if(nsdList.size() == 0)
         {
             throw new OSMException("No Network Service Descriptor in OSM catalog");
@@ -502,7 +502,7 @@ class OSMControllerR3 {
     {
         HTTPResponse response;
         String vnfdJSON = osmConnector.establishConnectionToReceiveVNFDList().getContent();
-        List<VirtualNetworkFunctionDescriptor> vnfdList = osmClientR3.getVNFDList();
+        List<VirtualNetworkFunctionDescriptor> vnfdList = osmClient.getVNFDList();
         if(vnfdList.size() == 0)
         {
             throw new OSMException("No Virtual Network Function Descriptor in OSM catalog");
@@ -658,7 +658,7 @@ class OSMControllerR3 {
         return response;
     }
 
-    public HTTPResponse createNS(String name, String nsdName, String datacenter, VIMConfiguration... optionalVIMConfiguration)
+    public HTTPResponse createNS(String name, String nsdName, String datacenter)
     {
         String nsdJSON = osmConnector.establishConnectionToReceiveNSDList().getContent();
 

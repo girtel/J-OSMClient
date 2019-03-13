@@ -9,6 +9,7 @@ import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 
 import javax.net.ssl.*;
+import javax.xml.bind.DatatypeConverter;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -42,11 +43,14 @@ class OSMAPIConnectorR3 {
     private String osmIPAddress;
     private String project;
 
-    protected OSMAPIConnectorR3(OSMClientR3 osmClientR3)
+    protected OSMAPIConnectorR3(OSMClient osmClient)
     {
-        this.osmIPAddress = osmClientR3.getOSMIPAddress();
-        this.credentials = osmClientR3.getEncodedCredentials();
-        this.project = osmClientR3.getProject();
+        this.osmIPAddress = osmClient.getOSMIPAddress();
+        String user = osmClient.getOSMUser();
+        String pass = osmClient.getOSMPassword();
+        String userCred = user + ":" + pass;
+        this.credentials = "Basic " + DatatypeConverter.printBase64Binary(userCred.getBytes());
+        this.project = osmClient.getOSMProject();
         configureSecurity();
     }
 

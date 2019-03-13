@@ -11,13 +11,13 @@ import java.util.List;
 public class OSMController005
 {
     private OSMAPIConnector005 osmConnector005;
-    private OSMClient005 osmClient005;
+    private OSMClient osmClient;
     private String emptyJSON = "{}";
 
-    protected OSMController005(OSMClient005 osmClient005)
+    protected OSMController005(OSMClient osmClient)
     {
-       this.osmClient005 = osmClient005;
-       this.osmConnector005 = new OSMAPIConnector005(osmClient005);
+       this.osmClient = osmClient;
+       this.osmConnector005 = new OSMAPIConnector005(osmClient);
     }
 
     protected HTTPResponse createSessionToken()
@@ -92,12 +92,12 @@ public class OSMController005
         return nss;
     }
 
-    protected HTTPResponse createNS(String name, String nsdName, String vim)
+    protected HTTPResponse createNS(String name, String nsdName, String vim, NSConfiguration... nsConfiguration)
     {
         JSONObject nsJSON = new JSONObject();
         nsJSON.put("nsDescription",new JSONValue("default"));
-        String vimId = osmClient005.getVIMByName(vim).getID();
-        String nsdId = osmClient005.getNSDByName(nsdName).getId();
+        String vimId = osmClient.getVIM(vim).getID();
+        String nsdId = osmClient.getNSD(nsdName).getId();
         nsJSON.put("vimAccountId",new JSONValue(vimId));
         nsJSON.put("nsdId", new JSONValue(nsdId));
         nsJSON.put("nsName", new JSONValue(name));
@@ -107,7 +107,7 @@ public class OSMController005
 
     protected HTTPResponse deleteNS(String name)
     {
-        String nsId = osmClient005.getNSByName(name).getId();
+        String nsId = osmClient.getNS(name).getId();
         return osmConnector005.establishConnectionToDeleteNS(nsId);
     }
 

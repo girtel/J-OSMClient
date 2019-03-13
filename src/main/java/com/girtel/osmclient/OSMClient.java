@@ -1,13 +1,11 @@
 package com.girtel.osmclient;
 
-import com.girtel.osmclient.internal.IOSMClient;
+import com.girtel.osmclient.json.JSONObject;
 import com.girtel.osmclient.utils.OSMException;
 import com.girtel.osmclient.utils.NSConfiguration;
 import com.girtel.osmclient.utils.VIMConfiguration;
 import com.girtel.osmclient.utils.HTTPResponse;
 import com.girtel.osmclient.utils.OSMConstants;
-
-import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,7 +13,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * <h2>REST Client targeted to work with Open Source MANO release 3.</h2>
+ * <h2>REST Client targeted to work with Open Source MANO.</h2>
  *
  * <p>Based on <a href="https://osm.etsi.org/wikipub/index.php/OsmClient">Python OSMClient </a>.</p>
  *
@@ -23,33 +21,55 @@ import java.util.stream.Collectors;
  *
  * @author Cesar San-Nicolas-Martinez
  */
-public class OSMClientR3 implements IOSMClient
+public class OSMClient
 {
 
-    private String osmIPAddress, credentials, project;
+    private String osmIPAddress, project, user, password, sessionToken;
+    private OSMConstants.OSMClientVersion version;
     private OSMControllerR3 osmControllerR3;
+    private OSMController005 osmController005;
 
     /**
      * OSMClient constructor
+     * @param version OSM version (release three or sol005)
      * @param osmIPAddress IP Address where OSM is running
      * @param user OSM user
      * @param password OSM password
-     * @param project OSM project (optional). If it is not specified, project default will be used
+     * @param project OSM project (optional). If it is not specified, default project will be used
      */
-
-    public OSMClientR3(String osmIPAddress, String user, String password, String... project)
+    public OSMClient(OSMConstants.OSMClientVersion version, String osmIPAddress, String user, String password, String... project)
     {
         this.osmIPAddress = osmIPAddress;
-        String userCred = user + ":" + password;
-        this.credentials = "Basic " + DatatypeConverter.printBase64Binary(userCred.getBytes());
-        if(project.length == 0)
-            this.project = "default";
-        else if(project.length == 1)
-            this.project = project[0];
-        else
-            throw new OSMException("More than one project is not allowed in OSM");
+        this.user = user;
+        this.password = password;
+        this.sessionToken = "";
+        this.version = version;
+        switch(version)
+        {
+            case RELEASE_THREE:
+                if(project.length == 0)
+                    this.project = "default";
+                else if(project.length == 1)
+                    this.project = project[0];
+                else
+                    throw new OSMException("More than one project is not allowed in OSM");
 
-        this.osmControllerR3 = new OSMControllerR3(this);
+                this.osmControllerR3 = new OSMControllerR3(this);
+                break;
+
+            case SOL_005:
+                if(project.length == 0)
+                    this.project = "admin";
+                else if(project.length == 1)
+                    this.project = project[0];
+                else
+                    throw new OSMException("More than one project is not allowed in OSM");
+
+                this.osmController005 = new OSMController005(this);
+                break;
+        }
+
+
     }
 
     /**
@@ -62,21 +82,54 @@ public class OSMClientR3 implements IOSMClient
     }
 
     /**
-     * Obtains OSM user and password encoded
-     * @return Encoded credentials
+     * Obtains OSM user
+     * @return OSM user
      */
-    protected String getEncodedCredentials()
+    protected String getOSMUser()
     {
-        return this.credentials;
+        return this.user;
+    }
+
+    /**
+     * Obtains OSM password
+     * @return OSM password
+     */
+    protected String getOSMPassword()
+    {
+        return this.password;
     }
 
     /**
      * Obtains OSM project
      * @return Project
      */
-    protected String getProject()
+    protected String getOSMProject()
     {
         return this.project;
+    }
+
+    /**
+     * Obtains Session Token
+     * @return Session Token
+     */
+    protected String getSessionToken()
+    {
+        switch(version)
+        {
+            case RELEASE_THREE:
+                throw new OSMException("Token feature is not supported on OSM release three");
+
+            case SOL_005:
+                if(this.sessionToken == null)
+                {
+                    HTTPResponse resp = osmController005.createSessionToken();
+                    String token = resp.getContent();
+                    JSONObject tokenJSON = new JSONObject(token);
+                    String tokenID = tokenJSON.get("_id").getValue();
+                    this.sessionToken = tokenID;
+                }
+        }
+        return this.sessionToken;
     }
 
     /**
@@ -90,7 +143,16 @@ public class OSMClientR3 implements IOSMClient
      */
     public HTTPResponse addConfigAgent(String name, OSMConstants.OSMConfigAgentType type, String serverIP, String user, String secret)
     {
-        HTTPResponse response = osmControllerR3.addConfigAgent(name, type, serverIP, user, secret);
+        HTTPResponse response = null;
+        switch(version)
+        {
+            case RELEASE_THREE:
+                response = osmControllerR3.addConfigAgent(name, type, serverIP, user, secret);
+                break;
+            case SOL_005:
+                //response = osmController005.addConfigAgent(name, type, serverIP, user, secret);
+                break;
+        }
         return response;
     }
 
@@ -99,15 +161,24 @@ public class OSMClientR3 implements IOSMClient
      * @param name new VIM name
      * @param osmVimType new VIM type (Openvim, Openstack, VMWare or AWS)
      * @param user VIM user
-     * @param password VIM password
+     * @param pass VIM password
      * @param authURL authentication URL, e.c. in Openstack: http://(IP_ADDRESS)/identity/v3
      * @param tenant VIM tenant to instantiate VMs
      * @param VIMConfiguration optional vim Configuration parameters
      * @return HTTPResponse from OSM (code, message, content)
      */
-    public HTTPResponse createVIM(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, VIMConfiguration... VIMConfiguration)
+    public HTTPResponse createVIM(String name, OSMConstants.OSMVimType osmVimType, String user, String pass, String authURL, String tenant, VIMConfiguration... VIMConfiguration)
     {
-        HTTPResponse response = osmControllerR3.createVIM(name,osmVimType,user,password,authURL,tenant, VIMConfiguration);
+        HTTPResponse response = null;
+        switch(version)
+        {
+            case RELEASE_THREE:
+                response = osmControllerR3.createVIM(name,osmVimType,user,pass,authURL,tenant, VIMConfiguration);
+                break;
+            case SOL_005:
+                //response = osmController005.createVIM(name,osmVimType,user,pass,authURL,tenant, VIMConfiguration);
+                break;
+        }
         return response;
     }
 
@@ -121,9 +192,19 @@ public class OSMClientR3 implements IOSMClient
      */
     public HTTPResponse createNS(String nsName, String nsdName, String datacenterName, NSConfiguration... nsConfiguration)
     {
-        if(nsConfiguration.length == 1)
-            throw new OSMException("Network Service configuration is not allowed for release 3");
-        HTTPResponse response = osmControllerR3.createNS(nsName, nsdName, datacenterName);
+        HTTPResponse response = null;
+        switch(version)
+        {
+            case RELEASE_THREE:
+                if(nsConfiguration.length >= 1)
+                    throw new OSMException("Network Service configuration is not allowed for release 3");
+                response = osmControllerR3.createNS(nsName, nsdName, datacenterName);
+                break;
+
+            case SOL_005:
+                response = osmController005.createNS(nsName, nsdName, datacenterName, nsConfiguration);
+                break;
+        }
         return response;
     }
 
@@ -189,7 +270,17 @@ public class OSMClientR3 implements IOSMClient
      */
     public HTTPResponse deleteConfigAgent(String name)
     {
-        HTTPResponse response = osmControllerR3.deleteConfigAgent(name);
+        HTTPResponse response = null;
+        switch(version)
+        {
+            case RELEASE_THREE:
+                response = osmControllerR3.deleteConfigAgent(name);
+                break;
+
+            case SOL_005:
+                //response = osmController005.deleteConfigAgent(name);
+                break;
+        }
         return response;
     }
 
@@ -200,7 +291,17 @@ public class OSMClientR3 implements IOSMClient
      */
     public HTTPResponse deleteVIM(String name)
     {
-        HTTPResponse response  = osmControllerR3.deleteVIM(name);
+        HTTPResponse response = null;
+        switch(version)
+        {
+            case RELEASE_THREE:
+                response = osmControllerR3.deleteVIM(name);
+                break;
+
+            case SOL_005:
+                //response = osmController005.deleteVIM(name);
+                break;
+        }
         return response;
     }
 
@@ -367,7 +468,6 @@ public class OSMClientR3 implements IOSMClient
         return vnf;
     }
 
-    @Override
     public VirtualNetworkFunction getVNFById(String id)
     {
         return null;
@@ -393,7 +493,6 @@ public class OSMClientR3 implements IOSMClient
         return nsd;
     }
 
-    @Override
     public NetworkServiceDescriptor getNSDById(String name)
     {
         return null;
@@ -419,7 +518,6 @@ public class OSMClientR3 implements IOSMClient
         return ns;
     }
 
-    @Override
     public NetworkService getNSById(String id)
     {
         return null;
@@ -445,7 +543,6 @@ public class OSMClientR3 implements IOSMClient
         return finalVIM;
     }
 
-    @Override
     public VirtualInfrastructureManager getVIMById(String id)
     {
         return null;
@@ -453,19 +550,24 @@ public class OSMClientR3 implements IOSMClient
 
     /**
      * Uploads a package (VNFD or NSD)
-     * @param file file which represents VNFD or NSD
+     * @param file file which represents a VNFD or NSD package
+     * @param type package type (VNFD or NSD)
      * @return HTTPResponse from OSM (code, message, content)
      */
-    public HTTPResponse uploadPackage(File file)
+    public HTTPResponse uploadPackage(File file, OSMConstants.OSMPackageType type)
     {
-        HTTPResponse response = osmControllerR3.uploadPackage(file);
+        HTTPResponse response = null;
+        switch(version)
+        {
+            case RELEASE_THREE:
+                response = osmControllerR3.uploadPackage(file);
+                break;
+
+            case SOL_005:
+                //response = osmController005.uploadPackage(file, type);
+                break;
+        }
         return response;
-    }
-
-    public static void main(String [] args)
-    {
-        OSMClientR3 osmClientR3 = new OSMClientR3("192.168.10.130","admin","admin");
-
     }
 
 }

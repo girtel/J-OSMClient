@@ -32,20 +32,20 @@ public class OSMAPIConnector005
     private String UPLOAD_NSD_URL_005 = "/osm/nsd/v1/ns_descriptors_content";
 
 
-    private OSMClient005 osmClient005;
+    private OSMClient osmClient;
     private String osmIPAddress;
     private String project;
     private JSONObject authJSON;
 
-    protected OSMAPIConnector005(OSMClient005 osmClient005)
+    protected OSMAPIConnector005(OSMClient osmClient)
     {
-        this.osmClient005 = osmClient005;
-        this.osmIPAddress = osmClient005.getOSMIPAddress();
-        this.project = osmClient005.getOSMProject();
+        this.osmClient = osmClient;
+        this.osmIPAddress = osmClient.getOSMIPAddress();
+        this.project = osmClient.getOSMProject();
         this.authJSON = new JSONObject();
-        authJSON.put("username",new JSONValue(osmClient005.getOSMUser()));
-        authJSON.put("password",new JSONValue(osmClient005.getOSMPassword()));
-        authJSON.put("project_id",new JSONValue(osmClient005.getOSMProject()));
+        authJSON.put("username",new JSONValue(osmClient.getOSMUser()));
+        authJSON.put("password",new JSONValue(osmClient.getOSMPassword()));
+        authJSON.put("project_id",new JSONValue(osmClient.getOSMProject()));
         configureSecurity();
     }
 
@@ -127,7 +127,7 @@ public class OSMAPIConnector005
             conn.setRequestProperty("Accept","application/json");
             if(includeAuth)
             {
-                conn.setRequestProperty("Authorization","Bearer "+osmClient005.getSessionToken());
+                conn.setRequestProperty("Authorization","Bearer "+osmClient.getSessionToken());
             }
 
         }
@@ -140,7 +140,7 @@ public class OSMAPIConnector005
             conn.setRequestProperty("Content-length", String.valueOf(entity.getContentLength()));
             if(includeAuth)
             {
-                conn.setRequestProperty("Authorization","Bearer "+osmClient005.getSessionToken());
+                conn.setRequestProperty("Authorization","Bearer "+osmClient.getSessionToken());
             }
 
         }
