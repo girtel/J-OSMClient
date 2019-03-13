@@ -121,7 +121,8 @@ public class OSMController005
         return vim;
     }
 
-    private VirtualDeploymentUnit parseVDU(JSONObject vduOb) {
+    private VirtualDeploymentUnit parseVDU(JSONObject vduOb)
+    {
 
         String vduId = vduOb.get("id").getValue();
         String vduName = vduOb.get("name").getValue();

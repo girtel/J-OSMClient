@@ -1,4 +1,4 @@
-package com.girtel.osmclient.internal;
+package com.girtel.osmclient.utils;
 
 /**
  * A exception that is thrown when a connection with OSM is not successful

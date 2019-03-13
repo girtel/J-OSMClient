@@ -2,7 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="049b0617-1b33-46dd-8777-7ecdd87e687d" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/internal/IOSMClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnectorR3.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnector005.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnector005.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClientR3.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient005.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient005.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMControllerR3.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController005.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController005.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/internal/OSMException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/OSMException.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -17,33 +27,84 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnector005.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="356">
-              <caret line="207" column="54" selection-start-line="207" selection-start-column="54" selection-end-line="207" selection-end-column="54" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient005.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="416">
-              <caret line="167" column="68" selection-start-line="167" selection-start-column="68" selection-end-line="167" selection-end-column="68" />
+            <state relative-caret-position="4284">
+              <caret line="286" column="4" selection-start-line="286" selection-start-column="4" selection-end-line="286" selection-end-column="4" />
               <folding>
                 <element signature="e#2239#2240#0" expanded="true" />
                 <element signature="e#2294#2295#0" expanded="true" />
+                <element signature="e#2634#2635#0" expanded="true" />
+                <element signature="e#2661#2662#0" expanded="true" />
+                <element signature="e#3805#3806#0" expanded="true" />
+                <element signature="e#3832#3833#0" expanded="true" />
+                <element signature="e#4643#4644#0" expanded="true" />
+                <element signature="e#4670#4671#0" expanded="true" />
+                <element signature="e#4739#4740#0" expanded="true" />
+                <element signature="e#4766#4767#0" expanded="true" />
+                <element signature="e#4834#4835#0" expanded="true" />
+                <element signature="e#4861#4862#0" expanded="true" />
+                <element signature="e#4930#4931#0" expanded="true" />
+                <element signature="e#4957#4958#0" expanded="true" />
+                <element signature="e#5027#5028#0" expanded="true" />
+                <element signature="e#5054#5055#0" expanded="true" />
+                <element signature="e#5126#5127#0" expanded="true" />
+                <element signature="e#5153#5154#0" expanded="true" />
+                <element signature="e#5217#5218#0" expanded="true" />
+                <element signature="e#5244#5245#0" expanded="true" />
+                <element signature="e#5415#5416#0" expanded="true" />
+                <element signature="e#5442#5443#0" expanded="true" />
+                <element signature="e#5507#5508#0" expanded="true" />
+                <element signature="e#5534#5535#0" expanded="true" />
+                <element signature="e#5603#5604#0" expanded="true" />
+                <element signature="e#5630#5631#0" expanded="true" />
+                <element signature="e#5697#5698#0" expanded="true" />
+                <element signature="e#5724#5725#0" expanded="true" />
+                <element signature="e#5382#5383#0" expanded="true" />
+                <element signature="e#5409#5410#0" expanded="true" />
+                <element signature="e#5393#5394#0" expanded="true" />
+                <element signature="e#5420#5421#0" expanded="true" />
+                <element signature="e#5504#5505#0" expanded="true" />
+                <element signature="e#5531#5532#0" expanded="true" />
+                <element signature="e#5380#5381#0" expanded="true" />
+                <element signature="e#5407#5408#0" expanded="true" />
+                <element signature="e#5824#5825#0" expanded="true" />
+                <element signature="e#5851#5852#0" expanded="true" />
+                <element signature="e#6347#6348#0" expanded="true" />
+                <element signature="e#6374#6375#0" expanded="true" />
+                <element signature="e#6817#6818#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController005.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClientR3.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1173">
-              <caret line="90" column="9" selection-start-line="90" selection-start-column="9" selection-end-line="90" selection-end-column="9" />
+            <state relative-caret-position="679">
+              <caret line="371" column="4" selection-start-line="371" selection-start-column="4" selection-end-line="371" selection-end-column="4" />
+              <folding>
+                <element signature="e#11879#11880#0" expanded="true" />
+                <element signature="e#12410#12411#0" expanded="true" />
+                <element signature="e#12437#12438#0" expanded="true" />
+                <element signature="e#12910#12911#0" expanded="true" />
+                <element signature="e#12937#12938#0" expanded="true" />
+                <element signature="e#13485#13486#0" expanded="true" />
+                <element signature="e#13512#13513#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/internal/IOSMClient.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="744">
+              <caret line="76" column="62" selection-start-line="76" selection-start-column="62" selection-end-line="76" selection-end-column="62" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -54,6 +115,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -72,9 +134,16 @@
         <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/json/JSONArray.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/json/JSONFactory.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController005.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnector005.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/VIMConfiguration.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController005.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/internal/OSMClient.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnectorR3.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMControllerR3.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMComponent.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/internal/IOSMClient.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClientR3.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient005.java" />
       </list>
     </option>
@@ -97,7 +166,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -139,6 +207,15 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="osmclient" type="462c0819:PsiDirectoryNode" />
+              <item name="internal" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="osmclient" type="b2602c69:ProjectViewProjectNode" />
+              <item name="J-OSMClient" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="osmclient" type="462c0819:PsiDirectoryNode" />
               <item name="json" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -154,6 +231,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -186,9 +264,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
@@ -213,20 +290,7 @@
     </layout>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/Configuration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="756">
-          <caret line="62" column="5" lean-forward="true" selection-start-line="62" selection-start-column="5" selection-end-line="62" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/NSConfiguration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/Configuration.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/HTTPResponse.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -255,13 +319,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/internal/OSMException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/OSMConstants.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="22">
@@ -276,41 +333,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/JSONUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="484">
-          <caret line="35" column="25" selection-start-line="35" selection-start-column="25" selection-end-line="35" selection-end-column="25" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnector.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="542">
-          <caret line="200" column="46" selection-start-line="200" selection-start-column="46" selection-end-line="200" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/json/JSONFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="17" column="26" lean-forward="true" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/JSONUtils.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/json/JSONArray.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="14" column="12" selection-start-line="14" selection-start-column="12" selection-end-line="14" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/json/JSONObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="19" selection-start-line="7" selection-start-column="19" selection-end-line="7" selection-end-column="19" />
         </state>
       </provider>
     </entry>
@@ -321,30 +348,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController005.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1173">
-          <caret line="90" column="9" selection-start-line="90" selection-start-column="9" selection-end-line="90" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnector005.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="207" column="54" selection-start-line="207" selection-start-column="54" selection-end-line="207" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
-          <caret line="593" column="33" lean-forward="true" selection-start-line="593" selection-start-column="33" selection-end-line="593" selection-end-column="33" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/VIMConfiguration.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="807">
@@ -352,13 +355,159 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/NSConfiguration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-85">
+          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnectorR3.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1154">
+          <caret line="200" column="46" selection-start-line="200" selection-start-column="46" selection-end-line="200" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/json/JSONObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="19" selection-start-line="7" selection-start-column="19" selection-end-line="7" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMComponent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="642">
+          <caret line="100" column="33" selection-start-line="100" selection-start-column="33" selection-end-line="100" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1336#1337#0" expanded="true" />
+            <element signature="e#1377#1378#0" expanded="true" />
+            <element signature="e#1562#1563#0" expanded="true" />
+            <element signature="e#1594#1595#0" expanded="true" />
+            <element signature="e#1806#1807#0" expanded="true" />
+            <element signature="e#1859#1860#0" expanded="true" />
+            <element signature="e#2047#2048#0" expanded="true" />
+            <element signature="e#2100#2101#0" expanded="true" />
+            <element signature="e#2265#2266#0" expanded="true" />
+            <element signature="e#2303#2304#0" expanded="true" />
+            <element signature="e#2353#2354#0" expanded="true" />
+            <element signature="e#2403#2404#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/json/JSONFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="17" column="26" lean-forward="true" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMController005.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="22" column="35" lean-forward="true" selection-start-line="22" selection-start-column="35" selection-end-line="22" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMAPIConnector005.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="206" column="54" selection-start-line="206" selection-start-column="54" selection-end-line="206" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMControllerR3.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="263">
+          <caret line="593" column="33" selection-start-line="593" selection-start-column="33" selection-end-line="593" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/internal/IOSMClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="744">
+          <caret line="76" column="62" selection-start-line="76" selection-start-column="62" selection-end-line="76" selection-end-column="62" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClientR3.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="679">
+          <caret line="371" column="4" selection-start-line="371" selection-start-column="4" selection-end-line="371" selection-end-column="4" />
+          <folding>
+            <element signature="e#11879#11880#0" expanded="true" />
+            <element signature="e#12410#12411#0" expanded="true" />
+            <element signature="e#12437#12438#0" expanded="true" />
+            <element signature="e#12910#12911#0" expanded="true" />
+            <element signature="e#12937#12938#0" expanded="true" />
+            <element signature="e#13485#13486#0" expanded="true" />
+            <element signature="e#13512#13513#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/utils/OSMException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/girtel/osmclient/OSMClient005.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="416">
-          <caret line="167" column="68" selection-start-line="167" selection-start-column="68" selection-end-line="167" selection-end-column="68" />
+        <state relative-caret-position="4284">
+          <caret line="286" column="4" selection-start-line="286" selection-start-column="4" selection-end-line="286" selection-end-column="4" />
           <folding>
             <element signature="e#2239#2240#0" expanded="true" />
             <element signature="e#2294#2295#0" expanded="true" />
+            <element signature="e#2634#2635#0" expanded="true" />
+            <element signature="e#2661#2662#0" expanded="true" />
+            <element signature="e#3805#3806#0" expanded="true" />
+            <element signature="e#3832#3833#0" expanded="true" />
+            <element signature="e#4643#4644#0" expanded="true" />
+            <element signature="e#4670#4671#0" expanded="true" />
+            <element signature="e#4739#4740#0" expanded="true" />
+            <element signature="e#4766#4767#0" expanded="true" />
+            <element signature="e#4834#4835#0" expanded="true" />
+            <element signature="e#4861#4862#0" expanded="true" />
+            <element signature="e#4930#4931#0" expanded="true" />
+            <element signature="e#4957#4958#0" expanded="true" />
+            <element signature="e#5027#5028#0" expanded="true" />
+            <element signature="e#5054#5055#0" expanded="true" />
+            <element signature="e#5126#5127#0" expanded="true" />
+            <element signature="e#5153#5154#0" expanded="true" />
+            <element signature="e#5217#5218#0" expanded="true" />
+            <element signature="e#5244#5245#0" expanded="true" />
+            <element signature="e#5415#5416#0" expanded="true" />
+            <element signature="e#5442#5443#0" expanded="true" />
+            <element signature="e#5507#5508#0" expanded="true" />
+            <element signature="e#5534#5535#0" expanded="true" />
+            <element signature="e#5603#5604#0" expanded="true" />
+            <element signature="e#5630#5631#0" expanded="true" />
+            <element signature="e#5697#5698#0" expanded="true" />
+            <element signature="e#5724#5725#0" expanded="true" />
+            <element signature="e#5382#5383#0" expanded="true" />
+            <element signature="e#5409#5410#0" expanded="true" />
+            <element signature="e#5393#5394#0" expanded="true" />
+            <element signature="e#5420#5421#0" expanded="true" />
+            <element signature="e#5504#5505#0" expanded="true" />
+            <element signature="e#5531#5532#0" expanded="true" />
+            <element signature="e#5380#5381#0" expanded="true" />
+            <element signature="e#5407#5408#0" expanded="true" />
+            <element signature="e#5824#5825#0" expanded="true" />
+            <element signature="e#5851#5852#0" expanded="true" />
+            <element signature="e#6347#6348#0" expanded="true" />
+            <element signature="e#6374#6375#0" expanded="true" />
+            <element signature="e#6817#6818#0" expanded="true" />
           </folding>
         </state>
       </provider>

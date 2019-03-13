@@ -1,14 +1,18 @@
 package com.girtel.osmclient;
 
-import com.girtel.osmclient.internal.OSMException;
+import com.girtel.osmclient.internal.IOSMClient;
+import com.girtel.osmclient.utils.OSMException;
 import com.girtel.osmclient.utils.HTTPResponse;
 import com.girtel.osmclient.json.JSONObject;
-import com.girtel.osmclient.json.JSONFactory;
-import com.girtel.osmclient.json.ParseException;
+import com.girtel.osmclient.utils.NSConfiguration;
+import com.girtel.osmclient.utils.OSMConstants;
+import com.girtel.osmclient.utils.VIMConfiguration;
 
+import java.io.File;
 import java.util.List;
+import java.util.Map;
 
-public class OSMClient005
+public class OSMClient005 implements IOSMClient
 {
     private String osmIPAddress, project, user, pass, sessionToken;
     private OSMController005 osmController005;
@@ -56,6 +60,15 @@ public class OSMClient005
     }
 
     /**
+     * Obtains OSM project
+     * @return Project
+     */
+    protected String getOSMProject()
+    {
+        return this.project;
+    }
+
+    /**
      * Obtains Session Token
      * @return Session Token
      */
@@ -71,14 +84,7 @@ public class OSMClient005
         }
         return this.sessionToken;
     }
-    /**
-     * Obtains OSM project
-     * @return Project
-     */
-    protected String getProject()
-    {
-        return this.project;
-    }
+
 
     public List<VirtualInfrastructureManager> getVIMList()
     {
@@ -88,6 +94,11 @@ public class OSMClient005
     public List<VirtualNetworkFunctionDescriptor> getVNFDList()
     {
         return osmController005.parseVNFDList();
+    }
+
+    @Override
+    public List<VirtualNetworkFunction> getVNFList() {
+        return null;
     }
 
     public List<NetworkServiceDescriptor> getNSDList()
@@ -100,9 +111,66 @@ public class OSMClient005
         return osmController005.parseNSList();
     }
 
+
+
+    @Override
+    public HTTPResponse uploadPackage(File file) {
+        return null;
+    }
+
     public HTTPResponse createNS(String nsName, String nsdName, String vimName)
     {
         return osmController005.createNS(nsName, nsdName, vimName);
+    }
+
+    @Override
+    public HTTPResponse addConfigAgent(String name, OSMConstants.OSMConfigAgentType type, String serverIP, String user, String secret) {
+        return null;
+    }
+
+    @Override
+    public HTTPResponse createVIM(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, VIMConfiguration... VIMConfiguration) {
+        return null;
+    }
+
+    @Override
+    public HTTPResponse createNS(String nsName, String nsdName, String datacenterName, NSConfiguration... NSConfiguration) {
+        return null;
+    }
+
+    @Override
+    public Map<String, HTTPResponse> deleteAllConfigAgents() {
+        return null;
+    }
+
+    @Override
+    public Map<String, HTTPResponse> deleteAllVIM() {
+        return null;
+    }
+
+    @Override
+    public Map<String, HTTPResponse> deleteAllNS() {
+        return null;
+    }
+
+    @Override
+    public Map<String, HTTPResponse> deleteAllNSD() {
+        return null;
+    }
+
+    @Override
+    public Map<String, HTTPResponse> deleteAllVNFD() {
+        return null;
+    }
+
+    @Override
+    public HTTPResponse deleteConfigAgent(String name) {
+        return null;
+    }
+
+    @Override
+    public HTTPResponse deleteVIM(String name) {
+        return null;
     }
 
     public HTTPResponse deleteNS(String name)
@@ -110,7 +178,27 @@ public class OSMClient005
         return osmController005.deleteNS(name);
     }
 
-    public VirtualInfrastructureManager getVIMByName(String name)
+    @Override
+    public HTTPResponse deleteNSD(String name) {
+        return null;
+    }
+
+    @Override
+    public HTTPResponse deleteVNFD(String name) {
+        return null;
+    }
+
+    @Override
+    public List<OSMComponent> getOSMComponentList() {
+        return null;
+    }
+
+    @Override
+    public List<ConfigAgent> getConfigAgentList() {
+        return null;
+    }
+
+    public VirtualInfrastructureManager getVIM(String name)
     {
         List<VirtualInfrastructureManager> vims = this.getVIMList();
         VirtualInfrastructureManager finalVim = null;
@@ -126,7 +214,37 @@ public class OSMClient005
         return finalVim;
     }
 
-    public NetworkServiceDescriptor getNSDByName(String name)
+    @Override
+    public VirtualInfrastructureManager getVIMById(String id)
+    {
+        return null;
+    }
+
+    @Override
+    public VirtualNetworkFunctionDescriptor getVNFD(String name)
+    {
+        return null;
+    }
+
+    @Override
+    public VirtualNetworkFunctionDescriptor getVNFDById(String id)
+    {
+        return null;
+    }
+
+    @Override
+    public VirtualNetworkFunction getVNF(String name)
+    {
+        return null;
+    }
+
+    @Override
+    public VirtualNetworkFunction getVNFById(String id)
+    {
+        return null;
+    }
+
+    public NetworkServiceDescriptor getNSD(String name)
     {
         List<NetworkServiceDescriptor> nsds = this.getNSDList();
         NetworkServiceDescriptor finalNSD = null;
@@ -142,7 +260,13 @@ public class OSMClient005
         return finalNSD;
     }
 
-    public NetworkService getNSByName(String name)
+    @Override
+    public NetworkServiceDescriptor getNSDById(String name)
+    {
+        return null;
+    }
+
+    public NetworkService getNS(String name)
     {
         List<NetworkService> nss = this.getNSList();
         NetworkService finalNS = null;
@@ -156,6 +280,12 @@ public class OSMClient005
         }
 
         return finalNS;
+    }
+
+    @Override
+    public NetworkService getNSById(String id)
+    {
+        return null;
     }
 
     public static void main(String [] args)

@@ -30,13 +30,13 @@ deploy:
   api-key: $TOKEN
   body: "$BODY"
   tag-name: $VERSION
-  name: "OSMClient $VERSION"
+  name: "IOSMClient $VERSION"
   file_glob: true
   file: target/*.jar
   skip_cleanup: true
   on:
     branch: master
-    repo: girtel/J-OSMClient
+    repo: girtel/J-IOSMClient
     tags: true
 
 notifications:

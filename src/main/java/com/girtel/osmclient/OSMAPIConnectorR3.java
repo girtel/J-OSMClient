@@ -2,7 +2,7 @@ package com.girtel.osmclient;
 
 
 import com.girtel.osmclient.utils.HTTPResponse;
-import com.girtel.osmclient.internal.OSMException;
+import com.girtel.osmclient.utils.OSMException;
 import com.girtel.osmclient.json.JSONObject;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
@@ -17,7 +17,7 @@ import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
-class OSMAPIConnector {
+class OSMAPIConnectorR3 {
 
     final String NS_URL = "/api/running/project/{projectname}/ns-instance-config";
     final String NSD_URL = "/api/running/project/{projectname}/nsd-catalog/nsd";
@@ -42,11 +42,11 @@ class OSMAPIConnector {
     private String osmIPAddress;
     private String project;
 
-    protected OSMAPIConnector(OSMClient osmClient)
+    protected OSMAPIConnectorR3(OSMClientR3 osmClientR3)
     {
-        this.osmIPAddress = osmClient.getOSMIPAddress();
-        this.credentials = osmClient.getEncodedCredentials();
-        this.project = osmClient.getProject();
+        this.osmIPAddress = osmClientR3.getOSMIPAddress();
+        this.credentials = osmClientR3.getEncodedCredentials();
+        this.project = osmClientR3.getProject();
         configureSecurity();
     }
 

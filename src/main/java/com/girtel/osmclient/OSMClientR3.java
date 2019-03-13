@@ -1,20 +1,21 @@
 package com.girtel.osmclient;
 
-import com.girtel.osmclient.internal.OSMException;
+import com.girtel.osmclient.internal.IOSMClient;
+import com.girtel.osmclient.utils.OSMException;
+import com.girtel.osmclient.utils.NSConfiguration;
 import com.girtel.osmclient.utils.VIMConfiguration;
 import com.girtel.osmclient.utils.HTTPResponse;
 import com.girtel.osmclient.utils.OSMConstants;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * <h2>REST Client targeted to work with Open Source MANO.</h2>
+ * <h2>REST Client targeted to work with Open Source MANO release 3.</h2>
  *
  * <p>Based on <a href="https://osm.etsi.org/wikipub/index.php/OsmClient">Python OSMClient </a>.</p>
  *
@@ -22,10 +23,11 @@ import java.util.stream.Collectors;
  *
  * @author Cesar San-Nicolas-Martinez
  */
-public class OSMClient {
+public class OSMClientR3 implements IOSMClient
+{
 
     private String osmIPAddress, credentials, project;
-    private OSMController osmController;
+    private OSMControllerR3 osmControllerR3;
 
     /**
      * OSMClient constructor
@@ -35,7 +37,7 @@ public class OSMClient {
      * @param project OSM project (optional). If it is not specified, project default will be used
      */
 
-    public OSMClient(String osmIPAddress, String user, String password, String... project)
+    public OSMClientR3(String osmIPAddress, String user, String password, String... project)
     {
         this.osmIPAddress = osmIPAddress;
         String userCred = user + ":" + password;
@@ -47,7 +49,7 @@ public class OSMClient {
         else
             throw new OSMException("More than one project is not allowed in OSM");
 
-        this.osmController = new OSMController(this);
+        this.osmControllerR3 = new OSMControllerR3(this);
     }
 
     /**
@@ -88,7 +90,7 @@ public class OSMClient {
      */
     public HTTPResponse addConfigAgent(String name, OSMConstants.OSMConfigAgentType type, String serverIP, String user, String secret)
     {
-        HTTPResponse response = osmController.addConfigAgent(name, type, serverIP, user, secret);
+        HTTPResponse response = osmControllerR3.addConfigAgent(name, type, serverIP, user, secret);
         return response;
     }
 
@@ -100,12 +102,12 @@ public class OSMClient {
      * @param password VIM password
      * @param authURL authentication URL, e.c. in Openstack: http://(IP_ADDRESS)/identity/v3
      * @param tenant VIM tenant to instantiate VMs
-     * @param VIMConfiguration optional VIMConfiguration parameters
+     * @param VIMConfiguration optional vim Configuration parameters
      * @return HTTPResponse from OSM (code, message, content)
      */
     public HTTPResponse createVIM(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, VIMConfiguration... VIMConfiguration)
     {
-        HTTPResponse response = osmController.createVIM(name,osmVimType,user,password,authURL,tenant, VIMConfiguration);
+        HTTPResponse response = osmControllerR3.createVIM(name,osmVimType,user,password,authURL,tenant, VIMConfiguration);
         return response;
     }
 
@@ -114,12 +116,14 @@ public class OSMClient {
      * @param nsName new network service name
      * @param nsdName ns descritptor name
      * @param datacenterName VIM name where ns will be instantiated
-     * @param VIMConfiguration optional VIMConfiguration parameters
+     * @param nsConfiguration optional network service Configuration parameters (NOT SUPPORTED IN RELEASE 3)
      * @return HTTPResponse from OSM (code, message, content)
      */
-    public HTTPResponse createNS(String nsName, String nsdName, String datacenterName, VIMConfiguration... VIMConfiguration)
+    public HTTPResponse createNS(String nsName, String nsdName, String datacenterName, NSConfiguration... nsConfiguration)
     {
-        HTTPResponse response = osmController.createNS(nsName, nsdName, datacenterName);
+        if(nsConfiguration.length == 1)
+            throw new OSMException("Network Service configuration is not allowed for release 3");
+        HTTPResponse response = osmControllerR3.createNS(nsName, nsdName, datacenterName);
         return response;
     }
 
@@ -185,7 +189,7 @@ public class OSMClient {
      */
     public HTTPResponse deleteConfigAgent(String name)
     {
-        HTTPResponse response = osmController.deleteConfigAgent(name);
+        HTTPResponse response = osmControllerR3.deleteConfigAgent(name);
         return response;
     }
 
@@ -196,7 +200,7 @@ public class OSMClient {
      */
     public HTTPResponse deleteVIM(String name)
     {
-        HTTPResponse response  = osmController.deleteVIM(name);
+        HTTPResponse response  = osmControllerR3.deleteVIM(name);
         return response;
     }
 
@@ -207,7 +211,7 @@ public class OSMClient {
      */
     public HTTPResponse deleteNS(String name)
     {
-        HTTPResponse response = osmController.deleteNS(name);
+        HTTPResponse response = osmControllerR3.deleteNS(name);
         return response;
     }
 
@@ -218,7 +222,7 @@ public class OSMClient {
      */
     public HTTPResponse deleteNSD(String name)
     {
-        HTTPResponse response = osmController.deleteNSD(name);
+        HTTPResponse response = osmControllerR3.deleteNSD(name);
         return response;
     }
 
@@ -229,7 +233,7 @@ public class OSMClient {
      */
     public HTTPResponse deleteVNFD(String name)
     {
-        HTTPResponse response = osmController.deleteVNFD(name);
+        HTTPResponse response = osmControllerR3.deleteVNFD(name);
         return response;
     }
 
@@ -255,7 +259,7 @@ public class OSMClient {
      */
     public List<ConfigAgent> getConfigAgentList()
     {
-        return osmController.parseConfigAgentList();
+        return osmControllerR3.parseConfigAgentList();
     }
 
     /**
@@ -264,7 +268,7 @@ public class OSMClient {
      */
     public List<VirtualInfrastructureManager> getVIMList()
     {
-        return osmController.parseVIMList();
+        return osmControllerR3.parseVIMList();
     }
 
     /**
@@ -273,7 +277,7 @@ public class OSMClient {
      */
     public List<VirtualNetworkFunctionDescriptor> getVNFDList()
     {
-        return osmController.parseVFNDList();
+        return osmControllerR3.parseVFNDList();
     }
 
     /**
@@ -282,7 +286,7 @@ public class OSMClient {
      */
     public List<VirtualNetworkFunction> getVNFList()
     {
-        return osmController.parseVNFList();
+        return osmControllerR3.parseVNFList();
     }
 
     /**
@@ -291,7 +295,7 @@ public class OSMClient {
      */
     public List<NetworkServiceDescriptor> getNSDList()
     {
-        return osmController.parseNSDList();
+        return osmControllerR3.parseNSDList();
     }
 
     /**
@@ -300,30 +304,7 @@ public class OSMClient {
      */
     public List<NetworkService> getNSList()
     {
-        return osmController.parseNSList();
-    }
-
-    /**
-     * Obtains monitoring parameters associated to a VNF
-     * @param name VNF name
-     * @return VNF's monitoring parameters list
-     */
-    public List<MonitoringParameter> getVNFMonitoringParameterList(String name)
-    {
-        return this.getVNF(name).getMonitoringParameterList();
-    }
-
-    /**
-     * Obtains monitoring parameters associated to a NS
-     * @param name NS name
-     * @return NS's monitoring parameters list
-     */
-    public List<MonitoringParameter> getNSMonitoringParameterList(String name)
-    {
-        List<MonitoringParameter> nsMonParamList = new ArrayList<>();
-        NetworkService ns = this.getNS(name);
-        ns.getVNFList().stream().forEach(vnf -> nsMonParamList.addAll(vnf.getMonitoringParameterList()));
-        return nsMonParamList;
+        return osmControllerR3.parseNSList();
     }
 
     /**
@@ -386,6 +367,12 @@ public class OSMClient {
         return vnf;
     }
 
+    @Override
+    public VirtualNetworkFunction getVNFById(String id)
+    {
+        return null;
+    }
+
     /**
      * Obtains NSD from its name
      * @param name NSD name
@@ -404,6 +391,12 @@ public class OSMClient {
         }
 
         return nsd;
+    }
+
+    @Override
+    public NetworkServiceDescriptor getNSDById(String name)
+    {
+        return null;
     }
 
     /**
@@ -426,6 +419,12 @@ public class OSMClient {
         return ns;
     }
 
+    @Override
+    public NetworkService getNSById(String id)
+    {
+        return null;
+    }
+
     /**
      * Obtains VIM from its name
      * @param name VIM name
@@ -446,6 +445,12 @@ public class OSMClient {
         return finalVIM;
     }
 
+    @Override
+    public VirtualInfrastructureManager getVIMById(String id)
+    {
+        return null;
+    }
+
     /**
      * Uploads a package (VNFD or NSD)
      * @param file file which represents VNFD or NSD
@@ -453,13 +458,13 @@ public class OSMClient {
      */
     public HTTPResponse uploadPackage(File file)
     {
-        HTTPResponse response = osmController.uploadPackage(file);
+        HTTPResponse response = osmControllerR3.uploadPackage(file);
         return response;
     }
 
     public static void main(String [] args)
     {
-        OSMClient osmClient = new OSMClient("192.168.10.130","admin","admin");
+        OSMClientR3 osmClientR3 = new OSMClientR3("192.168.10.130","admin","admin");
 
     }
 

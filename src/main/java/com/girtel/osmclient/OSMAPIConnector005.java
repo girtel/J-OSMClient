@@ -1,9 +1,8 @@
 package com.girtel.osmclient;
 
-import com.girtel.osmclient.internal.OSMException;
+import com.girtel.osmclient.utils.OSMException;
 import com.girtel.osmclient.utils.HTTPResponse;
 import com.girtel.osmclient.json.JSONObject;
-import com.girtel.osmclient.json.JSONFactory;
 import com.girtel.osmclient.json.JSONValue;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
@@ -42,11 +41,11 @@ public class OSMAPIConnector005
     {
         this.osmClient005 = osmClient005;
         this.osmIPAddress = osmClient005.getOSMIPAddress();
-        this.project = osmClient005.getProject();
+        this.project = osmClient005.getOSMProject();
         this.authJSON = new JSONObject();
         authJSON.put("username",new JSONValue(osmClient005.getOSMUser()));
         authJSON.put("password",new JSONValue(osmClient005.getOSMPassword()));
-        authJSON.put("project_id",new JSONValue(osmClient005.getProject()));
+        authJSON.put("project_id",new JSONValue(osmClient005.getOSMProject()));
         configureSecurity();
     }
 
