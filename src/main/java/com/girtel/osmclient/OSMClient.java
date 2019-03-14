@@ -197,7 +197,7 @@ public class OSMClient
         {
             case RELEASE_THREE:
                 if(nsConfiguration.length >= 1)
-                    throw new OSMException("Network Service configuration is not allowed for release 3");
+                    throw new OSMException("Network Service configuration is not supported on OSM Release 3");
                 response = osmControllerR3.createNS(nsName, nsdName, datacenterName);
                 break;
 
@@ -312,7 +312,17 @@ public class OSMClient
      */
     public HTTPResponse deleteNS(String name)
     {
-        HTTPResponse response = osmControllerR3.deleteNS(name);
+        HTTPResponse response = null;
+        switch(version)
+        {
+            case RELEASE_THREE:
+                response = osmControllerR3.deleteNS(name);
+                break;
+
+            case SOL_005:
+                response = osmController005.deleteNS(name);
+                break;
+        }
         return response;
     }
 
@@ -323,7 +333,17 @@ public class OSMClient
      */
     public HTTPResponse deleteNSD(String name)
     {
-        HTTPResponse response = osmControllerR3.deleteNSD(name);
+        HTTPResponse response = null;
+        switch(version)
+        {
+            case RELEASE_THREE:
+                response = osmControllerR3.deleteNSD(name);
+                break;
+
+            case SOL_005:
+                //response = osmController005.deleteNSD(name);
+                break;
+        }
         return response;
     }
 
@@ -334,7 +354,17 @@ public class OSMClient
      */
     public HTTPResponse deleteVNFD(String name)
     {
-        HTTPResponse response = osmControllerR3.deleteVNFD(name);
+        HTTPResponse response = null;
+        switch(version)
+        {
+            case RELEASE_THREE:
+                response = osmControllerR3.deleteVNFD(name);
+                break;
+
+            case SOL_005:
+                //response = osmController005.deleteVNFD(name);
+                break;
+        }
         return response;
     }
 
@@ -345,7 +375,8 @@ public class OSMClient
     public List<OSMComponent> getOSMComponentList()
     {
         List<OSMComponent> componentList = new LinkedList<>();
-        componentList.addAll(getConfigAgentList());
+        if(version.equals(OSMConstants.OSMClientVersion.RELEASE_THREE))
+            componentList.addAll(getConfigAgentList());
         componentList.addAll(getVIMList());
         componentList.addAll(getVNFDList());
         componentList.addAll(getVNFList());
@@ -360,7 +391,17 @@ public class OSMClient
      */
     public List<ConfigAgent> getConfigAgentList()
     {
-        return osmControllerR3.parseConfigAgentList();
+        List<ConfigAgent> configAgents = new LinkedList<>();
+        switch(version)
+        {
+            case RELEASE_THREE:
+                configAgents.addAll(osmControllerR3.parseConfigAgentList());
+                break;
+
+            case SOL_005:
+                throw new OSMException("Config Agent is not supported on OSM sol005");
+        }
+        return configAgents;
     }
 
     /**
@@ -369,7 +410,18 @@ public class OSMClient
      */
     public List<VirtualInfrastructureManager> getVIMList()
     {
-        return osmControllerR3.parseVIMList();
+        List<VirtualInfrastructureManager> vims = new LinkedList<>();
+        switch(version)
+        {
+            case RELEASE_THREE:
+                vims.addAll(osmControllerR3.parseVIMList());
+                break;
+
+            case SOL_005:
+                vims.addAll(osmController005.parseVIMList());
+                break;
+        }
+        return vims;
     }
 
     /**
@@ -378,7 +430,18 @@ public class OSMClient
      */
     public List<VirtualNetworkFunctionDescriptor> getVNFDList()
     {
-        return osmControllerR3.parseVFNDList();
+        List<VirtualNetworkFunctionDescriptor> vnfds = new LinkedList<>();
+        switch(version)
+        {
+            case RELEASE_THREE:
+                vnfds.addAll(osmControllerR3.parseVFNDList());
+                break;
+
+            case SOL_005:
+                vnfds.addAll(osmController005.parseVNFDList());
+                break;
+        }
+        return vnfds;
     }
 
     /**
@@ -387,7 +450,18 @@ public class OSMClient
      */
     public List<VirtualNetworkFunction> getVNFList()
     {
-        return osmControllerR3.parseVNFList();
+        List<VirtualNetworkFunction> vnfs = new LinkedList<>();
+        switch(version)
+        {
+            case RELEASE_THREE:
+                vnfs.addAll(osmControllerR3.parseVNFList());
+                break;
+
+            case SOL_005:
+                //vnfs.addAll(osmController005.parseVNFList());
+                break;
+        }
+        return vnfs;
     }
 
     /**
@@ -396,7 +470,18 @@ public class OSMClient
      */
     public List<NetworkServiceDescriptor> getNSDList()
     {
-        return osmControllerR3.parseNSDList();
+        List<NetworkServiceDescriptor> nsds = new LinkedList<>();
+        switch(version)
+        {
+            case RELEASE_THREE:
+                nsds.addAll(osmControllerR3.parseNSDList());
+                break;
+
+            case SOL_005:
+                nsds.addAll(osmController005.parseNSDList());
+                break;
+        }
+        return nsds;
     }
 
     /**
@@ -405,11 +490,22 @@ public class OSMClient
      */
     public List<NetworkService> getNSList()
     {
-        return osmControllerR3.parseNSList();
+        List<NetworkService> nss = new LinkedList<>();
+        switch(version)
+        {
+            case RELEASE_THREE:
+                nss.addAll(osmControllerR3.parseNSList());
+                break;
+
+            case SOL_005:
+                nss.addAll(osmController005.parseNSList());
+                break;
+        }
+        return nss;
     }
 
     /**
-     * Obtains VNFD from its name
+     * Obtains a VNFD from its name
      * @param name VNFD name
      * @return VNFD named (name)
      */
@@ -429,7 +525,7 @@ public class OSMClient
     }
 
     /**
-     * Obtains VNFD from its id
+     * Obtains a VNFD from its id
      * @param id VNFD id
      * @return VNFD identified by (id)
      */
@@ -449,7 +545,7 @@ public class OSMClient
     }
 
     /**
-     * Obtains VNF from its name
+     * Obtains a VNF from its name
      * @param name VNF name
      * @return VNF named (name)
      */
@@ -468,9 +564,24 @@ public class OSMClient
         return vnf;
     }
 
+    /**
+     * Obtains a VNF from its id
+     * @param id VNF id
+     * @return VNF identified by (id)
+     */
     public VirtualNetworkFunction getVNFById(String id)
     {
-        return null;
+        VirtualNetworkFunction vnf = null;
+        for(VirtualNetworkFunction vnfItem : getVNFList())
+        {
+            if(vnfItem.getId().equals(id))
+            {
+                vnf = vnfItem;
+                break;
+            }
+        }
+
+        return vnf;
     }
 
     /**
@@ -493,9 +604,24 @@ public class OSMClient
         return nsd;
     }
 
-    public NetworkServiceDescriptor getNSDById(String name)
+    /**
+     * Obtains a NSD from its id
+     * @param id NSD id
+     * @return NSD identified by (id)
+     */
+    public NetworkServiceDescriptor getNSDById(String id)
     {
-        return null;
+        NetworkServiceDescriptor nsd = null;
+        for(NetworkServiceDescriptor nsdItem : getNSDList())
+        {
+            if(nsdItem.getId().equals(id))
+            {
+                nsd = nsdItem;
+                break;
+            }
+        }
+
+        return nsd;
     }
 
     /**
@@ -518,9 +644,24 @@ public class OSMClient
         return ns;
     }
 
+    /**
+     * Obtains a NS from its id
+     * @param id NS id
+     * @return NS identified by (id)
+     */
     public NetworkService getNSById(String id)
     {
-        return null;
+        NetworkService ns = null;
+        for(NetworkService nsItem : getNSList())
+        {
+            if(nsItem.getId().equals(id))
+            {
+                ns = nsItem;
+                break;
+            }
+        }
+
+        return ns;
     }
 
     /**
@@ -543,9 +684,24 @@ public class OSMClient
         return finalVIM;
     }
 
+    /**
+     * Obtains a VIM from its id
+     * @param id VIM id
+     * @return VIM identified by (id)
+     */
     public VirtualInfrastructureManager getVIMById(String id)
     {
-        return null;
+        VirtualInfrastructureManager finalVIM = null;
+        for(VirtualInfrastructureManager vim : getVIMList())
+        {
+            if(vim.getId().equals(id))
+            {
+                finalVIM = vim;
+                break;
+            }
+        }
+
+        return finalVIM;
     }
 
     /**

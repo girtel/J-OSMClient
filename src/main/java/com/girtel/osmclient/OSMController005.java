@@ -96,7 +96,7 @@ public class OSMController005
     {
         JSONObject nsJSON = new JSONObject();
         nsJSON.put("nsDescription",new JSONValue("default"));
-        String vimId = osmClient.getVIM(vim).getID();
+        String vimId = osmClient.getVIM(vim).getId();
         String nsdId = osmClient.getNSD(nsdName).getId();
         nsJSON.put("vimAccountId",new JSONValue(vimId));
         nsJSON.put("nsdId", new JSONValue(nsdId));

@@ -41,7 +41,7 @@ public class VirtualInfrastructureManager extends OSMComponent{
      * Gets VIM id
      * @return VIM id
      */
-    public String getID()
+    public String getId()
     {
         return uuid;
     }
