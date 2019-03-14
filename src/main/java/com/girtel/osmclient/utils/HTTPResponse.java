@@ -1,9 +1,18 @@
 package com.girtel.osmclient.utils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import com.girtel.osmclient.json.JSONObject;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+
+import javax.net.ssl.*;
+import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * This class represents a HTTP Response
@@ -92,4 +101,5 @@ public class HTTPResponse
 
         return new HTTPResponse(code, message, response);
     }
+
 }

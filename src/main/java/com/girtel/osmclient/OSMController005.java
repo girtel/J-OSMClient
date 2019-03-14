@@ -10,14 +10,22 @@ import java.util.List;
 
 public class OSMController005
 {
-    private OSMAPIConnector005 osmConnector005;
+    /** OSM sol005 endpoints **/
+    private String TOKEN_URL_005 = "/osm/admin/v1/tokens";
+    private String VIM_URL_005 = "/osm/admin/v1/vim_accounts";
+    private String VNFD_URL_005 = "/osm/vnfpkgm/v1/vnf_packages";
+    private String VNF_URL_005 = "/osm/nslcm/v1/vnfrs";
+    private String NSD_URL_005 = "/osm/nsd/v1/ns_descriptors";
+    private String NS_URL_005 = "/osm/nslcm/v1/ns_instances_content";
+    private String UPLOAD_VNFD_URL_005 = "/osm/vnfpkgm/v1/vnf_packages_content";
+    private String UPLOAD_NSD_URL_005 = "/osm/nsd/v1/ns_descriptors_content";
+
     private OSMClient osmClient;
     private String emptyJSON = "{}";
 
     protected OSMController005(OSMClient osmClient)
     {
        this.osmClient = osmClient;
-       this.osmConnector005 = new OSMAPIConnector005(osmClient);
     }
 
     protected HTTPResponse createSessionToken()

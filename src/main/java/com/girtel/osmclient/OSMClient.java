@@ -147,10 +147,10 @@ public class OSMClient
         switch(version)
         {
             case RELEASE_THREE:
-                response = osmControllerR3.addConfigAgent(name, type, serverIP, user, secret);
+                response = osmControllerR3.createConfigAgent(name, type, serverIP, user, secret);
                 break;
             case SOL_005:
-                //response = osmController005.addConfigAgent(name, type, serverIP, user, secret);
+                //response = osmController005.createConfigAgent(name, type, serverIP, user, secret);
                 break;
         }
         return response;

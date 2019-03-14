@@ -8,6 +8,7 @@ import com.girtel.osmclient.utils.HTTPResponse;
 import com.girtel.osmclient.utils.OSMConstants;
 import javafx.util.Pair;
 
+import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -18,15 +19,39 @@ import java.util.stream.Collectors;
 
 class OSMControllerR3 {
 
-    private OSMAPIConnectorR3 osmConnector;
+    /** OSM Release 3 endpoints **/
+    private final String NS_URL = "/api/running/project/{projectname}/ns-instance-config";
+    private final String NSD_URL = "/api/running/project/{projectname}/nsd-catalog/nsd";
+    private final String VNF_URL = "/v1/api/operational/project/{projectname}/vnfr-catalog/vnfr";
+    private final String VNFD_URL = "/api/running/project/{projectname}/vnfd-catalog/vnfd";
+    private final String CONFIG_AGENT_URL = "/api/config/project/{projectname}/config-agent";
+    private final String DATACENTER_LIST_URL = "/openmano/{tenant_id}/datacenters";
+    private final String DEFAULTROACCOUNT_URL = "/api/operational/project/{projectname}/ro-account";
+    private final String UPDATEROACCOUNT_URL = "/api/operations/update-ro-account-status";
+    private final String DATACENTERS_URL = "/openmano/datacenters";
+    private final String GET_TENANTS_URL = "/openmano/tenants/";
+    private final String ATTACH_DETACH_DATACENTER_URL = "/openmano/{osm_id}/datacenters/{dc_id}";
+    private final String UPLOAD_PACKAGE_URL = "https://{osm_ip}:8443/composer/upload?api_server=https://localhost&upload_server=https://{osm_ip}&project_name={projectname}";
+    private final String CREATE_NS_URL = "/api/config/project/{projectname}/ns-instance-config/nsr";
+    private final String NS_DELETE_URL = "/api/config/project/{projectname}/ns-instance-config/nsr/{ns_id}";
+    private final String NSD_DELETE_URL = "/api/running/project/{projectname}/nsd-catalog/nsd/{nsd_id}";
+    private final String VNFD_DELETE_URL = "/api/running/project/{projectname}/vnfd-catalog/vnfd/{vnfd_id}";
+
     private OSMClient osmClient;
     private String emptyJSON = "{}";
+    private String osmIPAddress, project, credentials;
 
 
     protected OSMControllerR3(OSMClient osmClient)
     {
         this.osmClient = osmClient;
-        this.osmConnector = new OSMAPIConnectorR3(osmClient);
+        this.osmIPAddress = osmClient.getOSMIPAddress();
+        this.project = osmClient.getOSMProject();
+        String user = osmClient.getOSMUser();
+        String pass = osmClient.getOSMPassword();
+        String userCred = user + ":" + pass;
+        this.credentials = "Basic " + DatatypeConverter.printBase64Binary(userCred.getBytes());
+        HTTPUtils.configureSecurity();
     }
 
     private String generateUUID()
@@ -39,7 +64,8 @@ class OSMControllerR3 {
     {
 
         List<VirtualNetworkFunctionDescriptor> vnfdList = new ArrayList<>();
-        String receivedJSON = osmConnector.establishConnectionToReceiveVNFDList().getContent();
+        HTTPResponse response = HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":8008"+ VNFD_URL.replace("{projectname}",project), HTTPUtils.HTTPMethod.GET, OSMConstants.OSMClientVersion.RELEASE_THREE, true, credentials);
+        String receivedJSON = response.getContent();
         if(!receivedJSON.equalsIgnoreCase(emptyJSON))
         {
             JSONObject jObj = new JSONObject(receivedJSON);
@@ -59,7 +85,8 @@ class OSMControllerR3 {
     public List<VirtualNetworkFunction> parseVNFList()
     {
         List<VirtualNetworkFunction> vnfList = new ArrayList<>();
-        String receivedJSON = osmConnector.establishConnectionToReceiveVNFList().getContent();
+        HTTPResponse response = HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":8008"+ VNF_URL.replace("{projectname}",project), HTTPUtils.HTTPMethod.GET, OSMConstants.OSMClientVersion.RELEASE_THREE, true, credentials);
+        String receivedJSON = response.getContent();
         if(!receivedJSON.equalsIgnoreCase(emptyJSON))
         {
             if(receivedJSON != null)
@@ -83,7 +110,8 @@ class OSMControllerR3 {
     public List<NetworkServiceDescriptor> parseNSDList()
     {
         List<NetworkServiceDescriptor> nsdList = new ArrayList<>();
-        String receivedJSON = osmConnector.establishConnectionToReceiveNSDList().getContent();
+        HTTPResponse response = HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":8008"+ NSD_URL.replace("{projectname}",project), HTTPUtils.HTTPMethod.GET,OSMConstants.OSMClientVersion.RELEASE_THREE, true,  credentials);
+        String receivedJSON = response.getContent();
         if(!receivedJSON.equalsIgnoreCase(emptyJSON))
         {
             JSONObject jObj = new JSONObject(receivedJSON);
@@ -103,7 +131,8 @@ class OSMControllerR3 {
     public List<NetworkService> parseNSList()
     {
         List<NetworkService> nsList = new ArrayList<>();
-        String receivedJSON = osmConnector.establishConnectionToReceiveNSList().getContent();
+        HTTPResponse response = HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":8008"+ NS_URL.replace("{projectname}",project), HTTPUtils.HTTPMethod.GET, OSMConstants.OSMClientVersion.RELEASE_THREE, true, credentials);
+        String receivedJSON = response.getContent();
         if(!receivedJSON.equalsIgnoreCase(emptyJSON))
         {
             JSONObject jObj = new JSONObject(receivedJSON);
@@ -130,13 +159,15 @@ class OSMControllerR3 {
     public List<VirtualInfrastructureManager> parseVIMList()
     {
         List<VirtualInfrastructureManager> datacenterList = new ArrayList<>();
-        String osmTenant = osmConnector.establishConnectionToReceiveOSMTenant().getContent();
+        HTTPResponse response = HTTPUtils.establishHTTPConnectionWithOSM("http://"+osmIPAddress+":9090"+ GET_TENANTS_URL+"osm", HTTPUtils.HTTPMethod.GET,OSMConstants.OSMClientVersion.RELEASE_THREE, true,  credentials);
+        String osmTenant = response.getContent();
 
         if(!osmTenant.equalsIgnoreCase(emptyJSON))
         {
             JSONObject jObjDatacenters = new JSONObject(osmTenant);
             String tenantId = ((JSONObject)jObjDatacenters.get("tenant").getValue()).get("uuid").getValue();
-            String receivedDatacenterAdvancedInfo = osmConnector.establishConnectionToReceiveDatacenterList(tenantId).getContent();
+            HTTPResponse vimResponse = HTTPUtils.establishHTTPConnectionWithOSM("http://"+osmIPAddress+":9090"+ DATACENTER_LIST_URL.replace("{tenant_id}",tenantId), HTTPUtils.HTTPMethod.GET, OSMConstants.OSMClientVersion.RELEASE_THREE, true, credentials);
+            String receivedDatacenterAdvancedInfo = vimResponse.getContent();
 
             if(receivedDatacenterAdvancedInfo != null)
             {
@@ -159,8 +190,8 @@ class OSMControllerR3 {
     public List<ConfigAgent> parseConfigAgentList()
     {
         List<ConfigAgent> configAgentList = new ArrayList<>();
-        String receivedJSON = osmConnector.establishConnectionToReceiveConfigAgentList().getContent();
-
+        HTTPResponse response = HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":8008"+ CONFIG_AGENT_URL.replace("{projectname}",project), HTTPUtils.HTTPMethod.GET,OSMConstants.OSMClientVersion.RELEASE_THREE, true,  credentials);
+        String receivedJSON = response.getContent();
         if(!receivedJSON.equalsIgnoreCase(emptyJSON))
         {
             JSONObject jObj = new JSONObject(receivedJSON);
@@ -395,7 +426,7 @@ class OSMControllerR3 {
 
     }
 
-    public NetworkService parseNS(JSONObject ob)
+    private NetworkService parseNS(JSONObject ob)
     {
         String nsId = ob.get("id").getValue();
         String nsName = ob.get("name").getValue();
@@ -417,42 +448,15 @@ class OSMControllerR3 {
 
     public HTTPResponse deleteNS(String name)
     {
-        String nsJSON = osmConnector.establishConnectionToReceiveNSList().getContent();
-        List<NetworkService> nsList = osmClient.getNSList();
-        HTTPResponse response;
-
-        if(nsList.size() == 0)
+        HTTPResponse response = null;
+        NetworkService nsToDelete = osmClient.getNS(name);
+        if(nsToDelete == null)
         {
-            throw new OSMException("No Network Service instantiated in OSM");
+            throw new OSMException("No Network Service named "+name+" instantiated in OSM");
         }
-        else{
-            JSONObject jObj = new JSONObject(nsJSON);
-            JSONObject json = jObj.get("nsr:ns-instance-config").getValue();
-            JSONArray jArray = json.get("nsr").getValue();
-
-            String nsIdToDelete = "";
-
-            for(JSONValue item : jArray)
-            {
-                JSONObject ob = item.getValue();
-                String nsName = ob.get("name").getValue();
-                if(nsName.equals(name))
-                {
-                    nsIdToDelete = ob.get("id").getValue();
-                    break;
-                }
-            }
-
-
-            if(nsIdToDelete.equals(""))
-            {
-                throw new OSMException("No Network Service named "+name+" instantiated in OSM");
-            }
-            else
-            {
-                response = osmConnector.establishConnectionToDeleteNS(nsIdToDelete);
-            }
-
+        else {
+            String nsIdToDelete = nsToDelete.getId();
+            response = HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":8008" + NS_DELETE_URL.replace("{ns_id}",nsIdToDelete).replace("{projectname}",project), HTTPUtils.HTTPMethod.DELETE, OSMConstants.OSMClientVersion.RELEASE_THREE, true, credentials);
         }
 
         return response;
@@ -460,38 +464,15 @@ class OSMControllerR3 {
 
     public HTTPResponse deleteNSD(String name)
     {
-        HTTPResponse response;
-        String nsdJSON = osmConnector.establishConnectionToReceiveNSDList().getContent();
-        List<NetworkServiceDescriptor> nsdList = osmClient.getNSDList();
-        if(nsdList.size() == 0)
+        HTTPResponse response = null;
+        NetworkServiceDescriptor nsdToDelete = osmClient.getNSD(name);
+        if(nsdToDelete == null)
         {
-            throw new OSMException("No Network Service Descriptor in OSM catalog");
+            throw new OSMException("No Network Service Descriptor named "+name+" stored in OSM");
         }
-        else{
-            JSONObject jObj = new JSONObject(nsdJSON);
-            JSONArray jArray = jObj.get("project-nsd:nsd").getValue();
-
-            String nsdIdToDelete = "";
-
-            for(JSONValue item : jArray)
-            {
-                JSONObject ob = item.getValue();
-                String nsName = ob.get("name").getValue();
-                if(nsName.equals(name))
-                {
-                    nsdIdToDelete = ob.get("id").getValue();
-                    break;
-                }
-            }
-
-            if(nsdIdToDelete.equals(""))
-            {
-                throw new OSMException("No Network Service Descriptor named "+name+" in OSM catalog");
-            }
-            else
-            {
-                response = osmConnector.establishConnectionToDeleteNSD(nsdIdToDelete);
-            }
+        else {
+            String nsdIdToDelete = nsdToDelete.getId();
+            response = HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":8008" + NSD_DELETE_URL.replace("{nsd_id}",nsdIdToDelete).replace("{projectname}",project), HTTPUtils.HTTPMethod.DELETE, OSMConstants.OSMClientVersion.RELEASE_THREE, true, credentials);
         }
 
         return response;
@@ -500,63 +481,41 @@ class OSMControllerR3 {
 
     public HTTPResponse deleteVNFD(String name)
     {
-        HTTPResponse response;
-        String vnfdJSON = osmConnector.establishConnectionToReceiveVNFDList().getContent();
-        List<VirtualNetworkFunctionDescriptor> vnfdList = osmClient.getVNFDList();
-        if(vnfdList.size() == 0)
+        HTTPResponse response = null;
+        VirtualNetworkFunctionDescriptor vnfdToDelete = osmClient.getVNFD(name);
+        if(vnfdToDelete == null)
         {
-            throw new OSMException("No Virtual Network Function Descriptor in OSM catalog");
+            throw new OSMException("No VNFD named "+name+" stored in OSM");
         }
-        else{
-
-            JSONObject jObj = new JSONObject(vnfdJSON);
-            JSONArray jArray = jObj.get("project-vnfd:vnfd").getValue();
-
-            String vnfdIdToDelete = "";
-
-            for(JSONValue item : jArray)
-            {
-                JSONObject ob = item.getValue();
-                String nsName = ob.get("name").getValue();
-                if(nsName.equals(name))
-                {
-                    vnfdIdToDelete = ob.get("id").getValue();
-                    break;
-                }
-            }
-
-            if(vnfdIdToDelete.equals(""))
-            {
-                throw new OSMException("No Virtual Network Function Descriptor named "+name+" in OSM catalog");
-            }
-            else
-            {
-                response = osmConnector.establishConnectionToDeleteVNFD(vnfdIdToDelete);
-            }
+        else {
+            String vnfdIdToDelete = vnfdToDelete.getId();
+            response = HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":8008" + NS_DELETE_URL.replace("{vnfd_id}",vnfdIdToDelete).replace("{projectname}",project), HTTPUtils.HTTPMethod.DELETE, OSMConstants.OSMClientVersion.RELEASE_THREE, true, credentials);
         }
 
         return response;
 
     }
 
-
     public HTTPResponse deleteConfigAgent(String name)
     {
-        HTTPResponse response = osmConnector.establishConnectionToDeleteConfigAgent(name);
-        return response;
+        return HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":8008"+ CONFIG_AGENT_URL.replace("{projectname}",project)+"/account/"+name, HTTPUtils.HTTPMethod.DELETE,OSMConstants.OSMClientVersion.RELEASE_THREE, true,  credentials);
     }
 
     public HTTPResponse deleteVIM(String name)
     {
-        String tenantJSON = osmConnector.establishConnectionToReceiveOSMTenant().getContent();
-        JSONObject tenantJSONOb = new JSONObject(tenantJSON);
+        HTTPResponse response = HTTPUtils.establishHTTPConnectionWithOSM("http://"+osmIPAddress+":9090"+ GET_TENANTS_URL+"osm", HTTPUtils.HTTPMethod.GET, OSMConstants.OSMClientVersion.RELEASE_THREE, true, credentials);
+        String osmTenant = response.getContent();
+        JSONObject tenantJSONOb = new JSONObject(osmTenant);
         String tenantId = ((JSONObject)tenantJSONOb.get("tenant").getValue()).get("uuid").getValue();
-        osmConnector.establishConnectionToDetachDatacenter(tenantId, name).getContent();
-        osmConnector.establishConnectionToDeleteDatacenter(name);
-        String roAccJSON = osmConnector.establishConnectionToReceiveDefaultROAccount().getContent();
+
+        HTTPResponse detachResponse = HTTPUtils.establishHTTPConnectionWithOSM("http://"+osmIPAddress+":9090" + ATTACH_DETACH_DATACENTER_URL.replace("{osm_id}",tenantId).replace("{dc_id}", name), HTTPUtils.HTTPMethod.DELETE,OSMConstants.OSMClientVersion.RELEASE_THREE, true, credentials);
+        HTTPResponse deleteResponse = HTTPUtils.establishHTTPConnectionWithOSM("http://"+osmIPAddress+":9090"+ DATACENTERS_URL+"/"+name, HTTPUtils.HTTPMethod.DELETE, OSMConstants.OSMClientVersion.RELEASE_THREE, true, credentials);
+        HTTPResponse defaultROAccountResponse = HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":8008"+ DEFAULTROACCOUNT_URL.replace("{projectname}",project), HTTPUtils.HTTPMethod.GET, OSMConstants.OSMClientVersion.RELEASE_THREE, true, credentials);
+        String roAccJSON = defaultROAccountResponse.getContent();
         JSONObject defaultROJSON = new JSONObject(roAccJSON);
         defaultROJSON = ((JSONArray)((JSONObject)defaultROJSON.get("rw-ro-account:ro-account").getValue()).get("account").getValue()).get(0).getValue();
         String defaultROType = defaultROJSON.get("ro-account-type").getValue();
+
         HTTPResponse finalResponse = null;
 
         if(!defaultROType.equals("openmano"))
@@ -573,7 +532,7 @@ class OSMControllerR3 {
             updateROJSON.put("project-name", new JSONValue("default"));
             refreshBodyJSON.put("input",new JSONValue(updateROJSON));
 
-            finalResponse = osmConnector.establishConnectionToUpdateROAccount(refreshBodyJSON);
+            finalResponse = HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":8008"+ UPDATEROACCOUNT_URL, HTTPUtils.HTTPMethod.POST, OSMConstants.OSMClientVersion.RELEASE_THREE, true, credentials, refreshBodyJSON);
         }
 
         return finalResponse;
@@ -603,8 +562,11 @@ class OSMControllerR3 {
 
         finalJSON.put("datacenter",new JSONValue(dataCenterJSON));
 
-        String createDatacenterResponse = osmConnector.establishConnectionToCreateDatacenter(finalJSON).getContent();
-        String osmTenant = osmConnector.establishConnectionToReceiveOSMTenant().getContent();
+        HTTPResponse createVIMResponse = HTTPUtils.establishHTTPConnectionWithOSM("http://"+osmIPAddress+":9090"+ DATACENTERS_URL, HTTPUtils.HTTPMethod.POST, OSMConstants.OSMClientVersion.RELEASE_THREE, true, credentials, finalJSON);
+        String createDatacenterResponse = createVIMResponse.getContent();
+
+        HTTPResponse osmTenantResponse = HTTPUtils.establishHTTPConnectionWithOSM("http://"+osmIPAddress+":9090"+ GET_TENANTS_URL+"osm", HTTPUtils.HTTPMethod.GET,OSMConstants.OSMClientVersion.RELEASE_THREE, true,  credentials);
+        String osmTenant = osmTenantResponse.getContent();
 
         JSONObject datacenterJSON = new JSONObject(createDatacenterResponse);
         JSONObject tenantJSON = new JSONObject(osmTenant);
@@ -612,7 +574,7 @@ class OSMControllerR3 {
         String datacenterId = ((JSONObject)datacenterJSON.get("datacenter").getValue()).get("uuid").getValue();
         String tenantId = ((JSONObject)tenantJSON.get("tenant").getValue()).get("uuid").getValue();
 
-        HTTPResponse response = osmConnector.establishConnectionToAttachDatacenterToOSM(tenantId, datacenterId, finalJSON);
+        HTTPResponse response = HTTPUtils.establishHTTPConnectionWithOSM("http://"+osmIPAddress+":9090"+ ATTACH_DETACH_DATACENTER_URL.replace("{osm_id}",tenantId).replace("{dc_id}",datacenterId), HTTPUtils.HTTPMethod.POST,OSMConstants.OSMClientVersion.RELEASE_THREE, true,  credentials, finalJSON);
 
         if(response.getCode() > 299)
         {
@@ -623,7 +585,8 @@ class OSMControllerR3 {
             }
         }
 
-        String roAccJSON = osmConnector.establishConnectionToReceiveDefaultROAccount().getContent();
+        HTTPResponse defaultROAccountResponse = HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":8008"+ DEFAULTROACCOUNT_URL.replace("{projectname}",project), HTTPUtils.HTTPMethod.GET, OSMConstants.OSMClientVersion.RELEASE_THREE, true, credentials);
+        String roAccJSON = defaultROAccountResponse.getContent();
 
         JSONObject defaultROJSON = new JSONObject(roAccJSON);
 
@@ -646,7 +609,7 @@ class OSMControllerR3 {
             updateROJSON.put("project-name", new JSONValue("default"));
             refreshBodyJSON.put("input",new JSONValue(updateROJSON));
 
-            finalResponse = osmConnector.establishConnectionToUpdateROAccount(refreshBodyJSON);
+            finalResponse = HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":8008"+ UPDATEROACCOUNT_URL, HTTPUtils.HTTPMethod.POST, OSMConstants.OSMClientVersion.RELEASE_THREE, true, credentials, refreshBodyJSON);
         }
 
         return finalResponse;
@@ -654,13 +617,13 @@ class OSMControllerR3 {
 
     public HTTPResponse uploadPackage(File file)
     {
-        HTTPResponse response = osmConnector.establishConnectionToUploadPackageToOSM(file);
-        return response;
+        return HTTPUtils.establishHTTPConnectionWithOSM(UPLOAD_PACKAGE_URL.replace("{osm_ip}",osmIPAddress).replace("{projectname}",project), HTTPUtils.HTTPMethod.POST, OSMConstants.OSMClientVersion.RELEASE_THREE, true, credentials, file);
     }
 
     public HTTPResponse createNS(String name, String nsdName, String datacenter)
     {
-        String nsdJSON = osmConnector.establishConnectionToReceiveNSDList().getContent();
+        HTTPResponse nsdResponse = HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":8008"+ NSD_URL.replace("{projectname}",project), HTTPUtils.HTTPMethod.GET, OSMConstants.OSMClientVersion.RELEASE_THREE, true, credentials);
+        String nsdJSON = nsdResponse.getContent();
 
         JSONObject nsdJSONOb = new JSONObject(nsdJSON);
         JSONArray jArray = nsdJSONOb.get("project-nsd:nsd").getValue();
@@ -704,11 +667,10 @@ class OSMControllerR3 {
         nsrArray.add(new JSONValue(nsJSON));
         postJSON.put("nsr",new JSONValue(nsrArray));
 
-        return osmConnector.establishConnectionToCreateNS(postJSON);
-
+        return HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":8008"+ CREATE_NS_URL.replace("{projectname}",project), HTTPUtils.HTTPMethod.POST,OSMConstants.OSMClientVersion.RELEASE_THREE, true,  credentials, postJSON);
     }
 
-    public HTTPResponse addConfigAgent(String name, OSMConstants.OSMConfigAgentType type, String serverIP, String user, String secret)
+    public HTTPResponse createConfigAgent(String name, OSMConstants.OSMConfigAgentType type, String serverIP, String user, String secret)
     {
         JSONObject finalJSON = new JSONObject();
         JSONArray accountArray = new JSONArray();
@@ -727,9 +689,7 @@ class OSMControllerR3 {
 
         finalJSON.put("account",new JSONValue(accountArray));
 
-        HTTPResponse response = osmConnector.establishConnectionToAddConfigAgent(finalJSON);
-        return response;
-
+        return HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":8008" + CONFIG_AGENT_URL.replace("{projectname}",project), HTTPUtils.HTTPMethod.POST, OSMConstants.OSMClientVersion.RELEASE_THREE, true, credentials, finalJSON);
     }
 
 }

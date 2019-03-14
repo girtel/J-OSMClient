@@ -1,9 +1,9 @@
 package com.girtel.osmclient;
 
-import com.girtel.osmclient.utils.OSMException;
-import com.girtel.osmclient.utils.HTTPResponse;
 import com.girtel.osmclient.json.JSONObject;
-import com.girtel.osmclient.json.JSONValue;
+import com.girtel.osmclient.utils.HTTPResponse;
+import com.girtel.osmclient.utils.OSMConstants;
+import com.girtel.osmclient.utils.OSMException;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
@@ -20,32 +20,12 @@ import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
-public class OSMAPIConnector005
+public class HTTPUtils
 {
-
-
-
-    private OSMClient osmClient;
-    private String osmIPAddress;
-    private String project;
-    private JSONObject authJSON;
-
-    protected OSMAPIConnector005(OSMClient osmClient)
-    {
-        this.osmClient = osmClient;
-        this.osmIPAddress = osmClient.getOSMIPAddress();
-        this.project = osmClient.getOSMProject();
-        this.authJSON = new JSONObject();
-        authJSON.put("username",new JSONValue(osmClient.getOSMUser()));
-        authJSON.put("password",new JSONValue(osmClient.getOSMPassword()));
-        authJSON.put("project_id",new JSONValue(osmClient.getOSMProject()));
-        configureSecurity();
-    }
-
     /**
      * HTTP methods
      */
-    private enum HTTPMethod
+    public enum HTTPMethod
     {
         GET("GET"), POST("POST"), PUT("PUT"), DELETE("DELETE");
 
@@ -63,7 +43,7 @@ public class OSMAPIConnector005
         }
     }
 
-    private void configureSecurity()
+    protected static void configureSecurity()
     {
         TrustManager[] trustAllCerts = new TrustManager[]{
                 new X509TrustManager() {
@@ -112,7 +92,29 @@ public class OSMAPIConnector005
 
     }
 
-    private void configureConnection(HttpURLConnection conn, boolean includeAuth, MultipartEntity... optionalMultiPartEntity)
+    protected static void configureHeadersToConnectWithOSMReleaseThree(HttpURLConnection conn, String credentials, MultipartEntity... optionalMultiPartEntity)
+    {
+        if(optionalMultiPartEntity.length == 0)
+        {
+            conn.setRequestProperty("Content-Type","application/json");
+            conn.setRequestProperty("Accept","application/vnd.yand.data+json");
+            conn.setRequestProperty("Authorization",credentials);
+        }
+        else if (optionalMultiPartEntity.length == 1)
+        {
+            MultipartEntity entity = optionalMultiPartEntity[0];
+            conn.setRequestProperty("Content-Encoding", "gzip");
+            conn.setRequestProperty("Accept","*application/json*");
+            conn.setRequestProperty("Content-Type",entity.getContentType().getValue());
+            conn.setRequestProperty("Content-length", String.valueOf(entity.getContentLength()));
+            conn.setRequestProperty("Authorization",credentials);
+        }
+        else
+            throw new RuntimeException("No more than one multipartEntity is allowed");
+
+    }
+
+    private static void configureHeadersToConnectWithOSMsol005(HttpURLConnection conn, boolean includeAuth, String credentials, MultipartEntity... optionalMultiPartEntity)
     {
         if(optionalMultiPartEntity.length == 0)
         {
@@ -120,7 +122,7 @@ public class OSMAPIConnector005
             conn.setRequestProperty("Accept","application/json");
             if(includeAuth)
             {
-                conn.setRequestProperty("Authorization","Bearer "+osmClient.getSessionToken());
+                conn.setRequestProperty("Authorization","Bearer "+credentials);
             }
 
         }
@@ -133,7 +135,7 @@ public class OSMAPIConnector005
             conn.setRequestProperty("Content-length", String.valueOf(entity.getContentLength()));
             if(includeAuth)
             {
-                conn.setRequestProperty("Authorization","Bearer "+osmClient.getSessionToken());
+                conn.setRequestProperty("Authorization","Bearer "+credentials);
             }
 
         }
@@ -143,7 +145,7 @@ public class OSMAPIConnector005
 
     }
 
-    private HTTPResponse establishHTTPConnection(String url, OSMAPIConnector005.HTTPMethod method, boolean includeAuth, Object... optionalObjectToSend)
+    protected static HTTPResponse establishHTTPConnectionWithOSM(String url, HTTPMethod method, OSMConstants.OSMClientVersion version, boolean includeAuth, String credentials, Object... optionalObjectToSend)
     {
         URL url_;
         HttpURLConnection conn = null;
@@ -159,7 +161,16 @@ public class OSMAPIConnector005
 
             if(optionalObjectToSend.length == 0)
             {
-                configureConnection(conn, includeAuth);
+                switch(version)
+                {
+                    case RELEASE_THREE:
+                        configureHeadersToConnectWithOSMReleaseThree(conn, credentials);
+                        break;
+
+                    case SOL_005:
+                        configureHeadersToConnectWithOSMsol005(conn, includeAuth, credentials);
+                        break;
+                }
                 conn.connect();
                 response = HTTPResponse.getResponseFromHTTPConnection(conn);
             }
@@ -173,7 +184,16 @@ public class OSMAPIConnector005
                     MultipartEntity entity = new MultipartEntity(HttpMultipartMode.STRICT);
                     entity.addPart("package",fileBody);
 
-                    configureConnection(conn, includeAuth, entity);
+                    switch(version)
+                    {
+                        case RELEASE_THREE:
+                            configureHeadersToConnectWithOSMReleaseThree(conn, credentials, entity);
+                            break;
+
+                        case SOL_005:
+                            configureHeadersToConnectWithOSMsol005(conn, includeAuth, credentials, entity);
+                            break;
+                    }
                     conn.connect();
 
                     OutputStream out = null;
@@ -190,7 +210,16 @@ public class OSMAPIConnector005
                 }
                 else if(obj instanceof JSONObject)
                 {
-                    configureConnection(conn, includeAuth);
+                    switch(version)
+                    {
+                        case RELEASE_THREE:
+                            configureHeadersToConnectWithOSMReleaseThree(conn, credentials);
+                            break;
+
+                        case SOL_005:
+                            configureHeadersToConnectWithOSMsol005(conn, includeAuth, credentials);
+                            break;
+                    }
                     conn.connect();
 
                     JSONObject json = (JSONObject)obj;
@@ -223,58 +252,4 @@ public class OSMAPIConnector005
 
         return response;
     }
-
-    protected HTTPResponse establishConnectionToCreateSessionToken()
-    {
-        String url = "https://"+osmIPAddress+":9999"+TOKEN_URL_005;
-        HTTPResponse response =  establishHTTPConnection(url, HTTPMethod.POST, false, authJSON);
-        return response;
-    }
-
-    protected HTTPResponse establishConnectionToReceiveVIMList()
-    {
-        String url = "https://"+osmIPAddress+":9999"+VIM_URL_005;
-        HTTPResponse response =  establishHTTPConnection(url, HTTPMethod.GET, true);
-        return response;
-    }
-
-    protected HTTPResponse establishConnectionToReceiveVNFDList()
-    {
-        String url = "https://"+osmIPAddress+":9999"+ VNFD_URL_005;
-        return establishHTTPConnection(url, HTTPMethod.GET, true);
-    }
-
-    protected HTTPResponse establishConnectionToReceiveVNFList()
-    {
-        String url = "https://"+osmIPAddress+":9999"+ VNF_URL_005;
-        return establishHTTPConnection(url, HTTPMethod.GET, true);
-    }
-
-    protected HTTPResponse establishConnectionToReceiveNSDList()
-    {
-        String url = "https://"+osmIPAddress+":9999"+ NSD_URL_005;
-        return establishHTTPConnection(url, HTTPMethod.GET, true);
-    }
-
-    protected HTTPResponse establishConnectionToReceiveNSList()
-    {
-        String url = "https://"+osmIPAddress+":9999"+ NS_URL_005;
-        return establishHTTPConnection(url, HTTPMethod.GET, true);
-    }
-
-    protected HTTPResponse establishConnectionToCreateNS(JSONObject nsJSON)
-    {
-        String url = "https://"+osmIPAddress+":9999"+NS_URL_005;
-        HTTPResponse response =  establishHTTPConnection(url, HTTPMethod.POST, true, nsJSON);
-        return response;
-    }
-
-    protected HTTPResponse establishConnectionToDeleteNS(String nsId)
-    {
-        String url = "https://"+osmIPAddress+":9999"+NS_URL_005+"/"+nsId;
-        HTTPResponse response =  establishHTTPConnection(url, HTTPMethod.DELETE, true);
-        return response;
-    }
-
-
 }
