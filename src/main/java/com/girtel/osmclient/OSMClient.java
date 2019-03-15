@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class OSMClient
 {
 
-    private String osmIPAddress, project, user, password, sessionToken;
+    private String osmIPAddress, project, user, password;
     private OSMConstants.OSMClientVersion version;
     private OSMControllerR3 osmControllerR3;
     private OSMController005 osmController005;
@@ -42,7 +42,6 @@ public class OSMClient
         this.osmIPAddress = osmIPAddress;
         this.user = user;
         this.password = password;
-        this.sessionToken = "";
         this.version = version;
         switch(version)
         {
@@ -109,30 +108,6 @@ public class OSMClient
     }
 
     /**
-     * Obtains Session Token
-     * @return Session Token
-     */
-    protected String getSessionToken()
-    {
-        switch(version)
-        {
-            case RELEASE_THREE:
-                throw new OSMException("Token feature is not supported on OSM release three");
-
-            case SOL_005:
-                if(this.sessionToken == null)
-                {
-                    HTTPResponse resp = osmController005.createSessionToken();
-                    String token = resp.getContent();
-                    JSONObject tokenJSON = new JSONObject(token);
-                    String tokenID = tokenJSON.get("_id").getValue();
-                    this.sessionToken = tokenID;
-                }
-        }
-        return this.sessionToken;
-    }
-
-    /**
      * Adds a new configuration agent, e.c. Juju
      * @param name new agent's name
      * @param type new agent's type
@@ -186,11 +161,12 @@ public class OSMClient
      * Creates a new network service
      * @param nsName new network service name
      * @param nsdName ns descritptor name
+     * @param description ns description
      * @param datacenterName VIM name where ns will be instantiated
      * @param nsConfiguration optional network service Configuration parameters (NOT SUPPORTED IN RELEASE 3)
      * @return HTTPResponse from OSM (code, message, content)
      */
-    public HTTPResponse createNS(String nsName, String nsdName, String datacenterName, NSConfiguration... nsConfiguration)
+    public HTTPResponse createNS(String nsName, String description, String nsdName, String datacenterName, NSConfiguration... nsConfiguration)
     {
         HTTPResponse response = null;
         switch(version)
@@ -202,7 +178,7 @@ public class OSMClient
                 break;
 
             case SOL_005:
-                response = osmController005.createNS(nsName, nsdName, datacenterName, nsConfiguration);
+                response = osmController005.createNS(nsName, description, nsdName, datacenterName, nsConfiguration);
                 break;
         }
         return response;
