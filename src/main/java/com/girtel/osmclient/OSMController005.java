@@ -396,7 +396,7 @@ public class OSMController005
         String nsDescription = "";
         String nsStatus = ob.get("admin-status").getValue();
 
-        
+
 
         NetworkService ns = new NetworkService(nsId,nsName,nsDescription,nsStatus,nsDatacenter,null,null);
 
