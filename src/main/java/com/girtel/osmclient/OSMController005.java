@@ -69,7 +69,8 @@ public class OSMController005
         List<VirtualNetworkFunctionDescriptor> vnfds = new LinkedList<>();
         HTTPResponse vnfdResponse = HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":9999"+ VNFD_URL_005, HTTPUtils.HTTPMethod.GET, OSMConstants.OSMClientVersion.SOL_005, true, credentials);
         String vnfdResponseContent = vnfdResponse.getContent();
-        JSONArray vnfdsArray = new JSONArray(vnfdResponseContent);
+        String vnfdResponseContent_mod = vnfdResponseContent.replace(",            \"userDefinedData\": {}","");
+        JSONArray vnfdsArray = new JSONArray(vnfdResponseContent_mod);
         for(JSONValue item : vnfdsArray)
         {
             JSONObject ob = item.getValue();
@@ -85,7 +86,7 @@ public class OSMController005
         HTTPResponse vnfResponse = HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":9999"+ VNF_URL_005, HTTPUtils.HTTPMethod.GET, OSMConstants.OSMClientVersion.SOL_005, true, credentials);
         String vnfResponseContent = vnfResponse.getContent();
         String vnfResponseContent_mod = vnfResponseContent;
-
+        System.out.println(vnfResponseContent);
         JSONArray vnfsArray = new JSONArray(vnfResponseContent_mod);
         /*for(JSONValue item : vnfsArray)
         {
@@ -202,11 +203,11 @@ public class OSMController005
         String vduImage = vduOb.get("image").getValue();
 
         JSONObject flavorJSON = vduOb.get("vm-flavor").getValue();
-        double storageGb = flavorJSON.get("storage-gb").getValue();
+        String storageGb = flavorJSON.get("storage-gb").getValue();
         double vcpuCount = flavorJSON.get("vcpu-count").getValue();
-        double memoryMb = flavorJSON.get("memory-mb").getValue();
+        String memoryMb = flavorJSON.get("memory-mb").getValue();
 
-        VirtualDeploymentUnit vdu = new VirtualDeploymentUnit(vduId, vduName, vduImage,storageGb,vcpuCount,memoryMb);
+        VirtualDeploymentUnit vdu = new VirtualDeploymentUnit(vduId, vduName, vduImage, Double.parseDouble(storageGb), vcpuCount, Double.parseDouble(memoryMb));
 
         return vdu;
     }
@@ -395,6 +396,7 @@ public class OSMController005
         String nsDescription = "";
         String nsStatus = ob.get("admin-status").getValue();
 
+        
 
         NetworkService ns = new NetworkService(nsId,nsName,nsDescription,nsStatus,nsDatacenter,null,null);
 
