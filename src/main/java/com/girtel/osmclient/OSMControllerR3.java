@@ -538,7 +538,7 @@ class OSMControllerR3 {
         return finalResponse;
     }
 
-    public HTTPResponse createVIM(String name, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, VIMConfiguration... VIMConfiguration)
+    public HTTPResponse createVIM(String name, String description, OSMConstants.OSMVimType osmVimType, String user, String password, String authURL, String tenant, VIMConfiguration... VIMConfiguration)
     {
         if(VIMConfiguration.length > 1)
             throw new RuntimeException("No more than one VIMConfiguration is allowed");
@@ -555,7 +555,7 @@ class OSMControllerR3 {
 
         dataCenterJSON.put("vim_url",new JSONValue(authURL));
         dataCenterJSON.put("vim_url_admin",new JSONValue(authURL));
-        dataCenterJSON.put("description",new JSONValue("default"));
+        dataCenterJSON.put("description",new JSONValue(description));
         dataCenterJSON.put("vim_username",new JSONValue(user));
         dataCenterJSON.put("vim_password",new JSONValue(password));
         dataCenterJSON.put("vim_tenant_name",new JSONValue(tenant));

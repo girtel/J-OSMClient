@@ -150,6 +150,40 @@ public class OSMController005
         return HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":9999"+NS_URL_005+"/"+nsId, HTTPUtils.HTTPMethod.DELETE, OSMConstants.OSMClientVersion.SOL_005,true, credentials);
     }
 
+    protected HTTPResponse createVIM(String name, String description, OSMConstants.OSMVimType osmVimType, String user, String pass, String authURL, String tenant, VIMConfiguration... VIMConfiguration)
+    {
+        JSONObject createVIMJSON = new JSONObject();
+        createVIMJSON.put("name", new JSONValue(name));
+        createVIMJSON.put("vim_type", new JSONValue(osmVimType.toString()));
+        createVIMJSON.put("description", new JSONValue(description));
+        createVIMJSON.put("vim_url", new JSONValue(authURL));
+        createVIMJSON.put("vim_user", new JSONValue(user));
+        createVIMJSON.put("vim_password", new JSONValue(pass));
+        createVIMJSON.put("vim_tenant_name", new JSONValue(tenant));
+        if(VIMConfiguration.length == 1)
+            createVIMJSON.put("config", new JSONValue(VIMConfiguration[0].toJSON()));
+
+        return HTTPUtils.establishHTTPConnectionWithOSM("https://" + osmIPAddress + ":9999"+VIM_URL_005, HTTPUtils.HTTPMethod.POST, OSMConstants.OSMClientVersion.SOL_005, true, credentials, createVIMJSON);
+    }
+
+    protected HTTPResponse deleteVIM(String vimName)
+    {
+        String vimId = osmClient.getVIM(vimName).getId();
+        return HTTPUtils.establishHTTPConnectionWithOSM("https://" + osmIPAddress + ":9999"+VIM_URL_005+"/"+vimId+"?FORCE=True", HTTPUtils.HTTPMethod.DELETE, OSMConstants.OSMClientVersion.SOL_005, true, credentials);
+    }
+
+    protected HTTPResponse deleteNSD(String nsdName)
+    {
+        String nsdId = osmClient.getNSD(nsdName).getId();
+        return HTTPUtils.establishHTTPConnectionWithOSM("https://" + osmIPAddress + ":9999"+NSD_URL_005+"/"+nsdId+"?FORCE=True", HTTPUtils.HTTPMethod.DELETE, OSMConstants.OSMClientVersion.SOL_005, true, credentials);
+    }
+
+    protected HTTPResponse deleteVNFD(String vnfdName)
+    {
+        String vnfdId = osmClient.getVNFD(vnfdName).getId();
+        return HTTPUtils.establishHTTPConnectionWithOSM("https://" + osmIPAddress + ":9999"+VNFD_URL_005+"/"+vnfdId+"?FORCE=True", HTTPUtils.HTTPMethod.DELETE, OSMConstants.OSMClientVersion.SOL_005, true, credentials);
+    }
+
     private VirtualInfrastructureManager parseVIM(JSONObject ob)
     {
         String name = ob.get("name").getValue();

@@ -1,6 +1,5 @@
 package com.girtel.osmclient;
 
-import com.girtel.osmclient.json.JSONObject;
 import com.girtel.osmclient.utils.OSMException;
 import com.girtel.osmclient.utils.NSConfiguration;
 import com.girtel.osmclient.utils.VIMConfiguration;
@@ -125,8 +124,7 @@ public class OSMClient
                 response = osmControllerR3.createConfigAgent(name, type, serverIP, user, secret);
                 break;
             case SOL_005:
-                //response = osmController005.createConfigAgent(name, type, serverIP, user, secret);
-                break;
+                throw new OSMException("Config Agents are not supported on OSM sol005");
         }
         return response;
     }
@@ -134,6 +132,7 @@ public class OSMClient
     /**
      * Creates a new VIM
      * @param name new VIM name
+     * @param description new VIM description
      * @param osmVimType new VIM type (Openvim, Openstack, VMWare or AWS)
      * @param user VIM user
      * @param pass VIM password
@@ -142,16 +141,16 @@ public class OSMClient
      * @param VIMConfiguration optional vim Configuration parameters
      * @return HTTPResponse from OSM (code, message, content)
      */
-    public HTTPResponse createVIM(String name, OSMConstants.OSMVimType osmVimType, String user, String pass, String authURL, String tenant, VIMConfiguration... VIMConfiguration)
+    public HTTPResponse createVIM(String name, String description, OSMConstants.OSMVimType osmVimType, String user, String pass, String authURL, String tenant, VIMConfiguration... VIMConfiguration)
     {
         HTTPResponse response = null;
         switch(version)
         {
             case RELEASE_THREE:
-                response = osmControllerR3.createVIM(name,osmVimType,user,pass,authURL,tenant, VIMConfiguration);
+                response = osmControllerR3.createVIM(name, description, osmVimType, user, pass, authURL, tenant, VIMConfiguration);
                 break;
             case SOL_005:
-                //response = osmController005.createVIM(name,osmVimType,user,pass,authURL,tenant, VIMConfiguration);
+                response = osmController005.createVIM(name, description, osmVimType, user, pass, authURL, tenant, VIMConfiguration);
                 break;
         }
         return response;
@@ -254,8 +253,7 @@ public class OSMClient
                 break;
 
             case SOL_005:
-                //response = osmController005.deleteConfigAgent(name);
-                break;
+                throw new OSMException("Config Agents are not supported on OSM sol005");
         }
         return response;
     }
@@ -275,7 +273,7 @@ public class OSMClient
                 break;
 
             case SOL_005:
-                //response = osmController005.deleteVIM(name);
+                response = osmController005.deleteVIM(name);
                 break;
         }
         return response;
@@ -317,7 +315,7 @@ public class OSMClient
                 break;
 
             case SOL_005:
-                //response = osmController005.deleteNSD(name);
+                response = osmController005.deleteNSD(name);
                 break;
         }
         return response;
@@ -338,7 +336,7 @@ public class OSMClient
                 break;
 
             case SOL_005:
-                //response = osmController005.deleteVNFD(name);
+                response = osmController005.deleteVNFD(name);
                 break;
         }
         return response;
@@ -434,7 +432,7 @@ public class OSMClient
                 break;
 
             case SOL_005:
-                //vnfs.addAll(osmController005.parseVNFList());
+                vnfs.addAll(osmController005.parseVNFList());
                 break;
         }
         return vnfs;
@@ -702,4 +700,10 @@ public class OSMClient
         return response;
     }
 
+    public static void main(String [] args)
+    {
+        OSMClient osmClient = new OSMClient(OSMConstants.OSMClientVersion.SOL_005, "192.168.10.144","admin","admin");
+        System.out.println(osmClient.createVIM("vimprueba","vim de prueba con rest api", OSMConstants.OSMVimType.OPENSTACK,
+                "admin","girtelserver","http://192.168.10.103:5000/v3","admin"));
+    }
 }
