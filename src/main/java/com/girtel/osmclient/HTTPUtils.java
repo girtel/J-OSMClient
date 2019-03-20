@@ -7,17 +7,17 @@ import com.girtel.osmclient.utils.OSMException;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
+import sun.misc.IOUtils;
 
 import javax.net.ssl.*;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
+import javax.xml.bind.DatatypeConverter;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.security.KeyManagementException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class HTTPUtils
@@ -114,9 +114,9 @@ public class HTTPUtils
 
     }
 
-    private static void configureHeadersToConnectWithOSMsol005(HttpURLConnection conn, boolean includeAuth, String credentials, MultipartEntity... optionalMultiPartEntity)
+    private static void configureHeadersToConnectWithOSMsol005(HttpURLConnection conn, boolean includeAuth, String credentials, File... osmPackage)
     {
-        if(optionalMultiPartEntity.length == 0)
+        if(osmPackage.length == 0)
         {
             conn.setRequestProperty("Content-Type","application/json");
             conn.setRequestProperty("Accept","application/json");
@@ -126,13 +126,26 @@ public class HTTPUtils
             }
 
         }
-        else if (optionalMultiPartEntity.length == 1)
+        else if (osmPackage.length == 1)
         {
-            MultipartEntity entity = optionalMultiPartEntity[0];
-            conn.setRequestProperty("Content-Encoding", "gzip");
+            File pack = osmPackage[0];
             conn.setRequestProperty("Accept","*application/json*");
-            conn.setRequestProperty("Content-Type",entity.getContentType().getValue());
-            conn.setRequestProperty("Content-length", String.valueOf(entity.getContentLength()));
+            conn.setRequestProperty("Content-Type","application/gzip");
+            MessageDigest md = null;
+            try {
+                byte [] packageBytes = new byte[(int)pack.length()];
+                InputStream packageStream = new FileInputStream(pack);
+                packageStream.read(packageBytes);
+                md = MessageDigest.getInstance("MD5");
+                md.update(packageBytes);
+                byte[] digest = md.digest();
+                String md5 = DatatypeConverter.printHexBinary(digest).toUpperCase();
+                conn.setRequestProperty("Content-File-MD5",md5);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            //conn.setRequestProperty("Content-length", String.valueOf(pack.));
             if(includeAuth)
             {
                 conn.setRequestProperty("Authorization","Bearer "+credentials);
@@ -158,6 +171,7 @@ public class HTTPUtils
             conn.setUseCaches(false);
             conn.setDoInput(true);
             conn.setDoOutput(true);
+            conn.addRequestProperty("Content-Type", "multipart/form-data; boundary=nothing" );
 
             if(optionalObjectToSend.length == 0)
             {
@@ -191,7 +205,7 @@ public class HTTPUtils
                             break;
 
                         case SOL_005:
-                            configureHeadersToConnectWithOSMsol005(conn, includeAuth, credentials, entity);
+                            configureHeadersToConnectWithOSMsol005(conn, includeAuth, credentials, file);
                             break;
                     }
                     conn.connect();
@@ -199,7 +213,51 @@ public class HTTPUtils
                     OutputStream out = null;
                     try {
                         out = conn.getOutputStream();
-                        entity.writeTo(out);
+                        switch(version)
+                        {
+                            case RELEASE_THREE:
+                                entity.writeTo(out);
+                                break;
+
+                            case SOL_005:
+//                                conn.setDoOutput(true);
+  //                              conn.setRequestMethod("POST");
+
+                                OutputStream outputStreamToRequestBody = conn.getOutputStream();
+                                BufferedWriter httpRequestBodyWriter =
+                                        new BufferedWriter(new OutputStreamWriter(outputStreamToRequestBody));
+
+
+                                httpRequestBodyWriter.write("Content-Disposition: form-data;"
+                                        + "name=\"myFile.gz\";"
+                                        + "filename=\""+ file.getName() +"\""
+                                        + "\nContent-Type: application/gzip\n\n");
+                                httpRequestBodyWriter.flush();
+
+// Write the actual file contents
+                                FileInputStream inputStreamToLogFile = new FileInputStream(file);
+
+                                int bytesRead;
+                                byte[] dataBuffer = new byte[1024];
+                                while((bytesRead = inputStreamToLogFile.read(dataBuffer)) != -1) {
+                                    outputStreamToRequestBody.write(dataBuffer, 0, bytesRead);
+                                }
+
+                                outputStreamToRequestBody.flush();
+
+// Mark the end of the multipart http request
+                                httpRequestBodyWriter.flush();
+
+// Close the streams
+                                outputStreamToRequestBody.close();
+                                httpRequestBodyWriter.close();
+                               /* InputStream input = new FileInputStream(file);
+                                byte [] fileBytes = new byte[(int)file.length()];
+                                input.read(fileBytes);
+                                out.write(fileBytes);
+                                out.flush();*/
+                        }
+
                         out.close();
                     } catch (IOException e) {
                         e.printStackTrace();
