@@ -5,6 +5,7 @@ import com.girtel.osmclient.utils.*;
 import javafx.util.Pair;
 import org.apache.http.protocol.HTTP;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -402,6 +403,18 @@ public class OSMController005
 
         return ns;
 
+    }
+
+    public HTTPResponse uploadPackage(File file, OSMConstants.OSMPackageType type)
+    {
+        switch (type)
+        {
+            case NSD:
+                return HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":9999"+UPLOAD_NSD_URL_005, HTTPUtils.HTTPMethod.POST, OSMConstants.OSMClientVersion.SOL_005, true, credentials, file);
+            case VNFD:
+                return HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":9999"+UPLOAD_VNFD_URL_005, HTTPUtils.HTTPMethod.POST, OSMConstants.OSMClientVersion.SOL_005, true, credentials, file);
+        }
+        return null;
     }
 
 }

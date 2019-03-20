@@ -694,7 +694,7 @@ public class OSMClient
                 break;
 
             case SOL_005:
-                //response = osmController005.uploadPackage(file, type);
+                response = osmController005.uploadPackage(file, type);
                 break;
         }
         return response;
@@ -708,5 +708,9 @@ public class OSMClient
         //System.out.println(osmClient.deleteNSD("frrvnf_nsd"));
         //System.out.println(osmClient.getVNFDList());
         //System.out.println(osmClient.deleteVNFD("frrvnf_vnfd"));
+
+        File vnfdFile = new File("C:\\Users\\Manu\\Downloads\\vnf-tiny-vnfd.tar.gz");
+        System.out.println(osmClient.uploadPackage(vnfdFile, OSMConstants.OSMPackageType.VNFD));
+        //System.out.println(osmClient.uploadPackage(new File("C:\\Users\\Manu\\Downloads\\nat-tiny-nsd.tar"), OSMConstants.OSMPackageType.NSD));
     }
 }
