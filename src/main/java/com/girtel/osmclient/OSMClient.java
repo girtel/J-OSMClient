@@ -707,6 +707,7 @@ public class OSMClient
         //System.out.println(osmClient.createNS("prueba_frr","frrvnf_nsd description","frrvnf_nsd","vimprueba"));
         //System.out.println(osmClient.deleteNSD("frrvnf_nsd"));
         //System.out.println(osmClient.getVNFDList());
+        System.out.println(osmClient.getVNFList());
         //System.out.println(osmClient.deleteVNFD("frrvnf_vnfd"));
     }
 }

@@ -85,15 +85,13 @@ public class OSMController005
         List<VirtualNetworkFunction> vnfs = new LinkedList<>();
         HTTPResponse vnfResponse = HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":9999"+ VNF_URL_005, HTTPUtils.HTTPMethod.GET, OSMConstants.OSMClientVersion.SOL_005, true, credentials);
         String vnfResponseContent = vnfResponse.getContent();
-        String vnfResponseContent_mod = vnfResponseContent;
-        System.out.println(vnfResponseContent);
-        JSONArray vnfsArray = new JSONArray(vnfResponseContent_mod);
-        /*for(JSONValue item : vnfsArray)
+        JSONArray vnfsArray = new JSONArray(vnfResponseContent);
+        for(JSONValue item : vnfsArray)
         {
             JSONObject ob = item.getValue();
             VirtualNetworkFunction vnf = parseVNF(ob);
             vnfs.add(vnf);
-        }*/
+        }
 
         return vnfs;
     }
@@ -256,7 +254,7 @@ public class OSMController005
     private VirtualNetworkFunction parseVNF(JSONObject ob)
     {
         String id = ob.get("id").getValue();
-        String name = ob.get("name").getValue();
+        //String name = ob.get("name").getValue();
         String description = ob.get("description").getValue();
         String status = ob.get("operational-status").getValue();
 
