@@ -120,7 +120,7 @@ public class OSMController005
         HTTPResponse nsResponse = HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":9999"+ NS_URL_005, HTTPUtils.HTTPMethod.GET, OSMConstants.OSMClientVersion.SOL_005, true, credentials);
         String nsResponseContent = nsResponse.getContent();
         String nsResponseContent_mod = nsResponseContent.replace("\"orchestration-progress\": {},","").replace(",                \"userDefinedData\": {}","");
-
+        System.out.println(nsResponseContent_mod);
         JSONArray nssArray = new JSONArray(nsResponseContent_mod);
         for(JSONValue item : nssArray)
         {
@@ -255,53 +255,16 @@ public class OSMController005
     private VirtualNetworkFunction parseVNF(JSONObject ob)
     {
         String id = ob.get("id").getValue();
-        //String name = ob.get("name").getValue();
-        String description = ob.get("description").getValue();
-        String status = ob.get("operational-status").getValue();
-
-        JSONObject vnfdJSON = ob.get("vnfd").getValue();
-
-
-        VirtualNetworkFunctionDescriptor finalVNFD = parseVNFD(vnfdJSON);
-
-
-        JSONValue cpValue = ob.get("connection-point");
-        List<ConnectionPoint> connPointList = new ArrayList<>();
-
-        if(cpValue != null)
-        {
-            JSONArray cpJSON = ob.get("connection-point").getValue();
-
-            for(JSONValue cp : cpJSON)
-            {
-                JSONObject cpJSONOb = cp.getValue();
-                ConnectionPoint connPoint = parseConnectionPoint(cpJSONOb);
-                connPointList.add(connPoint);
-            }
-        }
-
-
-
-        JSONValue monParamValue = ob.get("monitoring-param");
-        List<MonitoringParameter> monParamList = new ArrayList<>();
-
-        if(monParamValue != null) {
-
-            JSONArray monParamJSON = monParamValue.getValue();
-
-            for (JSONValue mp : monParamJSON) {
-                JSONObject mpJSONOb = mp.getValue();
-                MonitoringParameter monParam = parseMonitoringParameter(mpJSONOb);
-                monParamList.add(monParam);
-            }
-
-        }
-
+        String vimId = ob.get("vim-account-id").getValue();
+        String vnfdId = ob.get("vnfd-id").getValue();
         String nsId = ob.get("nsr-id-ref").getValue();
 
-        VirtualNetworkFunction vnf = new VirtualNetworkFunction(id, name, description, status, nsId, finalVNFD, connPointList, monParamList);
-        return vnf;
+        VirtualInfrastructureManager vim = osmClient.getVIMById(vimId);
+        VirtualNetworkFunctionDescriptor vnfd = osmClient.getVNFDById(vnfdId);
+        NetworkService ns = osmClient.getNSById(nsId);
 
+        VirtualNetworkFunction vnf = new VirtualNetworkFunction(id, vim, vnfd, ns);
+        return vnf;
     }
 
     private VirtualLinkDescriptor parseVLD(JSONObject ob)
@@ -313,9 +276,9 @@ public class OSMController005
         if(vldDescriptionValue != null)
             vldDescription = ob.get("description").getValue();
         else
-            vldDescription = "No description";
+            vldDescription = "";
 
-        boolean vldIsMgmtNetwork = Boolean.parseBoolean(ob.get("mgmt-network").getValue());
+        boolean vldIsMgmtNetwork = (ob.get("mgmt-network") == null) ? false : ob.get("mgmt-network").getValue();
         JSONArray connPointRefJSON = ob.get("vnfd-connection-point-ref").getValue();
 
         List<Pair<String, String>> connPointRefList = new ArrayList<>();
@@ -359,8 +322,9 @@ public class OSMController005
     {
         String nsdId = ob.get("_id").getValue();
         String nsdName = ob.get("name").getValue();
+        String description = (ob.get("description") == null) ? "" : ob.get("description").getValue();
 
-        /*List<VirtualLinkDescriptor> vldList = new ArrayList<>();
+        List<VirtualLinkDescriptor> vldList = new ArrayList<>();
         JSONArray vldJSON = ob.get("vld").getValue();
 
         for(JSONValue item : vldJSON)
@@ -377,12 +341,11 @@ public class OSMController005
         {
             JSONObject cVNFDOb = item.getValue();
             String cVNFDId = cVNFDOb.get("vnfd-id-ref").getValue();
-            //VirtualNetworkFunctionDescriptor cVNFD = osmClient005.getVNFDById(cVNFDId);
-            //constituentVNFDs.add(cVNFD);
+            VirtualNetworkFunctionDescriptor cVNFD = osmClient.getVNFDById(cVNFDId);
+            constituentVNFDs.add(cVNFD);
         }
-        */
 
-        NetworkServiceDescriptor nsd = new NetworkServiceDescriptor(nsdId,nsdName,"",null,null);
+        NetworkServiceDescriptor nsd = new NetworkServiceDescriptor(nsdId,nsdName,description,constituentVNFDs,vldList);
         return nsd;
 
     }

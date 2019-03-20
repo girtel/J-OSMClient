@@ -47,7 +47,6 @@ public final class JSONFactory
     {
         Token keyToken = tokenizer.getCurrentToken();
 
-        System.out.println(keyToken.getValue());
         if (keyToken.getType() != Token.Type.STRING)
             throw new ParseException(tokenizer, "Expected STRING keys. ");
 
