@@ -16,7 +16,7 @@ public class NetworkService extends OSMComponent{
     private String id, name, description, status;
     private NetworkServiceDescriptor nsd;
     private List<VirtualNetworkFunction> vnfList;
-    private String vimName;
+    private VirtualInfrastructureManager vim;
 
     /**
      * Constructor
@@ -24,18 +24,18 @@ public class NetworkService extends OSMComponent{
      * @param name NS name
      * @param description NS description
      * @param status NS current status
-     * @param vimName VIM where this NS is instantiated
+     * @param vim VIM where this NS is instantiated
      * @param nsd NSD which defines this NS
      * @param vnfList List of VNFs which belong to this NS
      */
-    protected NetworkService(String id, String name, String description, String status, String vimName, NetworkServiceDescriptor nsd, List<VirtualNetworkFunction> vnfList)
+    protected NetworkService(String id, String name, String description, String status, VirtualInfrastructureManager vim, NetworkServiceDescriptor nsd, List<VirtualNetworkFunction> vnfList)
     {
         super(name, OSMConstants.OSMComponentType.NS);
         this.id = id;
         this.name = name;
         this.description = description;
         this.status = status;
-        this.vimName = vimName;
+        this.vim = vim;
         this.nsd = nsd;
         this.vnfList = vnfList;
     }
@@ -77,8 +77,8 @@ public class NetworkService extends OSMComponent{
      * Gets VIM where this NS is instantiated
      * @return NS VIM
      */
-    public String getVIMName() {
-        return vimName;
+    public VirtualInfrastructureManager getVIMName() {
+        return vim;
     }
 
     /**

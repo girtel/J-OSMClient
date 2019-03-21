@@ -431,6 +431,7 @@ class OSMControllerR3 {
         String nsId = ob.get("id").getValue();
         String nsName = ob.get("name").getValue();
         String nsDatacenter = ob.get("rw-nsr:datacenter").getValue();
+        VirtualInfrastructureManager vim = osmClient.getVIM(nsDatacenter);
         String nsDescription = "";
         String nsStatus = ob.get("admin-status").getValue();
 
@@ -440,7 +441,7 @@ class OSMControllerR3 {
         List<VirtualNetworkFunction> vnfs = osmClient.getVNFList();
         List<VirtualNetworkFunction> thisNS_VNFs = vnfs.stream().filter(vnf -> vnf.getNSID().equalsIgnoreCase(nsId)).collect(Collectors.toList());
 
-        NetworkService ns = new NetworkService(nsId,nsName,nsDescription,nsStatus,nsDatacenter,nsNSD,thisNS_VNFs);
+        NetworkService ns = new NetworkService(nsId,nsName,nsDescription,nsStatus,vim,nsNSD,thisNS_VNFs);
 
         return ns;
 

@@ -18,7 +18,8 @@ public class OSMController005
     private String VNFD_URL_005 = "/osm/vnfpkgm/v1/vnf_packages";
     private String VNF_URL_005 = "/osm/nslcm/v1/vnfrs";
     private String NSD_URL_005 = "/osm/nsd/v1/ns_descriptors";
-    private String NS_URL_005 = "/osm/nslcm/v1/ns_instances_content";
+    private String NS_POST_DELETE_URL_005 = "/osm/nslcm/v1/ns_instances_content";
+    private String NS_GET_URL_005 = "/osm/nslcm/v1/ns_instances";
     private String UPLOAD_VNFD_URL_005 = "/osm/vnfpkgm/v1/vnf_packages_content";
     private String UPLOAD_NSD_URL_005 = "/osm/nsd/v1/ns_descriptors_content";
 
@@ -117,10 +118,9 @@ public class OSMController005
     protected List<NetworkService> parseNSList()
     {
         List<NetworkService> nss = new LinkedList<>();
-        HTTPResponse nsResponse = HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":9999"+ NS_URL_005, HTTPUtils.HTTPMethod.GET, OSMConstants.OSMClientVersion.SOL_005, true, credentials);
+        HTTPResponse nsResponse = HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":9999"+ NS_GET_URL_005, HTTPUtils.HTTPMethod.GET, OSMConstants.OSMClientVersion.SOL_005, true, credentials);
         String nsResponseContent = nsResponse.getContent();
         String nsResponseContent_mod = nsResponseContent.replace("\"orchestration-progress\": {},","").replace(",                \"userDefinedData\": {}","");
-        System.out.println(nsResponseContent_mod);
         JSONArray nssArray = new JSONArray(nsResponseContent_mod);
         for(JSONValue item : nssArray)
         {
@@ -141,13 +141,13 @@ public class OSMController005
         nsJSON.put("nsdId", new JSONValue(nsdId));
         nsJSON.put("nsName", new JSONValue(name));
 
-        return HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":9999"+NS_URL_005, HTTPUtils.HTTPMethod.POST, OSMConstants.OSMClientVersion.SOL_005,true, credentials, nsJSON);
+        return HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":9999"+NS_POST_DELETE_URL_005, HTTPUtils.HTTPMethod.POST, OSMConstants.OSMClientVersion.SOL_005,true, credentials, nsJSON);
     }
 
     protected HTTPResponse deleteNS(String name)
     {
         String nsId = osmClient.getNS(name).getId();
-        return HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":9999"+NS_URL_005+"/"+nsId, HTTPUtils.HTTPMethod.DELETE, OSMConstants.OSMClientVersion.SOL_005,true, credentials);
+        return HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":9999"+NS_POST_DELETE_URL_005+"/"+nsId, HTTPUtils.HTTPMethod.DELETE, OSMConstants.OSMClientVersion.SOL_005,true, credentials);
     }
 
     protected HTTPResponse createVIM(String name, String description, OSMConstants.OSMVimType osmVimType, String user, String pass, String authURL, String tenant, VIMConfiguration... VIMConfiguration)
@@ -355,12 +355,23 @@ public class OSMController005
         String nsId = ob.get("id").getValue();
         String nsName = ob.get("name").getValue();
         String nsDatacenter = ob.get("datacenter").getValue();
-        String nsDescription = "";
+        String nsDescription = (ob.get("description") == null) ? "" : ob.get("description").getValue();
         String nsStatus = ob.get("admin-status").getValue();
+        String nsdName = ob.get("nsd-ref").getValue();
 
+        VirtualInfrastructureManager vim = osmClient.getVIMById(nsDatacenter);
+        NetworkServiceDescriptor nsd = osmClient.getNSD(nsdName);
 
+        JSONArray vnfArrays = ob.get("constituent-vnfr-ref").getValue();
+        List<VirtualNetworkFunction> vnfs = new LinkedList<>();
+        for(JSONValue it : vnfArrays)
+        {
+            String vnfId = it.getValue();
+            VirtualNetworkFunction vnf = osmClient.getVNFById(vnfId);
+            vnfs.add(vnf);
+        }
 
-        NetworkService ns = new NetworkService(nsId,nsName,nsDescription,nsStatus,nsDatacenter,null,null);
+        NetworkService ns = new NetworkService(nsId,nsName,nsDescription,nsStatus,vim,nsd,vnfs);
 
         return ns;
 
