@@ -60,6 +60,24 @@ public class NSConfiguration
     }
 
     /**
+     * Obtains the VLD Configuration options
+     * @return JSONArray including all VLD configuration options
+     */
+    public JSONArray getVLDOptions()
+    {
+        return vldJSON;
+    }
+
+    /**
+     * Obtains the VNF Configuration options
+     * @return JSONArray including all VNF configuration options
+     */
+    public JSONArray getVNFOptions()
+    {
+        return vnfJSON;
+    }
+
+    /**
      * Verifies if there is any VLD configuration options
      * @return true if there is at least one VLD configuration option, false if not
      */

@@ -146,12 +146,20 @@ public class OSMController005
             NSConfiguration thisNSConfiguration = nsConfiguration[0];
             if(!thisNSConfiguration.IsVLDConfigurationEmpty())
             {
-
+                JSONArray vldOptions = thisNSConfiguration.getVLDOptions();
+                for(JSONValue vldOption : vldOptions)
+                {
+                    JSONObject vldOptionJSON = vldOption.getValue();
+                }
             }
 
             if(!thisNSConfiguration.isVNFConfigurationEmpty())
             {
-
+                JSONArray vnfOptions = thisNSConfiguration.getVNFOptions();
+                for(JSONValue vnfOption : vnfOptions)
+                {
+                    JSONObject vnfOptionJSON = vnfOption.getValue();
+                }
             }
         }
 
