@@ -699,7 +699,6 @@ public class OSMClient
         }
         return response;
     }
-<<<<<<< HEAD
 
     public static void main(String [] args)
     {
@@ -718,7 +717,6 @@ public class OSMClient
         //System.out.println(osmClient.uploadPackage(vnfdFile, OSMConstants.OSMPackageType.VNFD));
         //System.out.println(osmClient.uploadPackage(new File("C:\\Users\\Manu\\Downloads\\nat-tiny-nsd.tar"), OSMConstants.OSMPackageType.NSD));
     }
-=======
->>>>>>> feature/uploadPackage005
+
 }
 

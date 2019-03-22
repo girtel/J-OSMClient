@@ -229,16 +229,12 @@ public class HTTPUtils
                                 break;
 
                             case SOL_005:
-<<<<<<< HEAD
-//                              //TODO Manu
-=======
                                 FileInputStream inputStreamToLogFile = new FileInputStream(file);
                                 byte[] dataBuffer = new byte[(int)file.length()];
                                 inputStreamToLogFile.read(dataBuffer);
                                 out.write(dataBuffer);
                                 out.flush();
                                 break;
->>>>>>> feature/uploadPackage005
                         }
 
                         out.close();
