@@ -220,42 +220,7 @@ public class HTTPUtils
                                 break;
 
                             case SOL_005:
-//                                conn.setDoOutput(true);
-  //                              conn.setRequestMethod("POST");
-
-                                OutputStream outputStreamToRequestBody = conn.getOutputStream();
-                                BufferedWriter httpRequestBodyWriter =
-                                        new BufferedWriter(new OutputStreamWriter(outputStreamToRequestBody));
-
-
-                                httpRequestBodyWriter.write("Content-Disposition: form-data;"
-                                        + "name=\"myFile.gz\";"
-                                        + "filename=\""+ file.getName() +"\""
-                                        + "\nContent-Type: application/gzip\n\n");
-                                httpRequestBodyWriter.flush();
-
-// Write the actual file contents
-                                FileInputStream inputStreamToLogFile = new FileInputStream(file);
-
-                                int bytesRead;
-                                byte[] dataBuffer = new byte[1024];
-                                while((bytesRead = inputStreamToLogFile.read(dataBuffer)) != -1) {
-                                    outputStreamToRequestBody.write(dataBuffer, 0, bytesRead);
-                                }
-
-                                outputStreamToRequestBody.flush();
-
-// Mark the end of the multipart http request
-                                httpRequestBodyWriter.flush();
-
-// Close the streams
-                                outputStreamToRequestBody.close();
-                                httpRequestBodyWriter.close();
-                               /* InputStream input = new FileInputStream(file);
-                                byte [] fileBytes = new byte[(int)file.length()];
-                                input.read(fileBytes);
-                                out.write(fileBytes);
-                                out.flush();*/
+//                              //TODO Manu
                         }
 
                         out.close();
