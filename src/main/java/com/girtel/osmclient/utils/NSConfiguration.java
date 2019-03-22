@@ -1,5 +1,6 @@
 package com.girtel.osmclient.utils;
 
+import com.girtel.osmclient.json.JSONArray;
 import com.girtel.osmclient.json.JSONObject;
 import com.girtel.osmclient.json.JSONValue;
 import org.yaml.snakeyaml.DumperOptions;
@@ -19,29 +20,34 @@ import java.util.Map;
 
 public class NSConfiguration
 {
-    JSONObject vldJSON, vnfJSON, totalJSON;
+    JSONObject totalJSON;
+    JSONArray vldJSON, vnfJSON;
 
     /**
      * Constructor
      */
     public NSConfiguration()
     {
-        this.vldJSON = new JSONObject();
-        this.vnfJSON = new JSONObject();
+        this.vldJSON = new JSONArray();
+        this.vnfJSON = new JSONArray();
         this.totalJSON = new JSONObject();
     }
 
     /**
-     * Adds a new configuration option to scecify to which network this VLD will be connected to
+     * Adds a new configuration option to scecify which network a VLD will be connected to
      * @param vldName VLD name to connect
-     * @param networkName network name
+     * @param vimNetworkName network name
      */
-    public void addVLDOption(String vldName, String networkName)
+    public void addVLDOption(String vldName, String vimNetworkName)
     {
+        JSONObject newVLDOption = new JSONObject();
+        newVLDOption.put("vldName", new JSONValue(vldName));
+        newVLDOption.put("vimNetworkName", new JSONValue(vimNetworkName));
+        vldJSON.add(new JSONValue(newVLDOption));
     }
 
     /**
-     * Adds a new configuration option to specify in which VIM this VNF will be instantiated
+     * Adds a new configuration option to specify which VIM a VNF will be instantiated in
      * @param VNF_memberIndex VNF memberIndex to instantiate
      * @param vimName VIM name
      */
@@ -49,11 +55,19 @@ public class NSConfiguration
     {
     }
 
+    /**
+     * Verifies if there is any VLD configuration options
+     * @return true if there is at least one VLD configuration option, false if not
+     */
     public boolean IsVLDConfigurationEmpty()
     {
         return vldJSON.isEmpty();
     }
 
+    /**
+     * Verifies if there is any VNF configuration options
+     * @return true if there is at least one VNF configuration option, false if not
+     */
     public boolean isVNFConfigurationEmpty()
     {
         return vnfJSON.isEmpty();
