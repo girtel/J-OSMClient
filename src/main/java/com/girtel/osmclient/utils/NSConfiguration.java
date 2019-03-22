@@ -48,11 +48,15 @@ public class NSConfiguration
 
     /**
      * Adds a new configuration option to specify which VIM a VNF will be instantiated in
-     * @param VNF_memberIndex VNF memberIndex to instantiate
+     * @param vnfIndex VNF Index to instantiate
      * @param vimName VIM name
      */
-    public void addVNFoption(String VNF_memberIndex, String vimName)
+    public void addVNFoption(String vnfIndex, String vimName)
     {
+        JSONObject newVNFOption = new JSONObject();
+        newVNFOption.put("vnfIndex", new JSONValue(vnfIndex));
+        newVNFOption.put("vimName", new JSONValue(vimName));
+        vnfJSON.add(new JSONValue(newVNFOption));
     }
 
     /**
