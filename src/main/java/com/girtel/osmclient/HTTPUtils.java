@@ -4,21 +4,31 @@ import com.girtel.osmclient.json.JSONObject;
 import com.girtel.osmclient.utils.HTTPResponse;
 import com.girtel.osmclient.utils.OSMConstants;
 import com.girtel.osmclient.utils.OSMException;
+import org.apache.http.NameValuePair;
+import org.apache.http.entity.mime.FormBodyPart;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.ByteArrayBody;
+import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.message.BasicNameValuePair;
 import sun.misc.IOUtils;
 
 import javax.net.ssl.*;
 import javax.xml.bind.DatatypeConverter;
 import java.io.*;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.rmi.server.ExportException;
 import java.security.KeyManagementException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class HTTPUtils
 {
@@ -129,8 +139,8 @@ public class HTTPUtils
         else if (osmPackage.length == 1)
         {
             File pack = osmPackage[0];
-            conn.setRequestProperty("Accept","*application/json*");
             conn.setRequestProperty("Content-Type","application/gzip");
+            conn.setRequestProperty("Accept","application/json");
             MessageDigest md = null;
             try {
                 byte [] packageBytes = new byte[(int)pack.length()];
@@ -139,13 +149,12 @@ public class HTTPUtils
                 md = MessageDigest.getInstance("MD5");
                 md.update(packageBytes);
                 byte[] digest = md.digest();
-                String md5 = DatatypeConverter.printHexBinary(digest).toUpperCase();
+                String md5 = DatatypeConverter.printHexBinary(digest).toLowerCase();
                 conn.setRequestProperty("Content-File-MD5",md5);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            //conn.setRequestProperty("Content-length", String.valueOf(pack.));
             if(includeAuth)
             {
                 conn.setRequestProperty("Authorization","Bearer "+credentials);
@@ -153,7 +162,7 @@ public class HTTPUtils
 
         }
         else
-            throw new RuntimeException("No more than one multipartEntity is allowed");
+            throw new RuntimeException("No more than one file is allowed");
 
 
     }
@@ -171,7 +180,7 @@ public class HTTPUtils
             conn.setUseCaches(false);
             conn.setDoInput(true);
             conn.setDoOutput(true);
-            conn.addRequestProperty("Content-Type", "multipart/form-data; boundary=nothing" );
+            //conn.addRequestProperty("Content-Type", "multipart/form-data; boundary=nothing" );
 
             if(optionalObjectToSend.length == 0)
             {
@@ -220,42 +229,12 @@ public class HTTPUtils
                                 break;
 
                             case SOL_005:
-//                                conn.setDoOutput(true);
-  //                              conn.setRequestMethod("POST");
-
-                                OutputStream outputStreamToRequestBody = conn.getOutputStream();
-                                BufferedWriter httpRequestBodyWriter =
-                                        new BufferedWriter(new OutputStreamWriter(outputStreamToRequestBody));
-
-
-                                httpRequestBodyWriter.write("Content-Disposition: form-data;"
-                                        + "name=\"myFile.gz\";"
-                                        + "filename=\""+ file.getName() +"\""
-                                        + "\nContent-Type: application/gzip\n\n");
-                                httpRequestBodyWriter.flush();
-
-// Write the actual file contents
                                 FileInputStream inputStreamToLogFile = new FileInputStream(file);
-
-                                int bytesRead;
-                                byte[] dataBuffer = new byte[1024];
-                                while((bytesRead = inputStreamToLogFile.read(dataBuffer)) != -1) {
-                                    outputStreamToRequestBody.write(dataBuffer, 0, bytesRead);
-                                }
-
-                                outputStreamToRequestBody.flush();
-
-// Mark the end of the multipart http request
-                                httpRequestBodyWriter.flush();
-
-// Close the streams
-                                outputStreamToRequestBody.close();
-                                httpRequestBodyWriter.close();
-                               /* InputStream input = new FileInputStream(file);
-                                byte [] fileBytes = new byte[(int)file.length()];
-                                input.read(fileBytes);
-                                out.write(fileBytes);
-                                out.flush();*/
+                                byte[] dataBuffer = new byte[(int)file.length()];
+                                inputStreamToLogFile.read(dataBuffer);
+                                out.write(dataBuffer);
+                                out.flush();
+                                break;
                         }
 
                         out.close();
@@ -309,5 +288,69 @@ public class HTTPUtils
         }
 
         return response;
+    }
+
+    public static void fueraDeCasa(String urlString, File file){
+        URL url = null;
+        try {
+            url = new URL(urlString);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(10000);
+            conn.setConnectTimeout(15000);
+            conn.setRequestMethod("POST");
+            conn.setUseCaches(false);
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ContentBody contentPart = new ByteArrayBody(bos.toByteArray(), file.getPath());
+
+            MessageDigest md = MessageDigest.getInstance("MD5");
+
+                byte [] packageBytes = new byte[(int)file.length()];
+                InputStream packageStream = new FileInputStream(file);
+                packageStream.read(packageBytes);
+
+                for (int i =0;i<packageBytes.length;i+=4096){
+                    if(i+4096<=packageBytes.length) {
+                        md.update(Arrays.copyOfRange(packageBytes, i, i + 4096));
+                    }else{
+                        md.update(Arrays.copyOfRange(packageBytes, i, packageBytes.length-i ));
+                    }
+
+                }
+
+                byte[] digest = md.digest();
+                String md5 = DatatypeConverter.printHexBinary(digest).toLowerCase();
+                System.out.println("md52 " + md5);
+                System.out.println("md53 " + hexdigest(packageBytes));
+
+            MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+            reqEntity.addPart("filename", contentPart);
+
+            conn.setRequestProperty("Connection", "Keep-Alive");
+            conn.addRequestProperty("Content-length", reqEntity.getContentLength()+"");
+            conn.addRequestProperty(reqEntity.getContentType().getName(), reqEntity.getContentType().getValue());
+
+            OutputStream os = conn.getOutputStream();
+            reqEntity.writeTo(conn.getOutputStream());
+            os.close();
+            conn.connect();
+
+            if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                System.out.println("Parece que bueno");
+            }
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+    }
+    public static String hexdigest(byte [] message) throws Exception {
+        String hd;
+        MessageDigest md5 = MessageDigest.getInstance( "MD5" );
+        md5.update( message );
+        BigInteger hash = new BigInteger( 1, md5.digest() );
+        hd = hash.toString(16); // BigInteger strips leading 0's
+        while ( hd.length() < 32 ) { hd = "0" + hd; } // pad with leading 0's
+        return hd;
     }
 }

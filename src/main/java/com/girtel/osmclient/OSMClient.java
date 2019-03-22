@@ -699,18 +699,5 @@ public class OSMClient
         }
         return response;
     }
-
-    public static void main(String [] args)
-    {
-        OSMClient osmClient = new OSMClient(OSMConstants.OSMClientVersion.SOL_005, "192.168.10.144","admin","admin");
-        //System.out.println(osmClient.createVIM("vimprueba","vim de prueba con rest api", OSMConstants.OSMVimType.OPENSTACK, "admin","girtelserver","http://192.168.10.103:5000/v3","admin"));
-        //System.out.println(osmClient.createNS("prueba_frr","frrvnf_nsd description","frrvnf_nsd","vimprueba"));
-        //System.out.println(osmClient.deleteNSD("frrvnf_nsd"));
-        //System.out.println(osmClient.getVNFDList());
-        //System.out.println(osmClient.deleteVNFD("frrvnf_vnfd"));
-
-        File vnfdFile = new File("C:\\Users\\Manu\\Downloads\\vnf-tiny-vnfd.tar.gz");
-        System.out.println(osmClient.uploadPackage(vnfdFile, OSMConstants.OSMPackageType.VNFD));
-        //System.out.println(osmClient.uploadPackage(new File("C:\\Users\\Manu\\Downloads\\nat-tiny-nsd.tar"), OSMConstants.OSMPackageType.NSD));
-    }
 }
+
