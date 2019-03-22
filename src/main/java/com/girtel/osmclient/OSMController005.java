@@ -48,6 +48,7 @@ public class OSMController005
         String tokenID = tokenJSON.get("_id").getValue();
         this.credentials = tokenID;
     }
+    public String getToken(){return this.credentials;}
 
     protected List<VirtualInfrastructureManager> parseVIMList()
     {
@@ -392,14 +393,17 @@ public class OSMController005
 
     public HTTPResponse uploadPackage(File file, OSMConstants.OSMPackageType type)
     {
+        HTTPResponse response = null;
         switch (type)
         {
             case NSD:
-                return HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":9999"+UPLOAD_NSD_URL_005, HTTPUtils.HTTPMethod.POST, OSMConstants.OSMClientVersion.SOL_005, true, credentials, file);
+                response = HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":9999"+UPLOAD_NSD_URL_005, HTTPUtils.HTTPMethod.POST, OSMConstants.OSMClientVersion.SOL_005, true, credentials, file);
+                break;
             case VNFD:
-                return HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":9999"+UPLOAD_VNFD_URL_005, HTTPUtils.HTTPMethod.POST, OSMConstants.OSMClientVersion.SOL_005, true, credentials, file);
+                response = HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":9999"+UPLOAD_VNFD_URL_005, HTTPUtils.HTTPMethod.POST, OSMConstants.OSMClientVersion.SOL_005, true, credentials, file);
+                break;
         }
-        return null;
+        return response;
     }
 
 }
