@@ -156,10 +156,21 @@ public class OSMController005
             if(!thisNSConfiguration.isVNFConfigurationEmpty())
             {
                 JSONArray vnfOptions = thisNSConfiguration.getVNFOptions();
+                JSONArray vnf2vimOptions = new JSONArray();
                 for(JSONValue vnfOption : vnfOptions)
                 {
                     JSONObject vnfOptionJSON = vnfOption.getValue();
+                    String vimName = vnfOptionJSON.get("vimName").getValue();
+                    VirtualInfrastructureManager vimOb = osmClient.getVIM(vimName);
+
+                    JSONObject vnf2vimJSON = new JSONObject();
+                    vnf2vimJSON.put("vimAccountId", new JSONValue(vimOb.getId()));
+
+                    vnf2vimOptions.add(new JSONValue(vnf2vimJSON));
                 }
+
+                if(!vnf2vimOptions.isEmpty())
+                    nsJSON.put("vnf", new JSONValue(vnf2vimOptions));
             }
         }
 
