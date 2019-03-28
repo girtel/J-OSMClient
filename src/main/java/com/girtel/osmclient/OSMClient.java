@@ -702,9 +702,13 @@ public class OSMClient
 
     public static void main(String [] args)
     {
-        OSMClient osmClient = new OSMClient(OSMConstants.OSMClientVersion.SOL_005, "192.168.10.141","admin","admin");
+        OSMClient osmClient = new OSMClient(OSMConstants.OSMClientVersion.SOL_005, "10.0.2.15","admin","admin");
         //System.out.println(osmClient.createVIM("vimuno","vim de prueba con rest api", OSMConstants.OSMVimType.OPENSTACK, "admin","girtelserver","http://192.168.10.103:5000/v3","admin"));
-        //System.out.println(osmClient.createNS("cirrakos_javi_caravaca_cabron","javi cabron vamos al goiko grill","cirros_2vnf_ns","vimuno"));
+        NSConfiguration nsConfiguration = new NSConfiguration();
+        nsConfiguration.addVNFoption("1","vimone");
+        nsConfiguration.addVNFoption("2","vimtwo");
+        System.out.println(nsConfiguration);
+        System.out.println(osmClient.createNS("javi-muro-multi-vim","javi","mh_cp_demo_nsd","vimone", nsConfiguration));
         //System.out.println(osmClient.deleteNSD("frrvnf_nsd"));
         //System.out.println(osmClient.deleteNS("cirros_prueba"));;
         //System.out.println(osmClient.getVNFDList());
