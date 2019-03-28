@@ -6,7 +6,7 @@
 
     <groupId>com.cfsnm</groupId>
     <artifactId>osmclient</artifactId>
-    <version>2.0</version>
+    <version>2.1</version>
 
     <name>OSM Client</name>
     <description>Java Client to work with OSM (OpenSource MANO) REST API.</description>
