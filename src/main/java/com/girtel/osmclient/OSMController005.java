@@ -378,8 +378,8 @@ public class OSMController005
         for(JSONValue item: constituentVNFDJSON)
         {
             JSONObject cVNFDOb = item.getValue();
-            String cVNFDId = cVNFDOb.get("vnfd-id-ref").getValue();
-            VirtualNetworkFunctionDescriptor cVNFD = osmClient.getVNFDById(cVNFDId);
+            String cVNFDName = cVNFDOb.get("vnfd-id-ref").getValue();
+            VirtualNetworkFunctionDescriptor cVNFD = osmClient.getVNFD(cVNFDName);
             constituentVNFDs.add(cVNFD);
         }
 
