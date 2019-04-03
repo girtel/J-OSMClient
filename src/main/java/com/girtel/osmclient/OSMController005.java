@@ -177,7 +177,7 @@ public class OSMController005
             }
         }
 
-        System.out.println(nsJSON);
+        //System.out.println(nsJSON);
 
         return HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":9999"+NS_URL_005, HTTPUtils.HTTPMethod.POST, OSMConstants.OSMClientVersion.SOL_005,true, credentials, nsJSON);
     }
@@ -297,11 +297,9 @@ public class OSMController005
         String vnfdId = ob.get("vnfd-id").getValue();
         String nsId = ob.get("nsr-id-ref").getValue();
 
-        VirtualInfrastructureManager vim = osmClient.getVIMById(vimId);
         VirtualNetworkFunctionDescriptor vnfd = osmClient.getVNFDById(vnfdId);
-        NetworkService ns = osmClient.getNSById(nsId);
 
-        VirtualNetworkFunction vnf = new VirtualNetworkFunction(id, vim, vnfd, ns);
+        VirtualNetworkFunction vnf = new VirtualNetworkFunction(id, "vnf-"+id, "No description", "Unknown", nsId, vnfd, new LinkedList<>(), new LinkedList<>());
         return vnf;
     }
 

@@ -4,13 +4,7 @@ All notable changes to J-OSMClient will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [2.1.1] - 2019-04-01
-### Fixed
-    - Minor bugs in JSON parsing.
-	
-####
-
-## [2.1] - 2019-03-28
+## [2.1] - 2019-04-03
 ### Added
     - Full support to OSM release 5 implementing sol005 standard.
 	

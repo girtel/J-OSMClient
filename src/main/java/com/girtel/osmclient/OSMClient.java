@@ -702,20 +702,20 @@ public class OSMClient
 
     public static void main(String [] args)
     {
-        OSMClient osmClient = new OSMClient(OSMConstants.OSMClientVersion.SOL_005, "10.0.2.15","admin","admin");
+        OSMClient osmClient = new OSMClient(OSMConstants.OSMClientVersion.SOL_005, "192.168.10.138","admin","admin");
         //System.out.println(osmClient.createVIM("vimuno","vim de prueba con rest api", OSMConstants.OSMVimType.OPENSTACK, "admin","girtelserver","http://192.168.10.103:5000/v3","admin"));
-        NSConfiguration nsConfiguration = new NSConfiguration();
-        nsConfiguration.addVNFoption("1","vimone");
-        nsConfiguration.addVNFoption("2","vimtwo");
-        System.out.println(nsConfiguration);
-        System.out.println(osmClient.createNS("javi-muro-multi-vim","javi","mh_cp_demo_nsd","vimone", nsConfiguration));
+        //NSConfiguration nsConfiguration = new NSConfiguration();
+        //nsConfiguration.addVNFoption("1","vimone");
+        //nsConfiguration.addVNFoption("2","vimtwo");
+        //System.out.println(nsConfiguration);
+        //System.out.println(osmClient.createNS("javi-muro-multi-vim","javi","nat-tiny-nsd","vimone"));
         //System.out.println(osmClient.deleteNSD("frrvnf_nsd"));
         //System.out.println(osmClient.deleteNS("cirros_prueba"));;
         //System.out.println(osmClient.getVNFDList());
-        //System.out.println(osmClient.getVNFList());
+        System.out.println(osmClient.getVNFList());
         //System.out.println(osmClient.deleteVNFD("frrvnf_vnfd"));
         //System.out.println(osmClient.getNSDList());
-        //System.out.println(osmClient.getNSList());
+        System.out.println(osmClient.getNSList());
 
         //File vnfdFile = new File("C:\\Users\\Manu\\Downloads\\vnf-tiny-vnfd.tar.gz");
         //System.out.println(osmClient.uploadPackage(vnfdFile, OSMConstants.OSMPackageType.VNFD));

@@ -21,7 +21,7 @@ public class VirtualNetworkFunction extends OSMComponent{
     private NetworkService ns;
 
     /**
-     * Constructor for release 3
+     * Constructor
      * @param id VNF identifier
      * @param name VNF name
      * @param description VNF description
@@ -43,23 +43,6 @@ public class VirtualNetworkFunction extends OSMComponent{
         this.vnfd = vnfd;
         this.connPointList = connPointList;
         this.monParamList = monParamList;
-    }
-
-    /**
-     * Constructor for sol005
-     * @param id VNF id
-     * @param vim VNF vim
-     * @param vnfd VNF descriptor
-     * @param ns VNF ns
-     */
-    protected VirtualNetworkFunction(String id, VirtualInfrastructureManager vim, VirtualNetworkFunctionDescriptor vnfd, NetworkService ns)
-    {
-        super("NetworkService - "+id, OSMConstants.OSMComponentType.VNF);
-        this.name = "NetworkService - "+id;
-        this.id = id;
-        this.vim = vim;
-        this.vnfd = vnfd;
-        this.ns = ns;
     }
 
     /**
