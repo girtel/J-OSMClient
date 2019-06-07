@@ -1,9 +1,13 @@
 package com.girtel.osmclient;
 
-import com.girtel.osmclient.json.*;
-import com.girtel.osmclient.utils.*;
+import com.girtel.osmclient.json.JSONArray;
+import com.girtel.osmclient.json.JSONObject;
+import com.girtel.osmclient.json.JSONValue;
+import com.girtel.osmclient.utils.HTTPResponse;
+import com.girtel.osmclient.utils.NSConfiguration;
+import com.girtel.osmclient.utils.OSMConstants;
+import com.girtel.osmclient.utils.VIMConfiguration;
 import javafx.util.Pair;
-import org.apache.http.protocol.HTTP;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -165,6 +169,8 @@ public class OSMController005
                     VirtualInfrastructureManager vimOb = osmClient.getVIM(vimName);
 
                     vnfOptionJSON.put("vimAccountId", new JSONValue(vimOb.getId()));
+
+                    vnfOptionJSON.remove("vim_account");
 
                 }
 
