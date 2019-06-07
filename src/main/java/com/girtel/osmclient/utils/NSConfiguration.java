@@ -54,8 +54,8 @@ public class NSConfiguration
     public void addVNFoption(String vnfIndex, String vimName)
     {
         JSONObject newVNFOption = new JSONObject();
-        newVNFOption.put("vnfIndex", new JSONValue(vnfIndex));
-        newVNFOption.put("vimName", new JSONValue(vimName));
+        newVNFOption.put("member-vnf-index", new JSONValue(vnfIndex));
+        newVNFOption.put("vim_account", new JSONValue(vimName));
         vnfJSON.add(new JSONValue(newVNFOption));
     }
 

@@ -156,28 +156,24 @@ public class OSMController005
             if(!thisNSConfiguration.isVNFConfigurationEmpty())
             {
                 JSONArray vnfOptions = thisNSConfiguration.getVNFOptions();
-                JSONArray vnf2vimOptions = new JSONArray();
                 for(JSONValue vnfOption : vnfOptions)
                 {
                     JSONObject vnfOptionJSON = vnfOption.getValue();
-                    String vnfIndex = vnfOptionJSON.get("vnfIndex").getValue();
-                    String vimName = vnfOptionJSON.get("vimName").getValue();
+                    String vnfIndex = vnfOptionJSON.get("member-vnf-index").getValue();
+                    String vimName = vnfOptionJSON.get("vim_account").getValue();
+
                     VirtualInfrastructureManager vimOb = osmClient.getVIM(vimName);
 
-                    JSONObject vnf2vimJSON = new JSONObject();
+                    vnfOptionJSON.put("vimAccountId", new JSONValue(vimOb.getId()));
 
-                    vnf2vimJSON.put("member-vnf-index", new JSONValue(vnfIndex));
-                    vnf2vimJSON.put("vimAccountId", new JSONValue(vimOb.getId()));
-
-                    vnf2vimOptions.add(new JSONValue(vnf2vimJSON));
                 }
 
-                if(!vnf2vimOptions.isEmpty())
-                    nsJSON.put("vnf", new JSONValue(vnf2vimOptions));
+                if(!vnfOptions.isEmpty())
+                    nsJSON.put("vnf", new JSONValue(vnfOptions));
             }
         }
 
-        //System.out.println(nsJSON);
+        System.out.println(nsJSON);
 
         return HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":9999"+NS_URL_005, HTTPUtils.HTTPMethod.POST, OSMConstants.OSMClientVersion.SOL_005,true, credentials, nsJSON);
     }
