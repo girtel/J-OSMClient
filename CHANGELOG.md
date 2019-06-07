@@ -4,6 +4,16 @@ All notable changes to J-OSMClient will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.2] - 2019-06-07
+### Added
+    - Support to multiVIM instantiation for a Network Service.
+	
+### Fixed	
+	- Several minor bugs.
+	
+####
+
+
 ## [2.1] - 2019-04-03
 ### Added
     - Full support to OSM release 5 implementing sol005 standard.

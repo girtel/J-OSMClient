@@ -179,8 +179,6 @@ public class OSMController005
             }
         }
 
-        System.out.println(nsJSON);
-
         return HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":9999"+NS_URL_005, HTTPUtils.HTTPMethod.POST, OSMConstants.OSMClientVersion.SOL_005,true, credentials, nsJSON);
     }
 
