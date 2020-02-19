@@ -76,10 +76,10 @@ public class OSMController005
         HTTPResponse vnfdResponse = HTTPUtils.establishHTTPConnectionWithOSM("https://"+osmIPAddress+":9999"+ VNFD_URL_005, HTTPUtils.HTTPMethod.GET, OSMConstants.OSMClientVersion.SOL_005, true, credentials);
         String vnfdResponseContent = vnfdResponse.getContent();
         String vnfdResponseContent_mod = vnfdResponseContent.replace(",            \"userDefinedData\": {}","");
-        JSONArray vnfdsArray = new JSONArray(vnfdResponseContent_mod);
-        for(JSONValue item : vnfdsArray)
+        org.json.JSONArray vnfdsArray = new org.json.JSONArray(vnfdResponseContent_mod);
+        for(Object item : vnfdsArray)
         {
-            JSONObject ob = item.getValue();
+            org.json.JSONObject ob = new org.json.JSONObject(item.toString());
             VirtualNetworkFunctionDescriptor vnfd = parseVNFD(ob);
             vnfds.add(vnfd);
         }
@@ -109,10 +109,16 @@ public class OSMController005
         String nsdResponseContent = nsdResponse.getContent();
         String nsdResponseContent_mod = nsdResponseContent.replace(",            \"userDefinedData\": {}","");
 
-        JSONArray nsdsArray = new JSONArray(nsdResponseContent_mod);
-        for(JSONValue item : nsdsArray)
+        //System.out.println(nsdResponseContent_mod);
+
+        org.json.JSONArray nsdsArray = new org.json.JSONArray(nsdResponseContent_mod);
+        //System.out.println(nsdsArray);
+        for(Object item : nsdsArray)
         {
-            JSONObject ob = item.getValue();
+            //System.out.println(new org.json.JSONObject(item.toString()).toString());
+            org.json.JSONObject ob = new org.json.JSONObject(item.toString());
+
+           // System.out.println(ob);
             NetworkServiceDescriptor nsd = parseNSD(ob);
             nsds.add(nsd);
         }
@@ -232,17 +238,17 @@ public class OSMController005
         return vim;
     }
 
-    private VirtualDeploymentUnit parseVDU(JSONObject vduOb)
+    private VirtualDeploymentUnit parseVDU(org.json.JSONObject vduOb)
     {
 
-        String vduId = vduOb.get("id").getValue();
-        String vduName = vduOb.get("name").getValue();
-        String vduImage = vduOb.get("image").getValue();
+        String vduId = vduOb.getString("id");
+        String vduName = vduOb.getString("name");
+        String vduImage = vduOb.getString("image");
 
-        JSONObject flavorJSON = vduOb.get("vm-flavor").getValue();
-        String storageGb = flavorJSON.get("storage-gb").getValue();
-        double vcpuCount = flavorJSON.get("vcpu-count").getValue();
-        String memoryMb = flavorJSON.get("memory-mb").getValue();
+        org.json.JSONObject flavorJSON = vduOb.getJSONObject("vm-flavor");
+        String storageGb = flavorJSON.getString("storage-gb");
+        double vcpuCount = flavorJSON.getDouble("vcpu-count");
+        String memoryMb = flavorJSON.getString("memory-mb");
 
         VirtualDeploymentUnit vdu = new VirtualDeploymentUnit(vduId, vduName, vduImage, Double.parseDouble(storageGb), vcpuCount, Double.parseDouble(memoryMb));
 
@@ -260,27 +266,27 @@ public class OSMController005
         return connPoint;
     }
 
-    private Pair<String, String> parseConnectionPointRef(JSONObject ob)
+    private Pair<String, String> parseConnectionPointRef(org.json.JSONObject ob)
     {
-        String vnfdConnPointName = ob.get("vnfd-connection-point-ref").getValue();
-        String vnfdId = ob.get("vnfd-id-ref").getValue();
+        String vnfdConnPointName = ob.getString("vnfd-connection-point-ref");
+        String vnfdId = ob.getString("vnfd-id-ref");
         Pair<String, String> cpRef = new Pair(vnfdId,vnfdConnPointName);
         return cpRef;
     }
 
-    private VirtualNetworkFunctionDescriptor parseVNFD(JSONObject ob)
+    private VirtualNetworkFunctionDescriptor parseVNFD(org.json.JSONObject ob)
     {
 
-        String id = ob.get("_id").getValue();
-        String name = ob.get("name").getValue();
-        String description = ob.get("description").getValue();
-        JSONArray vduJSON = ob.get("vdu").getValue();
+        String id = ob.getString("_id");
+        String name = ob.getString("name");
+        String description = ob.getString("description");
+        org.json.JSONArray vduJSON = ob.getJSONArray("vdu");
 
         List<VirtualDeploymentUnit> vduList = new ArrayList<>();
 
-        for(JSONValue vduItem : vduJSON)
+        for(Object vduItem : vduJSON)
         {
-            JSONObject vduOb = vduItem.getValue();
+            org.json.JSONObject vduOb = new org.json.JSONObject(vduItem.toString());
             VirtualDeploymentUnit vdu = parseVDU(vduOb);
             vduList.add(vdu);
         }
@@ -303,25 +309,26 @@ public class OSMController005
         return vnf;
     }
 
-    private VirtualLinkDescriptor parseVLD(JSONObject ob)
+    private VirtualLinkDescriptor parseVLD(org.json.JSONObject ob)
     {
-        String vldId = ob.get("id").getValue();
-        String vldName = ob.get("name").getValue();
-        JSONValue vldDescriptionValue = ob.get("description");
+        //System.out.println(ob);
+        String vldId = ob.getString("id");
+        String vldName = ob.getString("name");
+        boolean vldDescriptionValue = ob.has("description");
         String vldDescription = "";
-        if(vldDescriptionValue != null)
-            vldDescription = ob.get("description").getValue();
+        if(vldDescriptionValue != false)
+            vldDescription = ob.getString("description");
         else
             vldDescription = "";
 
-        boolean vldIsMgmtNetwork = (ob.get("mgmt-network") == null) ? false : ob.get("mgmt-network").getValue();
-        JSONArray connPointRefJSON = ob.get("vnfd-connection-point-ref").getValue();
+        boolean vldIsMgmtNetwork = (ob.has("mgmt-network") == false) ? false : ob.getBoolean("mgmt-network");
+        org.json.JSONArray connPointRefJSON = ob.getJSONArray("vnfd-connection-point-ref");
 
         List<Pair<String, String>> connPointRefList = new ArrayList<>();
 
-        for(JSONValue item : connPointRefJSON)
+        for(Object item : connPointRefJSON)
         {
-            JSONObject cpRefOb = item.getValue();
+            org.json.JSONObject cpRefOb = new org.json.JSONObject(item.toString());
             Pair<String, String> cpRef = parseConnectionPointRef(cpRefOb);
             connPointRefList.add(cpRef);
         }
@@ -354,29 +361,29 @@ public class OSMController005
 
     }
 
-    private NetworkServiceDescriptor parseNSD(JSONObject ob)
+    private NetworkServiceDescriptor parseNSD( org.json.JSONObject ob)
     {
-        String nsdId = ob.get("_id").getValue();
-        String nsdName = ob.get("name").getValue();
-        String description = (ob.get("description") == null) ? "" : ob.get("description").getValue();
+        String nsdId = ob.getString("_id");
+        String nsdName = ob.getString("name");
+        String description = (ob.getString("description") == null) ? "" : ob.getString("description");
 
         List<VirtualLinkDescriptor> vldList = new ArrayList<>();
-        JSONArray vldJSON = ob.get("vld").getValue();
+        org.json.JSONArray vldJSON = ob.getJSONArray("vld");
 
-        for(JSONValue item : vldJSON)
+        for(Object item : vldJSON)
         {
-            JSONObject vldOb = item.getValue();
+            org.json.JSONObject vldOb =  new org.json.JSONObject(item.toString());
             VirtualLinkDescriptor vld = parseVLD(vldOb);
             vldList.add(vld);
         }
 
-        JSONArray constituentVNFDJSON = ob.get("constituent-vnfd").getValue();
+        org.json.JSONArray constituentVNFDJSON = ob.getJSONArray("constituent-vnfd");
         List<VirtualNetworkFunctionDescriptor> constituentVNFDs = new ArrayList<>();
 
-        for(JSONValue item: constituentVNFDJSON)
+        for(Object item: constituentVNFDJSON)
         {
-            JSONObject cVNFDOb = item.getValue();
-            String cVNFDName = cVNFDOb.get("vnfd-id-ref").getValue();
+            org.json.JSONObject cVNFDOb = new org.json.JSONObject(item.toString());
+            String cVNFDName = cVNFDOb.getString("vnfd-id-ref");
             VirtualNetworkFunctionDescriptor cVNFD = osmClient.getVNFD(cVNFDName);
             constituentVNFDs.add(cVNFD);
         }
